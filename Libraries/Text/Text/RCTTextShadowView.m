@@ -300,6 +300,11 @@
                             maximumSize:frame.size
                         layoutDirection:self.layoutMetrics.layoutDirection
                           layoutContext:localLayoutContext];
+
+      // Reinforcing a proper frame origin for the Shadow View.
+      RCTLayoutMetrics localLayoutMetrics = shadowView.layoutMetrics;
+      localLayoutMetrics.frame.origin = frame.origin;
+      [shadowView layoutWithMetrics:localLayoutMetrics layoutContext:localLayoutContext];
     }
   ];
 }
