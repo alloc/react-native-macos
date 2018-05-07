@@ -110,21 +110,8 @@ function requireNativeComponent(
 
     viewConfig.uiViewClassName = viewName;
     viewConfig.validAttributes = {};
-
-    // ReactNative `View.propTypes` have been deprecated in favor of
-    // `ViewPropTypes`. In their place a temporary getter has been added with a
-    // deprecated warning message. Avoid triggering that warning here by using
-    // temporary workaround, __propTypesSecretDontUseThesePlease.
-    // TODO (bvaughn) Revert this particular change any time after April 1
-    if (componentInterface) {
-      viewConfig.propTypes =
-        typeof componentInterface.__propTypesSecretDontUseThesePlease ===
-        'object'
-          ? componentInterface.__propTypesSecretDontUseThesePlease
-          : componentInterface.propTypes;
-    } else {
-      viewConfig.propTypes = null;
-    }
+    viewConfig.propTypes =
+      componentInterface == null ? null : componentInterface.propTypes;
 
     let baseModuleName = viewConfig.baseModuleName;
     let bubblingEventTypes = viewConfig.bubblingEventTypes;
