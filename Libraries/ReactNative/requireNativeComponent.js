@@ -104,7 +104,7 @@ function requireNativeComponent(
     const viewConfig = UIManager[viewName];
 
     invariant(
-      viewConfig != null && !viewConfig.NativeProps != null,
+      viewConfig != null && viewConfig.NativeProps != null,
       'Native component for "%s" does not exist',
       viewName,
     );
