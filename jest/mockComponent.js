@@ -3,14 +3,20 @@
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
+ *
+ * @format
  */
+
 'use strict';
 
-module.exports = moduleName => {
+module.exports = (moduleName, instanceMethods) => {
   const RealComponent = require.requireActual(moduleName);
   const React = require('react');
 
-  const Component = class extends RealComponent {
+  const SuperClass =
+    typeof RealComponent === 'function' ? RealComponent : React.Component;
+
+  const Component = class extends SuperClass {
     render() {
       const name = RealComponent.displayName || RealComponent.name;
 
@@ -30,11 +36,16 @@ module.exports = moduleName => {
       }
 
       return React.createElement(
-        name.replace(/^(RCT|RK)/,''),
+        name.replace(/^(RCT|RK)/, ''),
         props,
         this.props.children,
       );
     }
   };
+
+  if (instanceMethods != null) {
+    Object.assign(Component.prototype, instanceMethods);
+  }
+
   return Component;
 };
