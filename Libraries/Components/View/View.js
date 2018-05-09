@@ -16,13 +16,13 @@ const React = require('React');
 const ReactNative = require('ReactNative');
 const ReactNativeStyleAttributes = require('ReactNativeStyleAttributes');
 const ReactNativeViewAttributes = require('ReactNativeViewAttributes');
+const TextAncestor = require('TextAncestor');
 const ViewPropTypes = require('ViewPropTypes');
-const {ViewContextTypes} = require('ViewContext');
+
 const invariant = require('fbjs/lib/invariant');
 const requireNativeComponent = require('requireNativeComponent');
 
 import type {ViewProps} from 'ViewPropTypes';
-import type {ViewChildContext} from 'ViewContext';
 
 export type Props = ViewProps;
 
@@ -35,30 +35,31 @@ export type Props = ViewProps;
  */
 class View extends ReactNative.NativeComponent<Props> {
   static propTypes = ViewPropTypes;
-  static childContextTypes = ViewContextTypes;
 
   viewConfig = {
     uiViewClassName: 'RCTView',
     validAttributes: ReactNativeViewAttributes.RCTView,
   };
 
-  getChildContext(): ViewChildContext {
-    return {
-      isInAParentText: false,
-    };
-  }
-
+  /**
+   * WARNING: This method will not be used in production mode as in that mode we
+   * replace wrapper component View with generated native wrapper RCTView. Avoid
+   * adding functionality this component that you'd want to be available in both
+   * dev and prod modes.
+   */
   render() {
-    invariant(
-      !this.context.isInAParentText,
-      'Nesting of <View> within <Text> is not currently supported.',
+    return (
+      <TextAncestor.Consumer>
+        {hasTextAncestor => {
+          // TODO: Change iOS to behave the same as Android.
+          invariant(
+            !hasTextAncestor,
+            'Nesting of <View> within <Text> is not currently supported.',
+          );
+          return <RCTView {...this.props} />;
+        }}
+      </TextAncestor.Consumer>
     );
-
-    // WARNING: This method will not be used in production mode as in that mode we
-    // replace wrapper component View with generated native wrapper RCTView. Avoid
-    // adding functionality this component that you'd want to be available in both
-    // dev and prod modes.
-    return <RCTView {...this.props} />;
   }
 }
 

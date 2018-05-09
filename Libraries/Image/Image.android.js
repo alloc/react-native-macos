@@ -20,6 +20,7 @@ var PropTypes = require('prop-types');
 var ReactNativeViewAttributes = require('ReactNativeViewAttributes');
 var StyleSheet = require('StyleSheet');
 var StyleSheetPropType = require('StyleSheetPropType');
+const TextAncestor = require('TextAncestor');
 var ViewPropTypes = require('ViewPropTypes');
 
 var createReactClass = require('create-react-class');
@@ -27,8 +28,6 @@ var flattenStyle = require('flattenStyle');
 var merge = require('merge');
 var requireNativeComponent = require('requireNativeComponent');
 var resolveAssetSource = require('resolveAssetSource');
-
-const {ViewContextTypes} = require('ViewContext');
 
 var {ImageLoader} = NativeModules;
 
@@ -188,8 +187,6 @@ var Image = createReactClass({
     validAttributes: ReactNativeViewAttributes.RCTView,
   },
 
-  contextTypes: ViewContextTypes,
-
   render: function() {
     const source = resolveAssetSource(this.props.source);
     const loadingIndicatorSource = resolveAssetSource(this.props.loadingIndicatorSource);
@@ -209,34 +206,43 @@ var Image = createReactClass({
       throw new Error('The <Image> component cannot contain children. If you want to render content on top of the image, consider using the <ImageBackground> component or absolute positioning.');
     }
 
-    if (source && (source.uri || Array.isArray(source))) {
-      let style;
-      let sources;
-      if (source.uri) {
-        const {width, height} = source;
-        style = flattenStyle([{width, height}, styles.base, this.props.style]);
-        sources = [{uri: source.uri}];
-      } else {
-        style = flattenStyle([styles.base, this.props.style]);
-        sources = source;
-      }
-
-      const {onLoadStart, onLoad, onLoadEnd, onError} = this.props;
-      const nativeProps = merge(this.props, {
-        style,
-        shouldNotifyLoadEvents: !!(onLoadStart || onLoad || onLoadEnd || onError),
-        src: sources,
-        headers: source.headers,
-        loadingIndicatorSrc: loadingIndicatorSource ? loadingIndicatorSource.uri : null,
-      });
-
-      if (this.context.isInAParentText) {
-        return <RCTTextInlineImage {...nativeProps} />;
-      } else {
-        return <RKImage {...nativeProps} />;
-      }
+    if (!source || (!source.uri && !Array.isArray(source))) {
+      return null;
     }
-    return null;
+
+    let style;
+    let sources;
+    if (source.uri) {
+      const {width, height} = source;
+      style = flattenStyle([{width, height}, styles.base, this.props.style]);
+      sources = [{uri: source.uri}];
+    } else {
+      style = flattenStyle([styles.base, this.props.style]);
+      sources = source;
+    }
+
+    const {onLoadStart, onLoad, onLoadEnd, onError} = this.props;
+    const nativeProps = merge(this.props, {
+      style,
+      shouldNotifyLoadEvents: !!(onLoadStart || onLoad || onLoadEnd || onError),
+      src: sources,
+      headers: source.headers,
+      loadingIndicatorSrc: loadingIndicatorSource
+        ? loadingIndicatorSource.uri
+        : null,
+    });
+
+    return (
+      <TextAncestor.Consumer>
+        {hasTextAncestor =>
+          hasTextAncestor ? (
+            <RCTTextInlineImage {...nativeProps} />
+          ) : (
+            <RKImage {...nativeProps} />
+          )
+        }
+      </TextAncestor.Consumer>
+    );
   },
 });
 

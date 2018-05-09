@@ -10,14 +10,12 @@
  * @flow
  * @format
  */
+
 'use strict';
 
-const PropTypes = require('prop-types');
+const React = require('React');
 
-export type ViewChildContext = {|
-  +isInAParentText: boolean,
-|};
-
-export const ViewContextTypes = {
-  isInAParentText: PropTypes.bool,
-};
+/**
+ * Whether the current element is the descendant of a <Text> element.
+ */
+module.exports = React.createContext(false);
