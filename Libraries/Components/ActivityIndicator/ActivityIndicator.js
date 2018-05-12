@@ -24,15 +24,27 @@ const ViewPropTypes = require('ViewPropTypes');
 
 const createReactClass = require('create-react-class');
 const requireNativeComponent = require('requireNativeComponent');
+
+import type {ViewProps} from 'ViewPropTypes';
+
 let RCTActivityIndicator;
 
 const GRAY = '#999999';
 
 type IndicatorSize = number | 'small' | 'large';
 
+type Props = $ReadOnly<{|
+  ...ViewProps,
+
+  animating?: ?boolean,
+  color?: ?string,
+  hidesWhenStopped?: ?boolean,
+  size?: ?IndicatorSize,
+|}>;
+
 type DefaultProps = {
   animating: boolean,
-  color: any,
+  color: ?string,
   hidesWhenStopped: boolean,
   size: IndicatorSize,
 };
@@ -42,7 +54,7 @@ type DefaultProps = {
  *
  * See http://facebook.github.io/react-native/docs/activityindicator.html
  */
-const ActivityIndicator = createReactClass({
+const ActivityIndicator = ((createReactClass({
   displayName: 'ActivityIndicator',
   mixins: [NativeMethodsMixin],
 
@@ -83,8 +95,7 @@ const ActivityIndicator = createReactClass({
   getDefaultProps(): DefaultProps {
     return {
       animating: true,
-      color:
-        Platform.OS === 'ios' || Platform.OS === 'macos' ? GRAY : undefined,
+      color: Platform.OS === 'ios' || Platform.OS === 'macos' ? GRAY : null,
       hidesWhenStopped: true,
       size: 'small',
     };
@@ -126,7 +137,7 @@ const ActivityIndicator = createReactClass({
       </View>
     );
   },
-});
+}): any): React.ComponentType<Props>);
 
 if (Platform.OS === 'ios' || Platform.OS === 'macos') {
   RCTActivityIndicator = requireNativeComponent(
