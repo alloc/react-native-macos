@@ -23,9 +23,6 @@ const ReactNative = require('ReactNative');
 const Text = require('Text');
 const TextAncestor = require('TextAncestor');
 const TextInputState = require('TextInputState');
-/* $FlowFixMe(>=0.54.0 site=react_native_oss) This comment suppresses an error
- * found when Flow v0.54 was deployed. To see the error delete this comment and
- * run Flow. */
 const TimerMixin = require('react-timer-mixin');
 const TouchableWithoutFeedback = require('TouchableWithoutFeedback');
 const UIManager = require('UIManager');
@@ -34,9 +31,6 @@ const ViewPropTypes = require('ViewPropTypes');
 const emptyFunction = require('fbjs/lib/emptyFunction');
 const invariant = require('fbjs/lib/invariant');
 const requireNativeComponent = require('requireNativeComponent');
-/* $FlowFixMe(>=0.54.0 site=react_native_oss) This comment suppresses an error
- * found when Flow v0.54 was deployed. To see the error delete this comment and
- * run Flow. */
 const warning = require('fbjs/lib/warning');
 
 let AndroidTextInput;
@@ -346,6 +340,7 @@ const TextInput = createReactClass({
      * Only called for multiline text inputs.
      */
     onContentSizeChange: PropTypes.func,
+    onTextInput: PropTypes.func,
     /**
      * Callback that is called when text input ends.
      */
