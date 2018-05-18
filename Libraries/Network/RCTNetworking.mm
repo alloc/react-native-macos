@@ -137,6 +137,15 @@ static NSString *RCTGenerateFormBoundary()
 
 RCT_EXPORT_MODULE()
 
+- (void)invalidate
+{
+  for (NSNumber *requestID in _tasksByRequestID) {
+    [_tasksByRequestID[requestID] cancel];
+  }
+  [_tasksByRequestID removeAllObjects];
+  _handlers = nil;
+}
+
 - (NSArray<NSString *> *)supportedEvents
 {
   return @[@"didCompleteNetworkResponse",
