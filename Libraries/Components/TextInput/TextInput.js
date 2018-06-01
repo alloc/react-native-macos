@@ -37,22 +37,20 @@ let AndroidTextInput;
 let RCTMultilineTextInputView;
 let RCTSinglelineTextInputView;
 
-const onlyMultiline = {
-  children: true,
-};
-
 if (Platform.OS === 'android') {
-  AndroidTextInput = requireNativeComponent('AndroidTextInput', null);
+  AndroidTextInput = requireNativeComponent('AndroidTextInput');
 } else if (Platform.OS === 'ios' || Platform.OS === 'macos') {
   RCTMultilineTextInputView = requireNativeComponent(
     'RCTMultilineTextInputView',
-    null,
   );
   RCTSinglelineTextInputView = requireNativeComponent(
     'RCTSinglelineTextInputView',
-    null,
   );
 }
+
+const onlyMultiline = {
+  children: true,
+};
 
 type Event = Object;
 type Selection = {
