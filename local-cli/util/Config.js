@@ -32,7 +32,7 @@ function getProjectPath() {
     // React Native was installed using CocoaPods.
     return path.resolve(__dirname, '../../../..');
   }
-  return path.resolve(__dirname, '../..');
+  return process.cwd();
 }
 
 const resolveSymlinksForRoots = roots =>
