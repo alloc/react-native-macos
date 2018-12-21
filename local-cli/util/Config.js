@@ -76,8 +76,12 @@ const Config = {
       ],
       getPolyfills,
     },
+    transformer: {
+      babelTransformerPath: require.resolve(
+        'metro/src/reactNativeTransformer.js',
+      ),
+    },
     watchFolders: getWatchFolders(),
-    transformModulePath: require.resolve('metro/src/reactNativeTransformer'),
   },
 
   async load(configFile: ?string): Promise<ConfigT> {
