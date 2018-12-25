@@ -56,15 +56,12 @@ const attachPackage = (command, pkg) =>
     ? command.map(cmd => attachPackage(cmd, pkg))
     : {...command, pkg};
 
-const appRoot = process.cwd();
-const plugins = findPlugins([appRoot]);
-const pluginPlatforms = plugins.platforms.reduce((acc, pathToPlatforms) => {
-  return Object.assign(
-    acc,
-    // $FlowFixMe non-literal require
-    require(path.join(appRoot, 'node_modules', pathToPlatforms)),
-  );
-}, {});
+const plugins = findPlugins([process.cwd()]);
+
+const pluginPlatforms = {};
+plugins.platforms.forEach(pathToPlatforms =>
+  Object.assign(pluginPlatforms, require(pathToPlatforms)),
+);
 
 const defaultConfig = {
   hasteImplModulePath: require.resolve('../../jest/hasteImpl'),
@@ -154,16 +151,16 @@ async function getCliConfig(): Promise<RNConfig> {
  * Returns an array of project commands used by the CLI to load
  */
 function getProjectCommands(): Array<CommandT> {
-  const commands = plugins.commands.map(pathToCommands => {
-    const name = pathToCommands.split(path.sep)[0];
-
-    return attachPackage(
-      require(path.join(appRoot, 'node_modules', pathToCommands)),
-      require(path.join(appRoot, 'node_modules', name, 'package.json')),
-    );
-  });
-
-  return flatten(commands);
+  const packageRootRE = /^(.+\/node_modules\/[^\/]+)(?:\/.+)?$/;
+  return flatten(
+    plugins.commands.map(pathToCommands => {
+      const match = pathToCommands.match(packageRootRE);
+      return attachPackage(
+        require(pathToCommands),
+        match ? require(path.join(match[1], 'package.json')) : {},
+      );
+    }),
+  );
 }
 
 module.exports.configPromise = getCliConfig();

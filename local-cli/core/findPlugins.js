@@ -31,20 +31,26 @@ const readPackage = folder => {
   }
 };
 
-const findPluginsInReactNativePackage = pjson => {
-  if (!pjson.rnpm || !pjson.rnpm.plugin) {
-    return [];
+const useReactNativePlugin = (config, pluginDir) => {
+  const pjson = readPackage(pluginDir);
+  if (pjson && pjson.rnpm) {
+    const {plugin: command, platform, haste} = pjson.rnpm;
+    if (command) {
+      config.commands.push(path.resolve(pluginDir, command));
+    }
+    if (platform) {
+      config.platforms.push(path.resolve(pluginDir, platform));
+    }
+    if (haste) {
+      const {platforms, providesModuleNodeModules: providers} = haste;
+      if (platforms) {
+        config.haste.platforms.push(...platforms);
+      }
+      if (providers) {
+        config.haste.providesModuleNodeModules.push(...providers);
+      }
+    }
   }
-
-  return path.join(pjson.name, pjson.rnpm.plugin);
-};
-
-const findPlatformsInPackage = pjson => {
-  if (!pjson.rnpm || !pjson.rnpm.platform) {
-    return [];
-  }
-
-  return path.join(pjson.name, pjson.rnpm.platform);
 };
 
 const getEmptyPluginConfig = () => ({
@@ -55,23 +61,6 @@ const getEmptyPluginConfig = () => ({
     providesModuleNodeModules: [],
   },
 });
-
-const findHasteConfigInPackageAndConcat = (pjson, haste) => {
-  if (!pjson.rnpm || !pjson.rnpm.haste) {
-    return;
-  }
-  let pkgHaste = pjson.rnpm.haste;
-
-  if (pkgHaste.platforms) {
-    haste.platforms = haste.platforms.concat(pkgHaste.platforms);
-  }
-
-  if (pkgHaste.providesModuleNodeModules) {
-    haste.providesModuleNodeModules = haste.providesModuleNodeModules.concat(
-      pkgHaste.providesModuleNodeModules,
-    );
-  }
-};
 
 const findPluginInFolder = folder => {
   const pjson = readPackage(folder);
@@ -85,23 +74,16 @@ const findPluginInFolder = folder => {
     Object.keys(pjson.devDependencies || {}),
   );
 
-  return deps.reduce((acc, pkg) => {
-    let commands = acc.commands;
-    let platforms = acc.platforms;
-    let haste = acc.haste;
-    if (isRNPMPlugin(pkg)) {
-      commands = commands.concat(pkg);
+  const config = getEmptyPluginConfig();
+  deps.forEach(dep => {
+    if (isRNPMPlugin(dep)) {
+      config.commands.push(path.join(folder, 'node_modules', dep));
     }
-    if (isReactNativePlugin(pkg)) {
-      const pkgJson = readPackage(path.join(folder, 'node_modules', pkg));
-      if (pkgJson) {
-        commands = commands.concat(findPluginsInReactNativePackage(pkgJson));
-        platforms = platforms.concat(findPlatformsInPackage(pkgJson));
-        findHasteConfigInPackageAndConcat(pkgJson, haste);
-      }
+    if (isReactNativePlugin(dep)) {
+      useReactNativePlugin(config, path.join(folder, 'node_modules', dep));
     }
-    return {commands: commands, platforms: platforms, haste: haste};
-  }, getEmptyPluginConfig());
+  });
+  return config;
 };
 
 /**

@@ -13,7 +13,7 @@
 const path = require('path');
 const findPlugins = require('../local-cli/core/findPlugins');
 
-const plugins = findPlugins([path.resolve(__dirname, '../../../')]);
+const plugins = findPlugins([process.cwd()]);
 
 // Detect out-of-tree platforms and add them to the whitelists
 const pluginRoots /*: Array<string> */ = plugins.haste.providesModuleNodeModules.map(
