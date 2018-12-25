@@ -222,7 +222,15 @@
     "sinon": "^2.2.0"
   },
   "rnpm": {
-    "plugin": "./local-cli/index.js",
-    "platform": "./local-cli/platform.js"
+    "plugin": "local-cli/index.js",
+    "platform": "local-cli/platform.js",
+    "haste": {
+      "providesModuleNodeModules": [
+        "react-native-macos"
+      ],
+      "platforms": [
+        "macos"
+      ]
+    }
   }
 }
