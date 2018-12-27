@@ -48,6 +48,10 @@
 #endif
 #endif
 
+#ifndef RCT_DEV_LOADING_VIEW
+#define RCT_DEV_LOADING_VIEW 0
+#endif
+
 #ifndef RCT_ENABLE_INSPECTOR
 #if RCT_DEV && __has_include(<React/RCTInspectorDevServerHelper.h>)
 #define RCT_ENABLE_INSPECTOR 1

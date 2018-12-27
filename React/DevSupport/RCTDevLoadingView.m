@@ -17,7 +17,7 @@
 #import "RCTUtils.h"
 
 
-#if RCT_DEV
+#if RCT_DEV && RCT_DEV_LOADING_VIEW
 
 static BOOL isEnabled = YES;
 
