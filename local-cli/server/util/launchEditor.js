@@ -13,7 +13,6 @@ var chalk = require('chalk');
 var fs = require('fs');
 var path = require('path');
 var child_process = require('child_process');
-const isAbsolutePath = require('absolute-path');
 const shellQuote = require('shell-quote');
 
 function isTerminalEditor(editor) {
@@ -42,14 +41,7 @@ var COMMON_EDITORS = {
   '/Applications/WebStorm.app/Contents/MacOS/webstorm': 'webstorm',
 };
 
-function addWorkspaceToArgumentsIfExists(args, workspace) {
-  if (workspace) {
-    args.unshift(workspace);
-  }
-  return args;
-}
-
-function getArgumentsForLineNumber(editor, fileName, lineNumber, workspace) {
+function getArgumentsForLineNumber(editor, fileName, lineNumber) {
   switch (path.basename(editor)) {
     case 'vim':
     case 'mvim':
@@ -74,10 +66,7 @@ function getArgumentsForLineNumber(editor, fileName, lineNumber, workspace) {
     case 'mine':
       return ['--line', lineNumber, fileName];
     case 'code':
-      return addWorkspaceToArgumentsIfExists(
-        ['-g', fileName + ':' + lineNumber],
-        workspace,
-      );
+      return ['-g', fileName + ':' + lineNumber];
   }
 
   // For all others, drop the lineNumber until we have
@@ -135,21 +124,6 @@ function printInstructions(title) {
   );
 }
 
-function transformToAbsolutePathIfNeeded(pathName) {
-  if (!isAbsolutePath(pathName)) {
-    pathName = path.resolve(process.cwd(), pathName);
-  }
-  return pathName;
-}
-
-function findRootForFile(projectRoots, fileName) {
-  fileName = transformToAbsolutePathIfNeeded(fileName);
-  return projectRoots.find(root => {
-    root = transformToAbsolutePathIfNeeded(root);
-    return fileName.startsWith(root + path.sep);
-  });
-}
-
 var _childProcess = null;
 function launchEditor(fileName, lineNumber, projectRoots) {
   if (!fs.existsSync(fileName)) {
@@ -168,10 +142,9 @@ function launchEditor(fileName, lineNumber, projectRoots) {
     return;
   }
 
-  var workspace = findRootForFile(projectRoots, fileName);
   if (lineNumber) {
     args = args.concat(
-      getArgumentsForLineNumber(editor, fileName, lineNumber, workspace),
+      getArgumentsForLineNumber(editor, fileName, lineNumber),
     );
   } else {
     args.push(fileName);
