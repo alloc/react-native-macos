@@ -39,7 +39,7 @@ extern NSString *const RCTContentDidAppearNotification;
  * like any ordinary UIView. You can have multiple RCTRootViews on screen at
  * once, all controlled by the same JavaScript application.
  */
-@interface RCTRootView : NSVisualEffectView
+@interface RCTRootView : NSView
 
 /**
  * - Designated initializer -
