@@ -140,7 +140,7 @@
     "test-android-e2e": "npm run test-android-build && npm run test-android-run-e2e"
   },
   "bin": {
-    "react-native-macos": "local-cli/wrong-react-native.js"
+    "react-native-macos": "bin/cli.js"
   },
   "peerDependencies": {
     "react": "16.2.0"
