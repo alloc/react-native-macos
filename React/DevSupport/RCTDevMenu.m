@@ -144,7 +144,7 @@ RCT_EXPORT_MODULE()
     [commands registerKeyCommandWithInput:@"d"
                             modifierFlags:NSEventModifierFlagCommand
                                    action:^(__unused NSEvent *command) {
-                                     [weakSelf toggle];
+                                     [weakSelf.bridge.devSettings setIsDebuggingRemotely:YES];
                                    }];
 
     // Toggle element inspector
