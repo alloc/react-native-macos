@@ -13,6 +13,8 @@
 #import "RCTKeyCommands.h"
 #import "RCTLog.h"
 #import "RCTUtils.h"
+#import "RCTDefines.h"
+#import <React/RCTBundleURLProvider.h>
 
 #define RCT_DEVMENU_TITLE @"React Native"
 
@@ -217,6 +219,12 @@ RCT_EXPORT_MODULE()
   [_extraMenuItems addObject:item];
 }
 
+- (void)setDefaultJSBundle {
+  [[RCTBundleURLProvider sharedSettings] resetToDefaults];
+  self->_bridge.bundleURL = [[RCTBundleURLProvider sharedSettings] jsBundleURLForFallbackResource:nil fallbackExtension:nil];
+  [self->_bridge reload];
+}
+
 - (NSArray<RCTDevMenuItem *> *)_menuItemsToPresent
 {
   NSMutableArray<RCTDevMenuItem *> *items = [NSMutableArray new];
@@ -294,6 +302,54 @@ RCT_EXPORT_MODULE()
       [self show];
     }]];
   }
+
+  [items addObject:[RCTDevMenuItem buttonItemWithTitleBlock:^NSString *{
+    return @"Change packager location";
+  } handler:^{
+    UIAlertController * alertController = [UIAlertController alertControllerWithTitle: @"Change packager location"
+                                                                              message: @"Input packager IP, port and entrypoint"
+                                                                       preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+      textField.placeholder = @"0.0.0.0";
+    }];
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+      textField.placeholder = @"8081";
+    }];
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+      textField.placeholder = @"index";
+    }];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"Use bundled JS" style:UIAlertActionStyleDefault handler:^(__unused UIAlertAction *action) {
+      [self setDefaultJSBundle];
+    }]];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"Use packager location" style:UIAlertActionStyleDefault handler:^(__unused UIAlertAction *action) {
+      NSArray * textfields = alertController.textFields;
+      UITextField * ipTextField = textfields[0];
+      UITextField * portTextField = textfields[1];
+      UITextField * bundleRootTextField = textfields[2];
+      NSString * bundleRoot = bundleRootTextField.text;
+      if(bundleRoot.length==0){
+        bundleRoot = @"index";
+      }
+      if(ipTextField.text.length == 0 && portTextField.text.length == 0) {
+        [self setDefaultJSBundle];
+        return;
+      }
+      NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+      formatter.numberStyle = NSNumberFormatterDecimalStyle;
+      NSNumber *portNumber = [formatter numberFromString:portTextField.text];
+      if (portNumber == nil) {
+        portNumber = [NSNumber numberWithInt: RCT_METRO_PORT];
+      }
+      [RCTBundleURLProvider sharedSettings].jsLocation = [NSString stringWithFormat:@"%@:%d",
+                                                          ipTextField.text, portNumber.intValue];
+      self->_bridge.bundleURL = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:bundleRoot fallbackResource:nil];
+      [self->_bridge reload];
+    }]];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(__unused UIAlertAction *action) {
+      return;
+    }]];
+    [RCTPresentedViewController() presentViewController:alertController animated:YES completion:NULL];
+  }]];
 
   [items addObject:[RCTDevMenuItem buttonItemWithTitleBlock:^NSString *{
     return @"Toggle Inspector";
