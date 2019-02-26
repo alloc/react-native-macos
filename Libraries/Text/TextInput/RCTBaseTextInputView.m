@@ -87,8 +87,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithFrame:(CGRect)frame)
 - (void)setReactBorderInsets:(NSEdgeInsets)reactBorderInsets
 {
   _reactBorderInsets = reactBorderInsets;
-  // We apply `borderInsets` as `backedTextInputView` layout offset.
-  self.backedTextInputView.frame = NSEdgeInsetsInsetRect(self.bounds, reactBorderInsets);
   [self updatePlaceholderFrame];
   [self setNeedsLayout:YES];
 }
