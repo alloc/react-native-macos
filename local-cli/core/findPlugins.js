@@ -21,7 +21,7 @@ const flatten = require('lodash').flatten;
  */
 const isRNPMPlugin = dependency => dependency.indexOf('rnpm-plugin-') === 0;
 const isReactNativePlugin = dependency =>
-  dependency.indexOf('react-native-') === 0;
+  /^react-native(-|$)/.test(dependency)
 
 const readPackage = folder => {
   try {
