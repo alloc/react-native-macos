@@ -1,18 +1,18 @@
 /**
  * Copyright (c) 2015-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @format
  */
+
 'use strict';
 
 var chalk = require('chalk');
 var fs = require('fs');
 var path = require('path');
 var child_process = require('child_process');
-const isAbsolutePath = require('absolute-path');
 const shellQuote = require('shell-quote');
 
 function isTerminalEditor(editor) {
@@ -41,14 +41,7 @@ var COMMON_EDITORS = {
   '/Applications/WebStorm.app/Contents/MacOS/webstorm': 'webstorm',
 };
 
-function addWorkspaceToArgumentsIfExists(args, workspace) {
-  if (workspace) {
-    args.unshift(workspace);
-  }
-  return args;
-}
-
-function getArgumentsForLineNumber(editor, fileName, lineNumber, workspace) {
+function getArgumentsForLineNumber(editor, fileName, lineNumber) {
   switch (path.basename(editor)) {
     case 'vim':
     case 'mvim':
@@ -73,7 +66,7 @@ function getArgumentsForLineNumber(editor, fileName, lineNumber, workspace) {
     case 'mine':
       return ['--line', lineNumber, fileName];
     case 'code':
-      return addWorkspaceToArgumentsIfExists(['-g', fileName + ':' + lineNumber], workspace);
+      return ['-g', fileName + ':' + lineNumber];
   }
 
   // For all others, drop the lineNumber until we have
@@ -116,32 +109,19 @@ function guessEditor() {
 }
 
 function printInstructions(title) {
-  console.log([
-    '',
-    chalk.bgBlue.white.bold(' ' + title + ' '),
-    '  When you see Red Box with stack trace, you can click any ',
-    '  stack frame to jump to the source file. The packager will launch your ',
-    '  editor of choice. It will first look at REACT_EDITOR environment ',
-    '  variable, then at EDITOR. To set it up, you can add something like ',
-    '  export REACT_EDITOR=atom to your ~/.bashrc or ~/.zshrc depending on ',
-    '  which shell you use.',
-    ''
-  ].join('\n'));
-}
-
-function transformToAbsolutePathIfNeeded(pathName) {
-  if (!isAbsolutePath(pathName)) {
-    pathName = path.resolve(process.cwd(), pathName);
-  }
-  return pathName;
-}
-
-function findRootForFile(projectRoots, fileName) {
-  fileName = transformToAbsolutePathIfNeeded(fileName);
-  return projectRoots.find((root) => {
-    root = transformToAbsolutePathIfNeeded(root);
-    return fileName.startsWith(root + path.sep);
-  });
+  console.log(
+    [
+      '',
+      chalk.bgBlue.white.bold(' ' + title + ' '),
+      '  When you see Red Box with stack trace, you can click any ',
+      '  stack frame to jump to the source file. The packager will launch your ',
+      '  editor of choice. It will first look at REACT_EDITOR environment ',
+      '  variable, then at EDITOR. To set it up, you can add something like ',
+      '  export REACT_EDITOR=atom to your ~/.bashrc or ~/.zshrc depending on ',
+      '  which shell you use.',
+      '',
+    ].join('\n'),
+  );
 }
 
 var _childProcess = null;
@@ -162,13 +142,16 @@ function launchEditor(fileName, lineNumber, projectRoots) {
     return;
   }
 
-  var workspace = findRootForFile(projectRoots, fileName);
   if (lineNumber) {
-    args = args.concat(getArgumentsForLineNumber(editor, fileName, lineNumber, workspace));
+    args = args.concat(
+      getArgumentsForLineNumber(editor, fileName, lineNumber),
+    );
   } else {
     args.push(fileName);
   }
-  console.log('Opening ' + chalk.underline(fileName) + ' with ' + chalk.bold(editor));
+  console.log(
+    'Opening ' + chalk.underline(fileName) + ' with ' + chalk.bold(editor),
+  );
 
   if (_childProcess && isTerminalEditor(editor)) {
     // There's an existing editor process already and it's attached
@@ -180,7 +163,11 @@ function launchEditor(fileName, lineNumber, projectRoots) {
   if (process.platform === 'win32') {
     // On Windows, launch the editor in a shell because spawn can only
     // launch .exe files.
-    _childProcess = child_process.spawn('cmd.exe', ['/C', editor].concat(args), {stdio: 'inherit'});
+    _childProcess = child_process.spawn(
+      'cmd.exe',
+      ['/C', editor].concat(args),
+      {stdio: 'inherit'},
+    );
   } else {
     _childProcess = child_process.spawn(editor, args, {stdio: 'inherit'});
   }
