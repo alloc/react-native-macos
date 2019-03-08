@@ -509,6 +509,11 @@ RCT_EXPORT_METHOD(dismiss)
     [self dismiss];
 }
 
+- (BOOL)isVisible
+{
+    return _window.isVisible;
+}
+
 - (void)redBoxWindow:(__unused RCTRedBoxWindow *)redBoxWindow openStackFrameInEditor:(RCTJSStackFrame *)stackFrame
 {
     NSURL *const bundleURL = _overrideBundleURL ?: _bridge.bundleURL;

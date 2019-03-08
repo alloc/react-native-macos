@@ -29,6 +29,8 @@
 
 - (void)dismiss;
 
+@property (readonly) BOOL isVisible;
+
 /** Overrides bridge.bundleURL. Modify on main thread only. You shouldn't need to use this. */
 @property (nonatomic, strong) NSURL *overrideBundleURL;
 
