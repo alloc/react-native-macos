@@ -116,6 +116,10 @@
 
 - (NSView *)reactHitTest:(NSPoint)point;
 
+@end
+
+@interface CALayer (React)
+
 + (void)performWithoutAnimation:(void (^)(void))actionsWithoutAnimation;
 
 @end
