@@ -114,20 +114,12 @@ RCT_EXPORT_MODULE()
   _paused = YES;
   _timers = [NSMutableDictionary new];
 
-  for (NSString *name in @[NSApplicationDidResignActiveNotification,
-                             NSApplicationWillTerminateNotification]) {
+  for (NSString *name in @[NSApplicationWillTerminateNotification]) {
 
       [[NSNotificationCenter defaultCenter] addObserver:self
                                                selector:@selector(stopTimers)
                                                    name:name
                                                  object:nil];
-  }
-
-  for (NSString *name in @[NSApplicationDidBecomeActiveNotification]) {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(startTimers)
-                                                 name:name
-                                               object:nil];
   }
 
   _bridge = bridge;
