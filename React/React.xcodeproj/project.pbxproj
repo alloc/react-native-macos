@@ -1889,6 +1889,7 @@
 				13B07FF31A6947C200A75B9A /* Views */,
 			);
 			name = React;
+			path = ../React;
 			sourceTree = "<group>";
 		};
 		83CBBA491A601E3B00E9B192 /* Base */ = {
