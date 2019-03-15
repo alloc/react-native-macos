@@ -45,6 +45,8 @@ const OVERRIDE_PROPS = [
   'testID',
   'onLayout',
   'hitSlop',
+  'onBlur',
+  'onFocus',
   'onMouseMove',
   'onMouseEnter',
   'onMouseLeave',
