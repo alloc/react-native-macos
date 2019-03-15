@@ -1,0 +1,107 @@
+{
+    "name": "@types/react-native",
+    "version": "0.57.39",
+    "description": "TypeScript definitions for react-native",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "Eloy Durán",
+            "url": "https://github.com/alloy",
+            "githubUsername": "alloy"
+        },
+        {
+            "name": "HuHuanming",
+            "url": "https://github.com/huhuanming",
+            "githubUsername": "huhuanming"
+        },
+        {
+            "name": "Kyle Roach",
+            "url": "https://github.com/iRoachie",
+            "githubUsername": "iRoachie"
+        },
+        {
+            "name": "Simon Knott",
+            "url": "https://github.com/skn0tt",
+            "githubUsername": "skn0tt"
+        },
+        {
+            "name": "Tim Wang",
+            "url": "https://github.com/timwangdev",
+            "githubUsername": "timwangdev"
+        },
+        {
+            "name": "Kamal Mahyuddin",
+            "url": "https://github.com/kamal",
+            "githubUsername": "kamal"
+        },
+        {
+            "name": "Naoufal El Yousfi",
+            "url": "https://github.com/nelyousfi",
+            "githubUsername": "nelyousfi"
+        },
+        {
+            "name": "Alex Dunne",
+            "url": "https://github.com/alexdunne",
+            "githubUsername": "alexdunne"
+        },
+        {
+            "name": "Manuel Alabor",
+            "url": "https://github.com/swissmanu",
+            "githubUsername": "swissmanu"
+        },
+        {
+            "name": "Michele Bombardi",
+            "url": "https://github.com/bm-software",
+            "githubUsername": "bm-software"
+        },
+        {
+            "name": "Tanguy Krotoff",
+            "url": "https://github.com/tkrotoff",
+            "githubUsername": "tkrotoff"
+        },
+        {
+            "name": "Alexander T.",
+            "url": "https://github.com/a-tarasyuk",
+            "githubUsername": "a-tarasyuk"
+        },
+        {
+            "name": "Martin van Dam",
+            "url": "https://github.com/mvdam",
+            "githubUsername": "mvdam"
+        },
+        {
+            "name": "Kacper Wiszczuk",
+            "url": "https://github.com/esemesek",
+            "githubUsername": "esemesek"
+        },
+        {
+            "name": "Ryan Nickel",
+            "url": "https://github.com/mrnickel",
+            "githubUsername": "mrnickel"
+        },
+        {
+            "name": "Souvik Ghosh",
+            "url": "https://github.com/souvik-ghosh",
+            "githubUsername": "souvik-ghosh"
+        },
+        {
+            "name": "Cheng Gibson",
+            "url": "https://github.com/nossbigg",
+            "githubUsername": "nossbigg"
+        }
+    ],
+    "main": "",
+    "types": "index",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+        "directory": "types/react-native"
+    },
+    "scripts": {},
+    "dependencies": {
+        "@types/prop-types": "*",
+        "@types/react": "*"
+    },
+    "typesPublisherContentHash": "36872b412fd5bc399962068860f00e4a76b14e85043933444ab010237152c46d",
+    "typeScriptVersion": "2.8"
+}
