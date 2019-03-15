@@ -37,6 +37,24 @@ import type {PressEvent} from 'CoreEventTypes';
 
 const PRESS_RETENTION_OFFSET = {top: 20, left: 20, right: 20, bottom: 30};
 
+const OVERRIDE_PROPS = [
+  'accessibilityLabel',
+  'accessibilityComponentType',
+  'accessibilityTraits',
+  'nativeID',
+  'testID',
+  'onLayout',
+  'hitSlop',
+  'onMouseMove',
+  'onMouseEnter',
+  'onMouseLeave',
+  'onMouseOver',
+  'onMouseOut',
+  'onContextMenu',
+  'onContextMenuItemClick',
+  'contextMenu',
+];
+
 /**
  * Do not use unless you have a very good reason. All elements that
  * respond to press should have a visual feedback when touched.
@@ -203,15 +221,16 @@ const TouchableWithoutFeedback = createReactClass({
         ? [child.props.style, {color: 'red'}]
         : child.props.style;
 
+    const overrides = {};
+    for (const prop of OVERRIDE_PROPS) {
+      if (this.props[prop] !== undefined) {
+        overrides[prop] = this.props[prop];
+      }
+    }
+
     return (React: any).cloneElement(child, {
+      ...overrides,
       accessible: this.props.accessible !== false,
-      accessibilityLabel: this.props.accessibilityLabel,
-      accessibilityComponentType: this.props.accessibilityComponentType,
-      accessibilityTraits: this.props.accessibilityTraits,
-      nativeID: this.props.nativeID,
-      testID: this.props.testID,
-      onLayout: this.props.onLayout,
-      hitSlop: this.props.hitSlop,
       onStartShouldSetResponder: this.touchableHandleStartShouldSetResponder,
       onResponderTerminationRequest: this
         .touchableHandleResponderTerminationRequest,
@@ -219,14 +238,6 @@ const TouchableWithoutFeedback = createReactClass({
       onResponderMove: this.touchableHandleResponderMove,
       onResponderRelease: this.touchableHandleResponderRelease,
       onResponderTerminate: this.touchableHandleResponderTerminate,
-      onMouseMove: this.props.onMouseMove,
-      onMouseEnter: this.props.onMouseEnter,
-      onMouseLeave: this.props.onMouseLeave,
-      onMouseOver: this.props.onMouseOver,
-      onMouseOut: this.props.onMouseOut,
-      onContextMenu: this.props.onContextMenu,
-      onContextMenuItemClick: this.props.onContextMenuItemClick,
-      contextMenu: this.props.contextMenu,
       style,
       children,
     });
