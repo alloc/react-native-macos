@@ -7,6 +7,7 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  *
  * @providesModule TouchableWithoutFeedback
+ * @format
  * @flow
  */
 'use strict';
@@ -34,7 +35,7 @@ const {
 
 import type {PressEvent} from 'CoreEventTypes';
 
-const PRESS_RETENTION_OFFSET = { top: 20, left: 20, right: 20, bottom: 30 };
+const PRESS_RETENTION_OFFSET = {top: 20, left: 20, right: 20, bottom: 30};
 
 /**
  * Do not use unless you have a very good reason. All elements that
@@ -64,14 +65,14 @@ const TouchableWithoutFeedback = createReactClass({
      */
     onPress: PropTypes.func,
     /**
-    * Called as soon as the touchable element is pressed and invoked even before onPress.
-    * This can be useful when making network requests.
-    */
+     * Called as soon as the touchable element is pressed and invoked even before onPress.
+     * This can be useful when making network requests.
+     */
     onPressIn: PropTypes.func,
     /**
-    * Called as soon as the touch is released even before onPress.
-    */
-     onPressOut: PropTypes.func,
+     * Called as soon as the touch is released even before onPress.
+     */
+    onPressOut: PropTypes.func,
     /**
      * Invoked on mount and layout changes with
      *
@@ -183,7 +184,7 @@ const TouchableWithoutFeedback = createReactClass({
       !child.type || child.type.displayName !== 'Text',
       'TouchableWithoutFeedback does not work well with Text children. Wrap children in a View instead. See ' +
         ((child._owner && child._owner.getName && child._owner.getName()) ||
-          '<unknown>')
+          '<unknown>'),
     );
     if (
       Touchable.TOUCH_TARGET_DEBUG &&
@@ -192,14 +193,15 @@ const TouchableWithoutFeedback = createReactClass({
     ) {
       children = React.Children.toArray(children);
       children.push(
-        Touchable.renderDebugView({ color: 'red', hitSlop: this.props.hitSlop })
+        Touchable.renderDebugView({color: 'red', hitSlop: this.props.hitSlop}),
       );
     }
-    const style = Touchable.TOUCH_TARGET_DEBUG &&
+    const style =
+      Touchable.TOUCH_TARGET_DEBUG &&
       child.type &&
       child.type.displayName === 'Text'
-      ? [child.props.style, { color: 'red' }]
-      : child.props.style;
+        ? [child.props.style, {color: 'red'}]
+        : child.props.style;
 
     return (React: any).cloneElement(child, {
       accessible: this.props.accessible !== false,
