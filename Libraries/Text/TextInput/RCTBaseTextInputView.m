@@ -534,7 +534,7 @@ static BOOL findMismatch(NSString *first, NSString *second, NSRange *firstRange,
 {
   if (_placeholderView && _textAttributes) {
     _placeholderView.font = _textAttributes.effectiveFont;
-    _placeholderView.textColor = _textAttributes.effectiveForegroundColor;
+    _placeholderView.textColor = self.placeholderColor ?: _textAttributes.effectiveForegroundColor;
     _placeholderView.alignment = _textAttributes.alignment;
   }
 }
