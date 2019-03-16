@@ -91,6 +91,7 @@
     "testEnvironment": "node"
   },
   "main": "Libraries/react-native/react-native-implementation.js",
+  "types": "./@types/index.d.ts",
   "files": [
     ".flowconfig",
     "android",
