@@ -42,12 +42,12 @@
 {
   if (self = [super initWithFrame:frameRect]) {
     // _text, _attributedText and _preferredMaxLayoutWidth are nil/0 by default
-    self.font            = self.defaultFont;
-    self.textColor       = self.defaultTextColor;
-    self.backgroundColor = self.defaultBackgroundColor;
-    self.numberOfLines   = 1;
-    self.alignment       = NSTextAlignmentLeft;
-    self.lineBreakMode   = NSLineBreakByTruncatingTail;
+    _font            = self.defaultFont;
+    _textColor       = self.defaultTextColor;
+    _backgroundColor = self.defaultBackgroundColor;
+    _numberOfLines   = 1;
+    _alignment       = NSTextAlignmentLeft;
+    _lineBreakMode   = NSLineBreakByTruncatingTail;
   }
 
   return self;
