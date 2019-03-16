@@ -45,7 +45,6 @@ const requireNativeComponent = require('requireNativeComponent');
 const warning = require('fbjs/lib/warning');
 
 const onlyMultiline = {
-  onTextInput: true,
   children: true,
 };
 
@@ -675,6 +674,7 @@ const TextInput = createReactClass({
           onChange={this._onChange}
           onSelectionChange={this._onSelectionChange}
           onSelectionChangeShouldSetResponder={emptyFunction.thatReturnsTrue}
+          onTextInput={this._onTextInput}
           text={this._getText()}
         />
       );
