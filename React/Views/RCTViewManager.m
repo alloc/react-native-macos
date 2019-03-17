@@ -127,15 +127,7 @@ RCT_CUSTOM_VIEW_PROPERTY(shouldRasterizeIOS, BOOL, RCTView)
   view.layer.rasterizationScale = view.layer.shouldRasterize ? [NSScreen mainScreen].backingScaleFactor : defaultView.layer.rasterizationScale;
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(transform, CATransform3D, RCTView)
-{
-  if (json) {
-    [view ensureLayerExists];
-  }
-  view.layer.transform = json ? [RCTConvert CATransform3D:json] : defaultView.layer.transform;
-  // Enable edge antialiasing in perspective transforms
-  view.layer.edgeAntialiasingMask = !(view.layer.transform.m34 == 0.0f);
-}
+RCT_EXPORT_VIEW_PROPERTY(transform, CATransform3D)
 
 RCT_CUSTOM_VIEW_PROPERTY(draggedTypes, NSArray*<NSString *>, RCTView)
 {
