@@ -129,9 +129,8 @@ RCT_CUSTOM_VIEW_PROPERTY(transform, CATransform3D, RCTView)
     [view ensureLayerExists];
   }
   view.layer.transform = json ? [RCTConvert CATransform3D:json] : defaultView.layer.transform;
-
-  // TODO: Improve this by enabling edge antialiasing only for transforms with rotation or skewing
-  view.layer.edgeAntialiasingMask = !CATransform3DIsIdentity(transform);
+  // Enable edge antialiasing in perspective transforms
+  view.layer.edgeAntialiasingMask = !(view.layer.transform.m34 == 0.0f);
 }
 
 RCT_CUSTOM_VIEW_PROPERTY(draggedTypes, NSArray*<NSString *>, RCTView)
