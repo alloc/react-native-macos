@@ -133,4 +133,7 @@
  */
 @property (nonatomic, assign) NSEdgeInsets hitTestEdgeInsets;
 
+/** Populate the `layer` ivar when nil */
+- (void)ensureLayerExists;
+
 @end
