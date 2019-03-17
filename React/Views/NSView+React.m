@@ -306,7 +306,23 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   return view;
 }
 
+#pragma mark - Other
+
+- (void)ensureLayerExists
+{
+  if (!self.layer) {
+    // Set `wantsLayer` first to create a "layer-backed view" instead of a "layer-hosting view".
+    self.wantsLayer = YES;
+
+    CALayer *layer = [CALayer layer];
+    layer.delegate = (id<CALayerDelegate>)self;
+    self.layer = layer;
+  }
+}
+
 @end
+
+#pragma mark -
 
 @implementation CALayer (React)
 

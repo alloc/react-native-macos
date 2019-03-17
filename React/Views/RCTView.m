@@ -627,18 +627,6 @@ static CGFloat RCTDefaultIfNegativeTo(CGFloat defaultValue, CGFloat x) {
   }
 }
 
-- (void)ensureLayerExists
-{
-  if (!self.layer) {
-    // Set `wantsLayer` first to create a "layer-backed view" instead of a "layer-hosting view".
-    self.wantsLayer = YES;
-
-    CALayer *layer = [CALayer layer];
-    layer.delegate = self;
-    self.layer = layer;
-  }
-}
-
 - (void)displayLayer:(CALayer *)layer
 {
   if (CGSizeEqualToSize(layer.bounds.size, CGSizeZero)) {

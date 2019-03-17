@@ -116,6 +116,9 @@
 
 - (NSView *)reactHitTest:(NSPoint)point;
 
+/** Populate the `layer` ivar when nil */
+- (void)ensureLayerExists;
+
 @end
 
 @interface CALayer (React)
