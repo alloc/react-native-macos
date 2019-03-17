@@ -641,11 +641,6 @@ static CGFloat RCTDefaultIfNegativeTo(CGFloat defaultValue, CGFloat x) {
 
 - (void)displayLayer:(CALayer *)layer
 {
-  if (self.shouldBeTransformed) {
-    self.layer.transform = self.transform;
-    self.shouldBeTransformed = NO;
-  }
-  
   if (CGSizeEqualToSize(layer.bounds.size, CGSizeZero)) {
     return;
   }
