@@ -477,22 +477,11 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
 
 - (void)setBackgroundColor:(NSColor *)backgroundColor
 {
-  if ([_backgroundColor isEqual:backgroundColor]) {
-    return;
-  }
-  if (backgroundColor == nil) {
-    [self setWantsLayer:NO];
-    self.layer = NULL;
-    return;
-  }
-  if (![self wantsLayer] || self.layer == nil) {
-    [self setWantsLayer:YES];
-    self.layer.delegate = self;
-  }
-  [self.layer setBackgroundColor:[backgroundColor CGColor]];
-  [self.layer setNeedsDisplay];
-  [self setNeedsDisplay:YES];
   _backgroundColor = backgroundColor;
+
+  [self ensureLayerExists];
+  self.layer.backgroundColor = backgroundColor.CGColor;
+  [self.layer setNeedsDisplay];
 }
 
 static CGFloat RCTDefaultIfNegativeTo(CGFloat defaultValue, CGFloat x) {

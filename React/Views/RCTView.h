@@ -46,8 +46,6 @@
  */
 + (NSEdgeInsets)contentInsetsForView:(NSView *)curView;
 
-- (void)setBackgroundColor:(NSColor *)backgroundColor;
-
 /**
  * Layout direction of the view.
  * This is inherited from UIView+React, but we override it here
@@ -113,12 +111,6 @@
 @property (nonatomic, assign) CGFloat borderEndWidth;
 @property (nonatomic, assign) CGFloat borderWidth;
 
-@property (nonatomic, assign) CATransform3D transform;
-
-@property (nonatomic, copy) RCTDirectEventBlock onDragEnter;
-@property (nonatomic, copy) RCTDirectEventBlock onDragLeave;
-@property (nonatomic, copy) RCTDirectEventBlock onDrop;
-@property (nonatomic, copy) RCTDirectEventBlock onContextMenuItemClick;
 /**
  * Border styles.
  */
@@ -128,5 +120,13 @@
  *  Insets used when hit testing inside this view.
  */
 @property (nonatomic, assign) NSEdgeInsets hitTestEdgeInsets;
+
+@property (nonatomic, assign) CATransform3D transform;
+@property (nonatomic, copy) NSColor *backgroundColor;
+
+@property (nonatomic, copy) RCTDirectEventBlock onDragEnter;
+@property (nonatomic, copy) RCTDirectEventBlock onDragLeave;
+@property (nonatomic, copy) RCTDirectEventBlock onDrop;
+@property (nonatomic, copy) RCTDirectEventBlock onContextMenuItemClick;
 
 @end
