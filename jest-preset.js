@@ -18,7 +18,6 @@ module.exports = {
     hasteImplModulePath: require.resolve('./jest/hasteImpl.js'),
     providesModuleNodeModules: ['react-native'],
   },
-  moduleFileExtensions: ['js', 'json', 'jsx', 'node', 'ts', 'tsx'],
   moduleNameMapper: {
     '^React$': require.resolve('react'),
   },
@@ -31,10 +30,6 @@ module.exports = {
   },
   transformIgnorePatterns: [
     'node_modules/(?!(jest-)?react-native|react-clone-referenced-element)',
-  ],
-  testMatch: [
-    '**/__tests__/**/*.(js|ts|tsx)',
-    '**/?(*.)+(spec|test).(js|ts|tsx)',
   ],
   setupFiles: [require.resolve('./jest/setup.js')],
   testEnvironment: 'node',
