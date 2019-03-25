@@ -42,6 +42,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)selectAll:(nullable id)sender;
 
+/**
+ * macOS only
+ */
+@property (nonatomic, assign) BOOL prefersFocus;
+
 @end
 
 NS_ASSUME_NONNULL_END

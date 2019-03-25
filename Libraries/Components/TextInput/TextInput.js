@@ -536,6 +536,11 @@ const TextInput = createReactClass({
      * If `true`, caret is hidden. The default value is `false`.
      */
     caretHidden: PropTypes.bool,
+    /**
+     * When true, focus is not lost when clicking outside the input view.
+     * @platform macos
+     */
+    preferFocus: PropTypes.bool,
   },
   getDefaultProps(): Object {
     return {

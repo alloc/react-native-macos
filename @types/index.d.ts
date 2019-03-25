@@ -953,6 +953,13 @@ export interface DocumentSelectionState extends EventEmitter {
     overlaps(start: number, end: number): boolean;
 }
 
+export interface TextInputMacOSProps {
+    /**
+     * When true, focus is not lost when clicking outside the input view.
+     */
+    preferFocus?: boolean;
+}
+
 /**
  * IOS Specific properties for TextInput
  * @see https://facebook.github.io/react-native/docs/textinput.html#props
@@ -1221,7 +1228,7 @@ export interface TextInputSubmitEditingEventData {
 /**
  * @see https://facebook.github.io/react-native/docs/textinput.html#props
  */
-export interface TextInputProps extends ViewProps, TextInputIOSProps, TextInputAndroidProps, AccessibilityProps {
+export interface TextInputProps extends ViewProps, TextInputMacOSProps, TextInputIOSProps, TextInputAndroidProps, AccessibilityProps {
     /**
      * Specifies whether fonts should scale to respect Text Size accessibility settings.
      * The default is `true`.

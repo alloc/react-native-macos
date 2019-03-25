@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class RCTFieldEditor;
 
 @protocol RCTFieldEditorDelegate <NSTextViewDelegate>
+@property (nonatomic, assign) BOOL prefersFocus;
 @optional
 - (void)fieldEditor:(RCTFieldEditor *)editor didPaste:(NSString *)text;
 - (void)fieldEditorDidReturn:(RCTFieldEditor *)editor;

@@ -12,6 +12,7 @@
 #import "RCTUtils.h"
 #import "RCTMouseEvent.h"
 #import "RCTTouchEvent.h"
+#import "RCTFieldEditor.h"
 #import "NSView+React.h"
 
 @implementation RCTWindow
@@ -151,8 +152,11 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
           return;
         }
 
-        // Blur the field editor when clicking outside it.
-        [self makeFirstResponder:nil];
+        // Blur the field editor when clicking outside it, except when "prefersFocus" is true.
+        BOOL isReactInput = [fieldEditor isKindOfClass:[RCTFieldEditor class]];
+        if (!isReactInput || !((RCTFieldEditor *)fieldEditor).delegate.prefersFocus) {
+          [self makeFirstResponder:nil];
+        }
       }
 
       if (type == NSEventTypeLeftMouseDown) {
