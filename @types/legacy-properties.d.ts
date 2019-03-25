@@ -67,9 +67,9 @@ import {
     StatusBarPropsAndroid,
     SwitchProps,
     SwitchPropsIOS,
-} from "react-native";
+} from "./index";
 
-declare module "react-native" {
+declare module "react-native-macos" {
     /*
      * Previously, props interfaces where named *Properties
      * They have been renamed to *Props to match React Native documentation
