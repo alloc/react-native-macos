@@ -203,7 +203,12 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithFrame:(CGRect)frame)
 
 - (BOOL)textInputShouldReturn
 {
-  return _blurOnSubmit;
+  if (_blurOnSubmit) {
+    return YES;
+  }
+
+  [self textInputDidReturn];
+  return NO;
 }
 
 - (void)textInputDidReturn
