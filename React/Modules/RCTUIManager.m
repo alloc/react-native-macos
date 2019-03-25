@@ -983,22 +983,28 @@ RCT_EXPORT_METHOD(blur:(nonnull NSNumber *)reactTag)
 RCT_EXPORT_METHOD(findSubviewIn:(nonnull NSNumber *)reactTag atPoint:(CGPoint)point callback:(RCTResponseSenderBlock)callback)
 {
   [self addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, NSView *> *viewRegistry) {
-    NSLog(@"findSubViewin is not implemented");
-//    NSView *view = viewRegistry[reactTag];
-//    NSView *target = [view hitTest:point withEvent:nil];
-//    CGRect frame = [target convertRect:target.bounds toView:view];
-//
-//    while (target.reactTag == nil && target.superview != nil) {
-//      target = target.superview;
-//    }
-//
-//    callback(@[
-//      RCTNullIfNil(target.reactTag),
-//      @(frame.origin.x),
-//      @(frame.origin.y),
-//      @(frame.size.width),
-//      @(frame.size.height),
-//    ]);
+    NSView *view = viewRegistry[reactTag];
+
+    // Flip the coordinate system to bottom-left origin.
+    NSPoint convertedPoint = (NSPoint){
+      point.x,
+      view.window.frame.size.height - point.y,
+    };
+
+    NSView *target = [view hitTest:view.isFlipped ? point : convertedPoint];
+    CGRect frame = [target convertRect:target.bounds toView:view];
+
+    while (target.reactTag == nil && target.superview != nil) {
+      target = target.superview;
+    }
+
+    callback(@[
+      RCTNullIfNil(target.reactTag),
+      @(frame.origin.x),
+      @(frame.origin.y),
+      @(frame.size.width),
+      @(frame.size.height),
+    ]);
   }];
 }
 
