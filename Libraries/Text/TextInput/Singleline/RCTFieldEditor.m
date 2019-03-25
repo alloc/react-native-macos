@@ -42,4 +42,10 @@
   }
 }
 
+- (NSView *)hitTest:(NSPoint)point
+{
+  NSView *view = [super hitTest:point];
+  return !view && CGRectContainsPoint(self.frame, point) ? self : view;
+}
+
 @end
