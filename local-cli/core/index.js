@@ -123,10 +123,11 @@ const defaultRNConfig = {
  * Loads the CLI configuration
  */
 async function getCliConfig(): Promise<RNConfig> {
-  const cliArgs = minimist(process.argv.slice(2));
-  const config = await Config.load(
-    cliArgs.config != null ? path.resolve(__dirname, cliArgs.config) : null,
-  );
+  const argv = minimist(process.argv.slice(2));
+  if (argv.config) {
+    argv.config = path.resolve(__dirname, argv.config);
+  }
+  const config = await Config.load(argv);
 
   config.transformer.assetRegistryPath = ASSET_REGISTRY_PATH;
 

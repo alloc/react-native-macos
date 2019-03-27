@@ -87,13 +87,11 @@ const Config = {
     watchFolders: getWatchFolders(),
   },
 
-  async load(configFile: ?string): Promise<ConfigT> {
-    const argv = {cwd: getProjectRoot()};
-
-    return await loadConfig(
-      configFile ? {...argv, config: configFile} : argv,
-      this.DEFAULT,
-    );
+  async load(argv?: any = {}): Promise<ConfigT> {
+    if (argv.cwd == null) {
+      argv.cwd = getProjectRoot();
+    }
+    return await loadConfig(argv, this.DEFAULT);
   },
 };
 
