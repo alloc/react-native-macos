@@ -158,7 +158,10 @@ RCT_EXPORT_MODULE()
 
   dispatch_async(_jsQueue, ^{
     if (!self.valid) {
-      callback(RCTErrorWithMessage(@"Runtime is not ready for debugging. Make sure Packager server is running."), nil);
+      if (self->_socket) {
+        [self invalidate];
+        callback(RCTErrorWithMessage(@"Runtime is not ready for debugging. Make sure Packager server is running."), nil);
+      }
       return;
     }
 
