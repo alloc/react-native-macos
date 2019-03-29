@@ -298,6 +298,19 @@ function getParent(inst) {
   while (inst && 5 !== inst.tag);
   return inst ? inst : null;
 }
+function getLowestCommonAncestor(instA, instB) {
+  for (var depthA = 0, tempA = instA; tempA; tempA = getParent(tempA)) depthA++;
+  tempA = 0;
+  for (var tempB = instB; tempB; tempB = getParent(tempB)) tempA++;
+  for (; 0 < depthA - tempA; ) (instA = getParent(instA)), depthA--;
+  for (; 0 < tempA - depthA; ) (instB = getParent(instB)), tempA--;
+  for (; depthA--; ) {
+    if (instA === instB || instA === instB.alternate) return instA;
+    instA = getParent(instA);
+    instB = getParent(instB);
+  }
+  return null;
+}
 function traverseTwoPhase(inst, fn, arg) {
   for (var path = []; inst; ) path.push(inst), (inst = getParent(inst));
   for (inst = path.length; 0 < inst--; ) fn(path[inst], "captured", arg);
@@ -331,22 +344,27 @@ function accumulateTwoPhaseDispatchesSingleSkipTarget(event) {
     traverseTwoPhase(targetInst, accumulateDirectionalDispatches, event);
   }
 }
+function accumulateDispatches(inst, ignoredDirection, event) {
+  inst &&
+    event &&
+    event.dispatchConfig.registrationName &&
+    (ignoredDirection = getListener(
+      inst,
+      event.dispatchConfig.registrationName
+    )) &&
+    ((event._dispatchListeners = accumulateInto(
+      event._dispatchListeners,
+      ignoredDirection
+    )),
+    (event._dispatchInstances = accumulateInto(
+      event._dispatchInstances,
+      inst
+    )));
+}
 function accumulateDirectDispatchesSingle(event) {
-  if (event && event.dispatchConfig.registrationName) {
-    var inst = event._targetInst;
-    if (inst && event && event.dispatchConfig.registrationName) {
-      var listener = getListener(inst, event.dispatchConfig.registrationName);
-      listener &&
-        ((event._dispatchListeners = accumulateInto(
-          event._dispatchListeners,
-          listener
-        )),
-        (event._dispatchInstances = accumulateInto(
-          event._dispatchInstances,
-          inst
-        )));
-    }
-  }
+  event &&
+    event.dispatchConfig.registrationName &&
+    accumulateDispatches(event._targetInst, null, event);
 }
 function functionThatReturnsTrue() {
   return !0;
@@ -724,207 +742,181 @@ var eventTypes$1 = {
             : "topSelectionChange" === topLevelType
               ? eventTypes$1.selectionChangeShouldSetResponder
               : eventTypes$1.scrollShouldSetResponder;
-        if (responderInst)
-          b: {
-            var JSCompiler_temp$jscomp$0 = responderInst;
-            for (
-              var depthA = 0, tempA = JSCompiler_temp$jscomp$0;
-              tempA;
-              tempA = getParent(tempA)
-            )
-              depthA++;
-            tempA = 0;
-            for (var tempB = targetInst; tempB; tempB = getParent(tempB))
-              tempA++;
-            for (; 0 < depthA - tempA; )
-              (JSCompiler_temp$jscomp$0 = getParent(JSCompiler_temp$jscomp$0)),
-                depthA--;
-            for (; 0 < tempA - depthA; )
-              (targetInst = getParent(targetInst)), tempA--;
-            for (; depthA--; ) {
-              if (
-                JSCompiler_temp$jscomp$0 === targetInst ||
-                JSCompiler_temp$jscomp$0 === targetInst.alternate
-              )
-                break b;
-              JSCompiler_temp$jscomp$0 = getParent(JSCompiler_temp$jscomp$0);
-              targetInst = getParent(targetInst);
-            }
-            JSCompiler_temp$jscomp$0 = null;
-          }
-        else JSCompiler_temp$jscomp$0 = targetInst;
-        targetInst = JSCompiler_temp$jscomp$0 === responderInst;
-        JSCompiler_temp$jscomp$0 = ResponderSyntheticEvent.getPooled(
+        targetInst = responderInst
+          ? getLowestCommonAncestor(responderInst, targetInst)
+          : targetInst;
+        var skipOverBubbleShouldSetFrom = targetInst === responderInst;
+        targetInst = ResponderSyntheticEvent.getPooled(
           JSCompiler_temp,
-          JSCompiler_temp$jscomp$0,
+          targetInst,
           nativeEvent,
           nativeEventTarget
         );
-        JSCompiler_temp$jscomp$0.touchHistory =
-          ResponderTouchHistoryStore.touchHistory;
-        targetInst
+        targetInst.touchHistory = ResponderTouchHistoryStore.touchHistory;
+        skipOverBubbleShouldSetFrom
           ? forEachAccumulated(
-              JSCompiler_temp$jscomp$0,
+              targetInst,
               accumulateTwoPhaseDispatchesSingleSkipTarget
             )
-          : forEachAccumulated(
-              JSCompiler_temp$jscomp$0,
-              accumulateTwoPhaseDispatchesSingle
-            );
+          : forEachAccumulated(targetInst, accumulateTwoPhaseDispatchesSingle);
         b: {
-          JSCompiler_temp = JSCompiler_temp$jscomp$0._dispatchListeners;
-          targetInst = JSCompiler_temp$jscomp$0._dispatchInstances;
+          JSCompiler_temp = targetInst._dispatchListeners;
+          skipOverBubbleShouldSetFrom = targetInst._dispatchInstances;
           if (Array.isArray(JSCompiler_temp))
             for (
-              depthA = 0;
-              depthA < JSCompiler_temp.length &&
-              !JSCompiler_temp$jscomp$0.isPropagationStopped();
-              depthA++
+              var i = 0;
+              i < JSCompiler_temp.length && !targetInst.isPropagationStopped();
+              i++
             ) {
               if (
-                JSCompiler_temp[depthA](
-                  JSCompiler_temp$jscomp$0,
-                  targetInst[depthA]
-                )
+                JSCompiler_temp[i](targetInst, skipOverBubbleShouldSetFrom[i])
               ) {
-                JSCompiler_temp = targetInst[depthA];
+                JSCompiler_temp = skipOverBubbleShouldSetFrom[i];
                 break b;
               }
             }
           else if (
             JSCompiler_temp &&
-            JSCompiler_temp(JSCompiler_temp$jscomp$0, targetInst)
+            JSCompiler_temp(targetInst, skipOverBubbleShouldSetFrom)
           ) {
-            JSCompiler_temp = targetInst;
+            JSCompiler_temp = skipOverBubbleShouldSetFrom;
             break b;
           }
           JSCompiler_temp = null;
         }
-        JSCompiler_temp$jscomp$0._dispatchInstances = null;
-        JSCompiler_temp$jscomp$0._dispatchListeners = null;
-        JSCompiler_temp$jscomp$0.isPersistent() ||
-          JSCompiler_temp$jscomp$0.constructor.release(
-            JSCompiler_temp$jscomp$0
+        targetInst._dispatchInstances = null;
+        targetInst._dispatchListeners = null;
+        targetInst.isPersistent() || targetInst.constructor.release(targetInst);
+        if (JSCompiler_temp && JSCompiler_temp !== responderInst) {
+          targetInst = void 0;
+          skipOverBubbleShouldSetFrom = ResponderSyntheticEvent.getPooled(
+            eventTypes$1.responderGrant,
+            JSCompiler_temp,
+            nativeEvent,
+            nativeEventTarget
           );
-        JSCompiler_temp && JSCompiler_temp !== responderInst
-          ? ((JSCompiler_temp$jscomp$0 = void 0),
-            (targetInst = ResponderSyntheticEvent.getPooled(
-              eventTypes$1.responderGrant,
-              JSCompiler_temp,
+          skipOverBubbleShouldSetFrom.touchHistory =
+            ResponderTouchHistoryStore.touchHistory;
+          forEachAccumulated(
+            skipOverBubbleShouldSetFrom,
+            accumulateDirectDispatchesSingle
+          );
+          i = !0 === executeDirectDispatch(skipOverBubbleShouldSetFrom);
+          if (responderInst) {
+            var terminationRequestEvent = ResponderSyntheticEvent.getPooled(
+              eventTypes$1.responderTerminationRequest,
+              responderInst,
               nativeEvent,
               nativeEventTarget
-            )),
-            (targetInst.touchHistory = ResponderTouchHistoryStore.touchHistory),
-            forEachAccumulated(targetInst, accumulateDirectDispatchesSingle),
-            (depthA = !0 === executeDirectDispatch(targetInst)),
-            responderInst
-              ? ((tempA = ResponderSyntheticEvent.getPooled(
-                  eventTypes$1.responderTerminationRequest,
+            );
+            terminationRequestEvent.touchHistory =
+              ResponderTouchHistoryStore.touchHistory;
+            forEachAccumulated(
+              terminationRequestEvent,
+              accumulateDirectDispatchesSingle
+            );
+            var shouldSwitch =
+              !terminationRequestEvent._dispatchListeners ||
+              executeDirectDispatch(terminationRequestEvent);
+            terminationRequestEvent.isPersistent() ||
+              terminationRequestEvent.constructor.release(
+                terminationRequestEvent
+              );
+            shouldSwitch
+              ? ((terminationRequestEvent = ResponderSyntheticEvent.getPooled(
+                  eventTypes$1.responderTerminate,
                   responderInst,
                   nativeEvent,
                   nativeEventTarget
                 )),
-                (tempA.touchHistory = ResponderTouchHistoryStore.touchHistory),
-                forEachAccumulated(tempA, accumulateDirectDispatchesSingle),
-                (tempB =
-                  !tempA._dispatchListeners || executeDirectDispatch(tempA)),
-                tempA.isPersistent() || tempA.constructor.release(tempA),
-                tempB
-                  ? ((tempA = ResponderSyntheticEvent.getPooled(
-                      eventTypes$1.responderTerminate,
-                      responderInst,
-                      nativeEvent,
-                      nativeEventTarget
-                    )),
-                    (tempA.touchHistory =
-                      ResponderTouchHistoryStore.touchHistory),
-                    forEachAccumulated(tempA, accumulateDirectDispatchesSingle),
-                    (JSCompiler_temp$jscomp$0 = accumulate(
-                      JSCompiler_temp$jscomp$0,
-                      [targetInst, tempA]
-                    )),
-                    changeResponder(JSCompiler_temp, depthA))
-                  : ((JSCompiler_temp = ResponderSyntheticEvent.getPooled(
-                      eventTypes$1.responderReject,
-                      JSCompiler_temp,
-                      nativeEvent,
-                      nativeEventTarget
-                    )),
-                    (JSCompiler_temp.touchHistory =
-                      ResponderTouchHistoryStore.touchHistory),
-                    forEachAccumulated(
-                      JSCompiler_temp,
-                      accumulateDirectDispatchesSingle
-                    ),
-                    (JSCompiler_temp$jscomp$0 = accumulate(
-                      JSCompiler_temp$jscomp$0,
-                      JSCompiler_temp
-                    ))))
-              : ((JSCompiler_temp$jscomp$0 = accumulate(
-                  JSCompiler_temp$jscomp$0,
-                  targetInst
+                (terminationRequestEvent.touchHistory =
+                  ResponderTouchHistoryStore.touchHistory),
+                forEachAccumulated(
+                  terminationRequestEvent,
+                  accumulateDirectDispatchesSingle
+                ),
+                (targetInst = accumulate(targetInst, [
+                  skipOverBubbleShouldSetFrom,
+                  terminationRequestEvent
+                ])),
+                changeResponder(JSCompiler_temp, i))
+              : ((JSCompiler_temp = ResponderSyntheticEvent.getPooled(
+                  eventTypes$1.responderReject,
+                  JSCompiler_temp,
+                  nativeEvent,
+                  nativeEventTarget
                 )),
-                changeResponder(JSCompiler_temp, depthA)),
-            (JSCompiler_temp = JSCompiler_temp$jscomp$0))
-          : (JSCompiler_temp = null);
+                (JSCompiler_temp.touchHistory =
+                  ResponderTouchHistoryStore.touchHistory),
+                forEachAccumulated(
+                  JSCompiler_temp,
+                  accumulateDirectDispatchesSingle
+                ),
+                (targetInst = accumulate(targetInst, JSCompiler_temp)));
+          } else
+            (targetInst = accumulate(targetInst, skipOverBubbleShouldSetFrom)),
+              changeResponder(JSCompiler_temp, i);
+          JSCompiler_temp = targetInst;
+        } else JSCompiler_temp = null;
       } else JSCompiler_temp = null;
-      JSCompiler_temp$jscomp$0 = responderInst && isStartish(topLevelType);
-      targetInst = responderInst && isMoveish(topLevelType);
-      depthA =
+      targetInst = responderInst && isStartish(topLevelType);
+      skipOverBubbleShouldSetFrom = responderInst && isMoveish(topLevelType);
+      i =
         responderInst &&
         ("topTouchEnd" === topLevelType || "topTouchCancel" === topLevelType);
       if (
-        (JSCompiler_temp$jscomp$0 = JSCompiler_temp$jscomp$0
+        (targetInst = targetInst
           ? eventTypes$1.responderStart
-          : targetInst
+          : skipOverBubbleShouldSetFrom
             ? eventTypes$1.responderMove
-            : depthA
+            : i
               ? eventTypes$1.responderEnd
               : null)
       )
-        (JSCompiler_temp$jscomp$0 = ResponderSyntheticEvent.getPooled(
-          JSCompiler_temp$jscomp$0,
+        (targetInst = ResponderSyntheticEvent.getPooled(
+          targetInst,
           responderInst,
           nativeEvent,
           nativeEventTarget
         )),
-          (JSCompiler_temp$jscomp$0.touchHistory =
-            ResponderTouchHistoryStore.touchHistory),
-          forEachAccumulated(
-            JSCompiler_temp$jscomp$0,
-            accumulateDirectDispatchesSingle
-          ),
-          (JSCompiler_temp = accumulate(
-            JSCompiler_temp,
-            JSCompiler_temp$jscomp$0
-          ));
-      JSCompiler_temp$jscomp$0 =
-        responderInst && "topTouchCancel" === topLevelType;
+          (targetInst.touchHistory = ResponderTouchHistoryStore.touchHistory),
+          forEachAccumulated(targetInst, accumulateDirectDispatchesSingle),
+          (JSCompiler_temp = accumulate(JSCompiler_temp, targetInst));
+      targetInst = responderInst && "topTouchCancel" === topLevelType;
       if (
         (topLevelType =
           responderInst &&
-          !JSCompiler_temp$jscomp$0 &&
+          !targetInst &&
           ("topTouchEnd" === topLevelType || "topTouchCancel" === topLevelType))
       )
         a: {
           if ((topLevelType = nativeEvent.touches) && 0 !== topLevelType.length)
-            for (targetInst = 0; targetInst < topLevelType.length; targetInst++)
+            for (
+              skipOverBubbleShouldSetFrom = 0;
+              skipOverBubbleShouldSetFrom < topLevelType.length;
+              skipOverBubbleShouldSetFrom++
+            )
               if (
-                ((depthA = topLevelType[targetInst].target),
-                null !== depthA && void 0 !== depthA && 0 !== depthA)
+                ((i = topLevelType[skipOverBubbleShouldSetFrom].target),
+                null !== i && void 0 !== i && 0 !== i)
               ) {
-                tempA = getInstanceFromNode(depthA);
+                terminationRequestEvent = getInstanceFromNode(i);
                 b: {
-                  for (depthA = responderInst; tempA; ) {
-                    if (depthA === tempA || depthA === tempA.alternate) {
-                      depthA = !0;
+                  for (i = responderInst; terminationRequestEvent; ) {
+                    if (
+                      i === terminationRequestEvent ||
+                      i === terminationRequestEvent.alternate
+                    ) {
+                      i = !0;
                       break b;
                     }
-                    tempA = getParent(tempA);
+                    terminationRequestEvent = getParent(
+                      terminationRequestEvent
+                    );
                   }
-                  depthA = !1;
+                  i = !1;
                 }
-                if (depthA) {
+                if (i) {
                   topLevelType = !1;
                   break a;
                 }
@@ -932,7 +924,7 @@ var eventTypes$1 = {
           topLevelType = !0;
         }
       if (
-        (topLevelType = JSCompiler_temp$jscomp$0
+        (topLevelType = targetInst
           ? eventTypes$1.responderTerminate
           : topLevelType
             ? eventTypes$1.responderRelease
@@ -955,6 +947,105 @@ var eventTypes$1 = {
       injectGlobalResponderHandler: function(GlobalResponderHandler) {
         ResponderEventPlugin.GlobalResponderHandler = GlobalResponderHandler;
       }
+    }
+  },
+  instanceCache = {},
+  instanceProps = {};
+function getInstanceFromTag(tag) {
+  return instanceCache[tag] || null;
+}
+function getTagFromInstance(inst) {
+  var tag = inst.stateNode._nativeTag;
+  void 0 === tag && (tag = inst.stateNode.canonical._nativeTag);
+  invariant(tag, "All native instances should have a tag.");
+  return tag;
+}
+var eventTypes$2 = {
+    mouseEnter: {
+      registrationName: "onMouseEnter",
+      dependencies: ["topMouseOut", "topMouseOver"]
+    },
+    mouseLeave: {
+      registrationName: "onMouseLeave",
+      dependencies: ["topMouseOut", "topMouseOver"]
+    }
+  },
+  EnterLeaveEvent = SyntheticEvent.extend({ relatedTarget: null }),
+  EnterLeaveEventPlugin = {
+    eventTypes: eventTypes$2,
+    extractEvents: function(
+      topLevelType,
+      targetInst,
+      nativeEvent,
+      nativeEventTarget
+    ) {
+      var isOverEvent = "topMouseOver" === topLevelType;
+      topLevelType = "topMouseOut" === topLevelType;
+      if (
+        (isOverEvent && nativeEvent.relatedTarget) ||
+        (!topLevelType && !isOverEvent)
+      )
+        return null;
+      topLevelType
+        ? ((isOverEvent = targetInst),
+          (topLevelType = (targetInst = nativeEvent.relatedTarget)
+            ? getInstanceFromTag(targetInst)
+            : null))
+        : ((isOverEvent = null), (topLevelType = targetInst));
+      if (isOverEvent === topLevelType) return null;
+      var fromNode = isOverEvent && getTagFromInstance(isOverEvent),
+        toNode = topLevelType && getTagFromInstance(topLevelType);
+      targetInst = EnterLeaveEvent.getPooled(
+        eventTypes$2.mouseLeave,
+        isOverEvent,
+        nativeEvent,
+        nativeEventTarget
+      );
+      targetInst.target = fromNode;
+      targetInst.relatedTarget = toNode;
+      nativeEvent = EnterLeaveEvent.getPooled(
+        eventTypes$2.mouseEnter,
+        topLevelType,
+        nativeEvent,
+        nativeEventTarget
+      );
+      nativeEvent.target = toNode;
+      nativeEvent.relatedTarget = fromNode;
+      fromNode = isOverEvent;
+      isOverEvent = topLevelType;
+      topLevelType =
+        fromNode && isOverEvent
+          ? getLowestCommonAncestor(fromNode, isOverEvent)
+          : null;
+      for (nativeEventTarget = []; fromNode && fromNode !== topLevelType; ) {
+        toNode = fromNode.alternate;
+        if (null !== toNode && toNode === topLevelType) break;
+        nativeEventTarget.push(fromNode);
+        fromNode = getParent(fromNode);
+      }
+      for (fromNode = []; isOverEvent && isOverEvent !== topLevelType; ) {
+        toNode = isOverEvent.alternate;
+        if (null !== toNode && toNode === topLevelType) break;
+        fromNode.push(isOverEvent);
+        isOverEvent = getParent(isOverEvent);
+      }
+      for (
+        isOverEvent = 0;
+        isOverEvent < nativeEventTarget.length;
+        isOverEvent++
+      )
+        accumulateDispatches(
+          nativeEventTarget[isOverEvent],
+          "bubbled",
+          targetInst
+        );
+      for (nativeEventTarget = fromNode.length; 0 < nativeEventTarget--; )
+        accumulateDispatches(
+          fromNode[nativeEventTarget],
+          "captured",
+          nativeEvent
+        );
+      return [targetInst, nativeEvent];
     }
   },
   ReactNativeBridgeEventPlugin = {
@@ -991,17 +1082,14 @@ var eventTypes$1 = {
   };
 injection.injectEventPluginOrder([
   "ResponderEventPlugin",
-  "ReactNativeBridgeEventPlugin"
+  "ReactNativeBridgeEventPlugin",
+  "EnterLeaveEventPlugin"
 ]);
 injection.injectEventPluginsByName({
   ResponderEventPlugin: ResponderEventPlugin,
-  ReactNativeBridgeEventPlugin: ReactNativeBridgeEventPlugin
+  ReactNativeBridgeEventPlugin: ReactNativeBridgeEventPlugin,
+  EnterLeaveEventPlugin: EnterLeaveEventPlugin
 });
-var instanceCache = {},
-  instanceProps = {};
-function getInstanceFromTag(tag) {
-  return instanceCache[tag] || null;
-}
 var restoreTarget = null,
   restoreQueue = null;
 function restoreStateOfTarget(target) {
@@ -1116,12 +1204,7 @@ getFiberCurrentPropsFromNode = function(stateNode) {
   return instanceProps[stateNode._nativeTag] || null;
 };
 getInstanceFromNode = getInstanceFromTag;
-getNodeFromInstance = function(inst) {
-  var tag = inst.stateNode._nativeTag;
-  void 0 === tag && (tag = inst.stateNode.canonical._nativeTag);
-  invariant(tag, "All native instances should have a tag.");
-  return tag;
-};
+getNodeFromInstance = getTagFromInstance;
 ResponderEventPlugin.injection.injectGlobalResponderHandler({
   onChange: function(from, to, blockNativeResponder) {
     null !== to
