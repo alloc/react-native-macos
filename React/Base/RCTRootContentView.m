@@ -18,6 +18,10 @@
 #import "RCTWindow.h"
 #import "NSView+React.h"
 
+@interface RCTRootContentView ()
+@property (nullable, readonly, assign) RCTRootView *superview;
+@end
+
 @implementation RCTRootContentView
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -43,10 +47,20 @@ RCT_NOT_IMPLEMENTED(-(instancetype)initWithCoder:(nonnull NSCoder *)aDecoder)
   [self updateAvailableSize];
 }
 
+@dynamic superview;
+
 - (void)addSubview:(NSView *)subview
 {
   [super addSubview:subview];
   [_bridge.performanceLogger markStopForTag:RCTPLTTI];
+
+  if (self.subviews.count == 1) {
+    [subview addObserver:self
+              forKeyPath:@"frame"
+                 options:NSKeyValueObservingOptionInitial
+                 context:nil];
+  }
+
   dispatch_async(dispatch_get_main_queue(), ^{
     if (!self->_contentHasAppeared) {
       self->_contentHasAppeared = YES;
@@ -54,6 +68,24 @@ RCT_NOT_IMPLEMENTED(-(instancetype)initWithCoder:(nonnull NSCoder *)aDecoder)
                                                           object:self.superview];
     }
   });
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
+{
+  if ([object isKindOfClass:[NSView class]]) {
+    NSView *subview = (NSView *)object;
+    if ([keyPath isEqualToString:@"frame"]) {
+      CGSize size = self.frame.size;
+      if (_sizeFlexibility & RCTRootViewSizeFlexibilityWidth) {
+        size.width = subview.frame.size.width;
+      }
+      if (_sizeFlexibility & RCTRootViewSizeFlexibilityHeight) {
+        size.height = subview.frame.size.height;
+      }
+      self.frameSize = size;
+      [self.window setContentSize:size];
+    }
+  }
 }
 
 - (void)setSizeFlexibility:(RCTRootViewSizeFlexibility)sizeFlexibility
