@@ -5851,6 +5851,7 @@ export interface ScaledSize {
     height: number;
     scale: number;
     fontScale: number;
+    dpi: number;
 }
 
 /**

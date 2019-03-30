@@ -62,9 +62,17 @@ static NSDictionary *RCTExportedDimensions(__unused RCTBridge *bridge)
 {
   RCTAssertMainQueue();
 
+  NSScreen *screen = [NSScreen mainScreen];
+  NSDictionary *description = [screen deviceDescription];
+  NSSize screenPixelSize = [[description objectForKey:NSDeviceSize] sizeValue];
+  CGSize screenPhysicalSize = CGDisplayScreenSize(
+    [[description objectForKey:@"NSScreenNumber"] unsignedIntValue]
+  );
+
   // Don't use RCTScreenSize since it the interface orientation doesn't apply to it
   CGRect screenSize = [[NSScreen mainScreen] frame];
   NSDictionary *dims = @{
+                         @"dpi": @(screenPixelSize.width / (screenPhysicalSize.width / 25.4)),
                          @"width": @(screenSize.size.width),
                          @"height": @(screenSize.size.height),
                          @"scale": @(RCTScreenScale()),
