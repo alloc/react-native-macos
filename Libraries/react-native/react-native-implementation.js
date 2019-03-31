@@ -48,8 +48,6 @@ const ReactNative = {
   get Switch() { return require('Switch'); },
   get RefreshControl() { return require('RefreshControl'); },
   get StatusBar() { return require('StatusBar'); },
-  get SwipeableFlatList() { return require('SwipeableFlatList'); },
-  get SwipeableListView() { return require('SwipeableListView'); },
   get TabBarIOS() { return require('TabBarIOS'); },
   get Text() { return require('Text'); },
   get TextInput() { return require('TextInput'); },

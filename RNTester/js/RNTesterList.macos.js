@@ -153,16 +153,6 @@ const ComponentExamples: Array<RNTesterExample> = [
   //   module: require('./StatusBarExample'),
   //   supportsTVOS: false,
   // },
-  {
-    key: 'SwipeableFlatListExample',
-    module: require('./SwipeableFlatListExample'),
-    supportsTVOS: false,
-  },
-  // {
-  //   key: 'SwipeableListViewExample',
-  //   module: require('./SwipeableListViewExample'),
-  //   supportsTVOS: false,
-  // },
   // {
   //   key: 'SwitchExample',
   //   module: require('./SwitchExample'),
