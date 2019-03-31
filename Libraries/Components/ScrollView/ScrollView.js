@@ -11,7 +11,6 @@
  */
 'use strict';
 
-const Animated = require('Animated');
 const ColorPropType = require('ColorPropType');
 const EdgeInsetsPropType = require('EdgeInsetsPropType');
 const Platform = require('Platform');
@@ -20,7 +19,6 @@ const PropTypes = require('prop-types');
 const React = require('React');
 const ReactNative = require('ReactNative');
 const ScrollResponder = require('ScrollResponder');
-const ScrollViewStickyHeader = require('ScrollViewStickyHeader');
 const StyleSheet = require('StyleSheet');
 const StyleSheetPropType = require('StyleSheetPropType');
 const View = require('View');
@@ -340,14 +338,6 @@ const ScrollView = createReactClass({
      */
     autoScrollToBottom: PropTypes.bool,
     /**
-     * An array of child indices determining which children get docked to the
-     * top of the screen when scrolling. For example, passing
-     * `stickyHeaderIndices={[0]}` will cause the first child to be fixed to the
-     * top of the scroll view. This property is not supported in conjunction
-     * with `horizontal={true}`.
-     */
-    stickyHeaderIndices: PropTypes.arrayOf(PropTypes.number),
-    /**
      * When set, causes the scroll view to stop at multiples of the value of
      * `snapToInterval`. This can be used for paginating through children
      * that have lengths smaller than the scroll view. Typically used in
@@ -461,33 +451,8 @@ const ScrollView = createReactClass({
 
   mixins: [ScrollResponder.Mixin],
 
-  _scrollAnimatedValue: (new Animated.Value(0): Animated.Value),
-  _scrollAnimatedValueAttachment: (null: ?{detach: () => void}),
-  _stickyHeaderRefs: (new Map(): Map<number, ScrollViewStickyHeader>),
-  _headerLayoutYs: (new Map(): Map<string, number>),
   getInitialState: function() {
     return this.scrollResponderMixinGetInitialState();
-  },
-
-  componentWillMount: function() {
-    this._scrollAnimatedValue = new Animated.Value(this.props.contentOffset ? this.props.contentOffset.y : 0);
-    this._scrollAnimatedValue.setOffset(this.props.contentInset ? this.props.contentInset.top : 0);
-    this._stickyHeaderRefs = new Map();
-    this._headerLayoutYs = new Map();
-  },
-
-  componentDidMount: function() {
-    this._updateAnimatedNodeAttachment();
-  },
-
-  componentDidUpdate: function() {
-    this._updateAnimatedNodeAttachment();
-  },
-
-  componentWillUnmount: function() {
-    if (this._scrollAnimatedValueAttachment) {
-      this._scrollAnimatedValueAttachment.detach();
-    }
   },
 
   setNativeProps: function(props: Object) {
@@ -577,50 +542,6 @@ const ScrollView = createReactClass({
   _getKeyForIndex: function(index, childArray) {
     const child = childArray[index];
     return child && child.key;
-  },
-
-  _updateAnimatedNodeAttachment: function() {
-    if (this._scrollAnimatedValueAttachment) {
-      this._scrollAnimatedValueAttachment.detach();
-    }
-    if (this.props.stickyHeaderIndices && this.props.stickyHeaderIndices.length > 0) {
-      this._scrollAnimatedValueAttachment = Animated.attachNativeEvent(
-        this._scrollViewRef,
-        'onScroll',
-        [{nativeEvent: {contentOffset: {y: this._scrollAnimatedValue}}}]
-      );
-    }
-  },
-
-  _setStickyHeaderRef: function(key, ref) {
-    if (ref) {
-      this._stickyHeaderRefs.set(key, ref);
-    } else {
-      this._stickyHeaderRefs.delete(key);
-    }
-  },
-
-  _onStickyHeaderLayout: function(index, event, key) {
-    if (!this.props.stickyHeaderIndices) {
-      return;
-    }
-    const childArray = React.Children.toArray(this.props.children);
-    if (key !== this._getKeyForIndex(index, childArray)) {
-      // ignore stale layout update
-      return;
-    }
-
-    const layoutY = event.nativeEvent.layout.y;
-    this._headerLayoutYs.set(key, layoutY);
-
-    const indexOfIndex = this.props.stickyHeaderIndices.indexOf(index);
-    const previousHeaderIndex = this.props.stickyHeaderIndices[indexOfIndex - 1];
-    if (previousHeaderIndex != null) {
-      const previousHeader = this._stickyHeaderRefs.get(
-        this._getKeyForIndex(previousHeaderIndex, childArray)
-      );
-      previousHeader && previousHeader.setNextHeaderY(layoutY);
-    }
   },
 
   _handleScroll: function(e: Object) {
@@ -715,44 +636,13 @@ const ScrollView = createReactClass({
       };
     }
 
-    const {stickyHeaderIndices} = this.props;
-    const hasStickyHeaders = stickyHeaderIndices && stickyHeaderIndices.length > 0;
-    const childArray = hasStickyHeaders && React.Children.toArray(this.props.children);
-    const children = hasStickyHeaders ?
-      childArray.map((child, index) => {
-        const indexOfIndex = child ? stickyHeaderIndices.indexOf(index) : -1;
-        if (indexOfIndex > -1) {
-          const key = child.key;
-          const nextIndex = stickyHeaderIndices[indexOfIndex + 1];
-          return (
-            <ScrollViewStickyHeader
-              key={key}
-              ref={(ref) => this._setStickyHeaderRef(key, ref)}
-              nextHeaderLayoutY={
-                this._headerLayoutYs.get(this._getKeyForIndex(nextIndex, childArray))
-              }
-              onLayout={(event) => this._onStickyHeaderLayout(index, event, key)}
-              scrollAnimatedValue={this._scrollAnimatedValue}>
-              {child}
-            </ScrollViewStickyHeader>
-          );
-        } else {
-          return child;
-        }
-      }) :
-      this.props.children;
+    const children = this.props.children;
     const contentContainer =
       <ScrollContentContainerViewClass
         {...contentSizeChangeProps}
         ref={this._setInnerViewRef}
         style={contentContainerStyle}
-        removeClippedSubviews={
-          // Subview clipping causes issues with sticky headers on Android and
-          // would be hard to fix properly in a performant way.
-          Platform.OS === 'android' && hasStickyHeaders ?
-            false :
-            this.props.removeClippedSubviews
-        }
+        removeClippedSubviews={this.props.removeClippedSubviews}
         collapsable={false}>
         {children}
       </ScrollContentContainerViewClass>;
@@ -794,7 +684,7 @@ const ScrollView = createReactClass({
       onTouchMove: this.scrollResponderHandleTouchMove,
       onTouchStart: this.scrollResponderHandleTouchStart,
       onTouchCancel: this.scrollResponderHandleTouchCancel,
-      scrollEventThrottle: hasStickyHeaders ? 1 : this.props.scrollEventThrottle,
+      scrollEventThrottle: this.props.scrollEventThrottle,
       sendMomentumEvents: (this.props.onMomentumScrollBegin || this.props.onMomentumScrollEnd) ?
         true : false,
       DEPRECATED_sendUpdatedChildFrames,
