@@ -68,16 +68,6 @@ jest
     };
     return DataSource;
   })
-  .mock('AnimatedImplementation', () => {
-    const AnimatedImplementation = require.requireActual('AnimatedImplementation');
-    const oldCreate = AnimatedImplementation.createAnimatedComponent;
-    AnimatedImplementation.createAnimatedComponent = function(Component) {
-      const Wrapped = oldCreate(Component);
-      Wrapped.__skipSetNativeProps_FOR_TESTS_ONLY = true;
-      return Wrapped;
-    };
-    return AnimatedImplementation;
-  })
   .mock('ReactNative', () => {
     const ReactNative = require.requireActual('ReactNative');
     const NativeMethodsMixin =

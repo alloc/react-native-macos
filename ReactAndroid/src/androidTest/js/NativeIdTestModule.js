@@ -17,7 +17,6 @@ const React = require('React');
 const StyleSheet = require('StyleSheet');
 const Text = require('Text');
 const TextInput = require('TextInput');
-const TouchableBounce = require('TouchableBounce');
 const TouchableHighlight = require('TouchableHighlight');
 const TouchableOpacity = require('TouchableOpacity');
 const TouchableWithoutFeedback = require('TouchableWithoutFeedback');
@@ -45,9 +44,6 @@ class NativeIdTestApp extends React.Component<{}> {
           style={styles.base} />
         <Text nativeID="Text">text</Text>
         <TextInput nativeID="TextInput" value="Text input" />
-        <TouchableBounce nativeID="TouchableBounce">
-          <Text>TouchableBounce</Text>
-        </TouchableBounce>
         <TouchableHighlight nativeID="TouchableHighlight">
           <Text>TouchableHighlight</Text>
         </TouchableHighlight>

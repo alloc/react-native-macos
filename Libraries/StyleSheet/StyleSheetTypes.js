@@ -13,7 +13,7 @@
 
 'use strict';
 
-import AnimatedNode from 'AnimatedNode';
+type AnimatedNode = any;
 
 export opaque type StyleSheetStyle: number = number;
 
@@ -99,8 +99,10 @@ export type TransformStyle = {
     | {+translateX: number | AnimatedNode}
     | {+translateY: number | AnimatedNode}
     | {
-      +translate: [number | AnimatedNode, number | AnimatedNode] | AnimatedNode,
-    }
+        +translate:
+          | [number | AnimatedNode, number | AnimatedNode]
+          | AnimatedNode,
+      }
     | {+skewX: string}
     | {+skewY: string}
     // TODO: what is the actual type it expects?

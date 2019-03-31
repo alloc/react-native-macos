@@ -31,7 +31,6 @@ const ROOTS = [path.resolve(__dirname, '..') + path.sep, ...pluginRoots];
 
 const BLACKLISTED_PATTERNS /*: Array<RegExp> */ = [
   /.*[\\\/]__(mocks|tests)__[\\\/].*/,
-  /^Libraries[\\\/]Animated[\\\/]src[\\\/]polyfills[\\\/].*/,
   /^Libraries[\\\/]Renderer[\\\/]fb[\\\/].*/,
 ];
 

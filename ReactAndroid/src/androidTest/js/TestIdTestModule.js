@@ -17,7 +17,6 @@ var StyleSheet = require('StyleSheet');
 var Switch = require('Switch');
 var Text = require('Text');
 var TextInput = require('TextInput');
-var TouchableBounce = require('TouchableBounce');
 var TouchableHighlight = require('TouchableHighlight');
 var TouchableOpacity = require('TouchableOpacity');
 var TouchableWithoutFeedback = require('TouchableWithoutFeedback');
@@ -47,10 +46,6 @@ class TestIdTestApp extends React.Component {
         <Text testID="Text">text</Text>
 
         <TextInput testID="TextInput" value="Text input" />
-
-        <TouchableBounce testID="TouchableBounce">
-          <Text>TouchableBounce</Text>
-        </TouchableBounce>
 
         <TouchableHighlight testID="TouchableHighlight">
           <Text>TouchableHighlight</Text>
