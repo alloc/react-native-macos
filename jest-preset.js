@@ -29,7 +29,7 @@ module.exports = {
     ),
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(jest-)?react-native|react-clone-referenced-element)',
+    'node_modules/(?!(jest-)?react-native|@react-native-community|react-clone-referenced-element)',
   ],
   setupFiles: [require.resolve('./jest/setup.js')],
   testEnvironment: 'node',
