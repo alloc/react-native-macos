@@ -511,7 +511,7 @@ RCT_EXPORT_METHOD(dismiss)
 
 - (BOOL)isVisible
 {
-    return _window.isVisible;
+    return _window.contentView.superview != nil && _window.isVisible;
 }
 
 - (void)redBoxWindow:(__unused RCTRedBoxWindow *)redBoxWindow openStackFrameInEditor:(RCTJSStackFrame *)stackFrame
