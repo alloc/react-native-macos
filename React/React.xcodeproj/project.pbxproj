@@ -2432,7 +2432,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 83CBBA3F1A601D0F00E9B192 /* Build configuration list for PBXNativeTarget "React" */;
 			buildPhases = (
-				006B79A01A781F38006873D1 /* Start Packager */,
 				3D80DA181DF820500028D040 /* Headers */,
 				3D80D91E1DF6FA530028D040 /* Copy Headers */,
 				83CBBA2A1A601D0E00E9B192 /* Sources */,
@@ -2534,21 +2533,6 @@
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		006B79A01A781F38006873D1 /* Start Packager */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Start Packager";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost 8081 ; then\n    if ! curl -s \"http://localhost:8081/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port 8081 already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi";
-			showEnvVarsInLog = 0;
-		};
 		142C4F7F1B582EA6001F0B58 /* Include RCTJSCProfiler */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
