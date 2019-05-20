@@ -204,14 +204,10 @@ class WebSocket extends EventTarget(...WEBSOCKET_EVENTS) {
   }
 
   _close(code?: number, reason?: string): void {
-    if (Platform.OS === 'android') {
-      // See https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
-      const statusCode = typeof code === 'number' ? code : CLOSE_NORMAL;
-      const closeReason = typeof reason === 'string' ? reason : '';
-      WebSocketModule.close(statusCode, closeReason, this._socketId);
-    } else {
-      WebSocketModule.close(this._socketId);
-    }
+    // See https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
+    const statusCode = typeof code === 'number' ? code : CLOSE_NORMAL;
+    const closeReason = typeof reason === 'string' ? reason : '';
+    WebSocketModule.close(statusCode, closeReason, this._socketId);
   }
 
   _unregisterEvents(): void {
