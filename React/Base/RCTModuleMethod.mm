@@ -91,7 +91,8 @@ static BOOL RCTParseSelectorPart(const char **input, NSMutableString *selector)
 static BOOL RCTParseUnused(const char **input)
 {
   return RCTReadString(input, "__unused") ||
-         RCTReadString(input, "__attribute__((unused))");
+         RCTReadString(input, "__attribute__((unused))") ||
+         RCTReadString(input, "__attribute__((__unused__))");
 }
 
 static RCTNullability RCTParseNullability(const char **input)
