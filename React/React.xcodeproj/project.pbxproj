@@ -527,12 +527,37 @@
 		702B7FFF221C88D70027174A /* RCTWindow.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 702B7FF6221C88AF0027174A /* RCTWindow.h */; };
 		705EDE2922107DD0000CAA67 /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 705EDE2722107DD0000CAA67 /* Utils.h */; };
 		705EDE2A22107DD0000CAA67 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 705EDE2822107DD0000CAA67 /* Utils.cpp */; };
+		705EDE2C221082CB000CAA67 /* RCTSurfaceSizeMeasureMode.mm in Sources */ = {isa = PBXBuildFile; fileRef = 705EDE2B221082CB000CAA67 /* RCTSurfaceSizeMeasureMode.mm */; };
 		7095B6CE2247C83800BE2245 /* RCTFieldEditor.h in Headers */ = {isa = PBXBuildFile; fileRef = 7095B6CD2247C83800BE2245 /* RCTFieldEditor.h */; };
 		7095B6D02247C86300BE2245 /* RCTFieldEditor.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 7095B6CD2247C83800BE2245 /* RCTFieldEditor.h */; };
+		70A2DEEC22B3FE78008A2DA2 /* CompactValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 70A2DEDC22B3FE77008A2DA2 /* CompactValue.h */; };
+		70A2DEEF22B3FE78008A2DA2 /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 70A2DEDF22B3FE77008A2DA2 /* log.cpp */; };
+		70A2DEF322B3FE78008A2DA2 /* instrumentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 70A2DEE322B3FE77008A2DA2 /* instrumentation.h */; };
+		70A2DEF622B3FE78008A2DA2 /* log.h in Headers */ = {isa = PBXBuildFile; fileRef = 70A2DEE622B3FE77008A2DA2 /* log.h */; };
+		70A2DEFA22B4060D008A2DA2 /* YGMarker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 70A2DEE422B3FE77008A2DA2 /* YGMarker.cpp */; };
+		70A2DEFB22B4060D008A2DA2 /* YGValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 70A2DEDB22B3FE77008A2DA2 /* YGValue.cpp */; };
+		70A2DEFC22B4060D008A2DA2 /* YGConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 70A2DEEA22B3FE78008A2DA2 /* YGConfig.cpp */; };
+		70A2DEFD22B4060D008A2DA2 /* YGLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 70A2DEE522B3FE77008A2DA2 /* YGLayout.cpp */; };
+		70A2DEFE22B4060D008A2DA2 /* YGStyle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 70A2DEE022B3FE77008A2DA2 /* YGStyle.cpp */; };
+		70A2DEFF22B4060D008A2DA2 /* YGNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D49593E4202C96FF00A7694B /* YGNode.cpp */; };
+		70A2DF0022B40626008A2DA2 /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 70A2DEDF22B3FE77008A2DA2 /* log.cpp */; };
+		70A2DF0122B40626008A2DA2 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 705EDE2822107DD0000CAA67 /* Utils.cpp */; };
+		70A2DF0222B4065A008A2DA2 /* YGValue.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 70A2DEE222B3FE77008A2DA2 /* YGValue.h */; };
+		70A2DF0322B4065A008A2DA2 /* YGConfig.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 70A2DEE122B3FE77008A2DA2 /* YGConfig.h */; };
+		70A2DF0422B4066A008A2DA2 /* YGMarker.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 70A2DEDE22B3FE77008A2DA2 /* YGMarker.h */; };
+		70A2DF0522B406A8008A2DA2 /* log.h in Headers */ = {isa = PBXBuildFile; fileRef = 70A2DEE622B3FE77008A2DA2 /* log.h */; };
+		70A2DF0622B406A8008A2DA2 /* instrumentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 70A2DEE322B3FE77008A2DA2 /* instrumentation.h */; };
+		70A2DF0722B406A8008A2DA2 /* CompactValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 70A2DEDC22B3FE77008A2DA2 /* CompactValue.h */; };
+		70A2DF0822B406A8008A2DA2 /* YGValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 70A2DEE222B3FE77008A2DA2 /* YGValue.h */; };
+		70A2DF0922B406A8008A2DA2 /* YGMarker.h in Headers */ = {isa = PBXBuildFile; fileRef = 70A2DEDE22B3FE77008A2DA2 /* YGMarker.h */; };
+		70A2DF0A22B406A8008A2DA2 /* YGConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 70A2DEE122B3FE77008A2DA2 /* YGConfig.h */; };
+		70A2DF0B22B406A8008A2DA2 /* YGFloatOptional.h in Headers */ = {isa = PBXBuildFile; fileRef = 70A2DEDD22B3FE77008A2DA2 /* YGFloatOptional.h */; };
+		70A2DF0C22B406A8008A2DA2 /* YGLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 70A2DEE722B3FE77008A2DA2 /* YGLayout.h */; };
+		70A2DF0D22B406A8008A2DA2 /* YGStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 70A2DEE922B3FE78008A2DA2 /* YGStyle.h */; };
+		70A2DF0E22B406A8008A2DA2 /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 705EDE2722107DD0000CAA67 /* Utils.h */; };
 		70BA7CC32217790F006B6654 /* RCTLayout.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 70D4B5142217707C0007C3F1 /* RCTLayout.h */; };
 		70D4B5162217707D0007C3F1 /* RCTLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 70D4B5142217707C0007C3F1 /* RCTLayout.h */; };
 		70D4B5172217707D0007C3F1 /* RCTLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 70D4B5152217707C0007C3F1 /* RCTLayout.m */; };
-		705EDE2C221082CB000CAA67 /* RCTSurfaceSizeMeasureMode.mm in Sources */ = {isa = PBXBuildFile; fileRef = 705EDE2B221082CB000CAA67 /* RCTSurfaceSizeMeasureMode.mm */; };
 		830A229E1A66C68A008503DA /* RCTRootView.m in Sources */ = {isa = PBXBuildFile; fileRef = 830A229D1A66C68A008503DA /* RCTRootView.m */; };
 		83392EB31B6634E10013B15F /* RCTModalHostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 83392EB21B6634E10013B15F /* RCTModalHostViewController.m */; };
 		83A1FE8C1B62640A00BE0E65 /* RCTModalHostView.m in Sources */ = {isa = PBXBuildFile; fileRef = 83A1FE8B1B62640A00BE0E65 /* RCTModalHostView.m */; };
@@ -571,10 +596,7 @@
 		D49593DF202C937C00A7694B /* RCTCursorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D49593D9202C937B00A7694B /* RCTCursorManager.m */; };
 		D49593E0202C937C00A7694B /* RCTMenuManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D49593DA202C937B00A7694B /* RCTMenuManager.h */; };
 		D49593E1202C937C00A7694B /* RCTMenuManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D49593DB202C937C00A7694B /* RCTMenuManager.m */; };
-		D49593E5202C96FF00A7694B /* YGNode.h in Headers */ = {isa = PBXBuildFile; fileRef = D49593E3202C96FF00A7694B /* YGNode.h */; };
-		D49593E6202C96FF00A7694B /* YGNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D49593E4202C96FF00A7694B /* YGNode.cpp */; };
 		D49593E7202C970600A7694B /* YGNode.h in Headers */ = {isa = PBXBuildFile; fileRef = D49593E3202C96FF00A7694B /* YGNode.h */; };
-		D49593E8202C972800A7694B /* YGNode.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = D49593E3202C96FF00A7694B /* YGNode.h */; };
 		D4EEE2F5201DF63F00C4CBB6 /* RCTButtonManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D4EEE2F1201DF63F00C4CBB6 /* RCTButtonManager.h */; };
 		D4EEE2F6201DF63F00C4CBB6 /* RCTButton.h in Headers */ = {isa = PBXBuildFile; fileRef = D4EEE2F2201DF63F00C4CBB6 /* RCTButton.h */; };
 		D4EEE2F7201DF63F00C4CBB6 /* RCTButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D4EEE2F3201DF63F00C4CBB6 /* RCTButton.m */; };
@@ -808,7 +830,9 @@
 			dstPath = include/yoga;
 			dstSubfolderSpec = 16;
 			files = (
-				D49593E8202C972800A7694B /* YGNode.h in Copy Headers */,
+				70A2DF0422B4066A008A2DA2 /* YGMarker.h in Copy Headers */,
+				70A2DF0222B4065A008A2DA2 /* YGValue.h in Copy Headers */,
+				70A2DF0322B4065A008A2DA2 /* YGConfig.h in Copy Headers */,
 				3DE4F8681DF85D8E00B9E5A0 /* YGEnums.h in Copy Headers */,
 				3DE4F8691DF85D8E00B9E5A0 /* YGMacros.h in Copy Headers */,
 				3DE4F86A1DF85D8E00B9E5A0 /* Yoga.h in Copy Headers */,
@@ -1254,6 +1278,21 @@
 		705EDE2822107DD0000CAA67 /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
 		705EDE2B221082CB000CAA67 /* RCTSurfaceSizeMeasureMode.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTSurfaceSizeMeasureMode.mm; sourceTree = "<group>"; };
 		7095B6CD2247C83800BE2245 /* RCTFieldEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCTFieldEditor.h; path = TextInput/Singleline/RCTFieldEditor.h; sourceTree = "<group>"; };
+		70A2DEDB22B3FE77008A2DA2 /* YGValue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = YGValue.cpp; sourceTree = "<group>"; };
+		70A2DEDC22B3FE77008A2DA2 /* CompactValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompactValue.h; sourceTree = "<group>"; };
+		70A2DEDD22B3FE77008A2DA2 /* YGFloatOptional.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YGFloatOptional.h; sourceTree = "<group>"; };
+		70A2DEDE22B3FE77008A2DA2 /* YGMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YGMarker.h; sourceTree = "<group>"; };
+		70A2DEDF22B3FE77008A2DA2 /* log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = log.cpp; sourceTree = "<group>"; };
+		70A2DEE022B3FE77008A2DA2 /* YGStyle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = YGStyle.cpp; sourceTree = "<group>"; };
+		70A2DEE122B3FE77008A2DA2 /* YGConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YGConfig.h; sourceTree = "<group>"; };
+		70A2DEE222B3FE77008A2DA2 /* YGValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YGValue.h; sourceTree = "<group>"; };
+		70A2DEE322B3FE77008A2DA2 /* instrumentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = instrumentation.h; sourceTree = "<group>"; };
+		70A2DEE422B3FE77008A2DA2 /* YGMarker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = YGMarker.cpp; sourceTree = "<group>"; };
+		70A2DEE522B3FE77008A2DA2 /* YGLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = YGLayout.cpp; sourceTree = "<group>"; };
+		70A2DEE622B3FE77008A2DA2 /* log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = log.h; sourceTree = "<group>"; };
+		70A2DEE722B3FE77008A2DA2 /* YGLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YGLayout.h; sourceTree = "<group>"; };
+		70A2DEE922B3FE78008A2DA2 /* YGStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YGStyle.h; sourceTree = "<group>"; };
+		70A2DEEA22B3FE78008A2DA2 /* YGConfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = YGConfig.cpp; sourceTree = "<group>"; };
 		70D4B5142217707C0007C3F1 /* RCTLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTLayout.h; sourceTree = "<group>"; };
 		70D4B5152217707C0007C3F1 /* RCTLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTLayout.m; sourceTree = "<group>"; };
 		830213F31A654E0800B993E6 /* RCTBridgeModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTBridgeModule.h; sourceTree = "<group>"; };
@@ -1357,6 +1396,21 @@
 		130A77021DF767AF001F9587 /* yoga */ = {
 			isa = PBXGroup;
 			children = (
+				70A2DEE622B3FE77008A2DA2 /* log.h */,
+				70A2DEDF22B3FE77008A2DA2 /* log.cpp */,
+				70A2DEE422B3FE77008A2DA2 /* YGMarker.cpp */,
+				70A2DEE322B3FE77008A2DA2 /* instrumentation.h */,
+				70A2DEDC22B3FE77008A2DA2 /* CompactValue.h */,
+				70A2DEDB22B3FE77008A2DA2 /* YGValue.cpp */,
+				70A2DEE222B3FE77008A2DA2 /* YGValue.h */,
+				70A2DEDE22B3FE77008A2DA2 /* YGMarker.h */,
+				70A2DEEA22B3FE78008A2DA2 /* YGConfig.cpp */,
+				70A2DEE122B3FE77008A2DA2 /* YGConfig.h */,
+				70A2DEDD22B3FE77008A2DA2 /* YGFloatOptional.h */,
+				70A2DEE522B3FE77008A2DA2 /* YGLayout.cpp */,
+				70A2DEE722B3FE77008A2DA2 /* YGLayout.h */,
+				70A2DEE022B3FE77008A2DA2 /* YGStyle.cpp */,
+				70A2DEE922B3FE78008A2DA2 /* YGStyle.h */,
 				705EDE2822107DD0000CAA67 /* Utils.cpp */,
 				705EDE2722107DD0000CAA67 /* Utils.h */,
 				D49593E4202C96FF00A7694B /* YGNode.cpp */,
@@ -2088,12 +2142,22 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70A2DF0522B406A8008A2DA2 /* log.h in Headers */,
+				70A2DF0622B406A8008A2DA2 /* instrumentation.h in Headers */,
+				70A2DF0722B406A8008A2DA2 /* CompactValue.h in Headers */,
+				70A2DF0822B406A8008A2DA2 /* YGValue.h in Headers */,
+				70A2DF0A22B406A8008A2DA2 /* YGConfig.h in Headers */,
+				70A2DF0922B406A8008A2DA2 /* YGMarker.h in Headers */,
+				70A2DF0D22B406A8008A2DA2 /* YGStyle.h in Headers */,
 				D49593E7202C970600A7694B /* YGNode.h in Headers */,
 				53D1239E1FBF1EFB001B8A10 /* Yoga-internal.h in Headers */,
 				133957881DF76D3500EC27BE /* YGEnums.h in Headers */,
 				1339578B1DF76D3500EC27BE /* Yoga.h in Headers */,
+				70A2DF0E22B406A8008A2DA2 /* Utils.h in Headers */,
 				5376C5E61FC6DDC10083513D /* YGNodePrint.h in Headers */,
 				133957891DF76D3500EC27BE /* YGMacros.h in Headers */,
+				70A2DF0C22B406A8008A2DA2 /* YGLayout.h in Headers */,
+				70A2DF0B22B406A8008A2DA2 /* YGFloatOptional.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2205,18 +2269,21 @@
 				3D80DA361DF820620028D040 /* RCTModuleMethod.h in Headers */,
 				3D80DA371DF820620028D040 /* RCTMultipartDataTask.h in Headers */,
 				3D80DA381DF820620028D040 /* RCTMultipartStreamReader.h in Headers */,
+				70A2DEF622B3FE78008A2DA2 /* log.h in Headers */,
 				D4EEE2FB201DF64800C4CBB6 /* NSView+NSViewAnimationWithBlocks.h in Headers */,
 				594F0A361FD23228007FBE96 /* RCTSurfaceSizeMeasureMode.h in Headers */,
 				53D123B21FBF220F001B8A10 /* Yoga.h in Headers */,
 				3D80DA391DF820620028D040 /* RCTNullability.h in Headers */,
 				3D80DA3A1DF820620028D040 /* RCTParserUtils.h in Headers */,
 				59EDBCB11FDF4E0C003573DE /* RCTScrollContentViewManager.h in Headers */,
+				70A2DEF322B3FE78008A2DA2 /* instrumentation.h in Headers */,
 				599FAA421FB274980058CCF6 /* RCTSurfaceRootView.h in Headers */,
 				3D80DA3B1DF820620028D040 /* RCTPerformanceLogger.h in Headers */,
 				3D80DA3C1DF820620028D040 /* RCTPlatform.h in Headers */,
 				3D80DA3D1DF820620028D040 /* RCTRootView.h in Headers */,
 				59EDBCB91FDF4E0C003573DE /* RCTScrollViewManager.h in Headers */,
 				59EDBCB51FDF4E0C003573DE /* RCTScrollView.h in Headers */,
+				70A2DEEC22B3FE78008A2DA2 /* CompactValue.h in Headers */,
 				135A9BFB1E7B0EAE00587AEB /* RCTJSCErrorHandling.h in Headers */,
 				3D80DA3E1DF820620028D040 /* RCTRootViewDelegate.h in Headers */,
 				3D80DA3F1DF820620028D040 /* RCTRootViewInternal.h in Headers */,
@@ -2260,7 +2327,6 @@
 				5960C1B91F0804A00066FD5B /* RCTLayoutAnimationGroup.h in Headers */,
 				CF2731C01E7B8DE40044CA4F /* RCTDeviceInfo.h in Headers */,
 				3D80DA611DF820620028D040 /* RCTAnimationType.h in Headers */,
-				D49593E5202C96FF00A7694B /* YGNode.h in Headers */,
 				3D0E378A1F1CC40000DCAC9F /* RCTWebSocketModule.h in Headers */,
 				3D80DA621DF820620028D040 /* RCTAutoInsetsProtocol.h in Headers */,
 				C60128AB1F3D1258009DF9FF /* RCTCxxConvert.h in Headers */,
@@ -2607,8 +2673,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70A2DF0022B40626008A2DA2 /* log.cpp in Sources */,
+				70A2DEFA22B4060D008A2DA2 /* YGMarker.cpp in Sources */,
+				70A2DEFB22B4060D008A2DA2 /* YGValue.cpp in Sources */,
+				70A2DEFC22B4060D008A2DA2 /* YGConfig.cpp in Sources */,
 				53D123A01FBF1EFF001B8A10 /* Yoga.cpp in Sources */,
+				70A2DEFE22B4060D008A2DA2 /* YGStyle.cpp in Sources */,
+				70A2DEFF22B4060D008A2DA2 /* YGNode.cpp in Sources */,
 				53D1239A1FBF1EF2001B8A10 /* YGEnums.cpp in Sources */,
+				70A2DF0122B40626008A2DA2 /* Utils.cpp in Sources */,
+				70A2DEFD22B4060D008A2DA2 /* YGLayout.cpp in Sources */,
 				5376C5E41FC6DDBC0083513D /* YGNodePrint.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2662,7 +2736,6 @@
 				133CAE8E1B8E5CFD00F6AD92 /* RCTDatePicker.m in Sources */,
 				14C2CA761B3AC64F00E6CBB2 /* RCTFrameUpdate.m in Sources */,
 				702B7FF9221C88AF0027174A /* RCTWindow.m in Sources */,
-				D49593E6202C96FF00A7694B /* YGNode.cpp in Sources */,
 				594F0A341FD23228007FBE96 /* RCTSurfaceHostingView.mm in Sources */,
 				13134C861E296B2A00B9F3CB /* RCTCxxBridge.mm in Sources */,
 				13B07FEF1A69327A00A75B9A /* RCTAlertManager.m in Sources */,
@@ -2763,6 +2836,7 @@
 				13C156061AB1A2840079392D /* RCTWebViewManager.m in Sources */,
 				58114A161AAE854800E7D092 /* RCTPicker.m in Sources */,
 				83A1FE8C1B62640A00BE0E65 /* RCTModalHostView.m in Sources */,
+				70A2DEEF22B3FE78008A2DA2 /* log.cpp in Sources */,
 				13E067551A70F44B002CDEE1 /* RCTShadowView.m in Sources */,
 				9936F3371F5F2F480010BF04 /* PrivateDataBase.cpp in Sources */,
 				1450FF871BCFF28A00208362 /* RCTProfileTrampoline-arm.S in Sources */,
