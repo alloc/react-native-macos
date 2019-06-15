@@ -202,6 +202,13 @@ function _validateTransform(key, value, transformation) {
       break;
     case 'translateX':
     case 'translateY':
+      invariant(
+        typeof value === 'number' || value.endsWith('%'),
+        'Transform with key of "%s" must be a number or percentage: %s',
+        key,
+        stringifySafe(transformation),
+      );
+      break;
     case 'scale':
     case 'scaleX':
     case 'scaleY':
