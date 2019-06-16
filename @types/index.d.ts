@@ -666,7 +666,7 @@ type GeolocationError = {
     TIMEOUT: number;
 };
 
-interface PerpectiveTransform {
+interface PerspectiveTransform {
     perspective: number;
 }
 
@@ -716,7 +716,7 @@ interface SkewYTransform {
 
 export interface TransformsStyle {
     transform?: (
-        | PerpectiveTransform
+        | PerspectiveTransform
         | RotateTransform
         | RotateXTransform
         | RotateYTransform
