@@ -699,11 +699,11 @@ interface ScaleYTransform {
 }
 
 interface TranslateXTransform {
-    translateX: number;
+    translateX: number | string;
 }
 
 interface TranslateYTransform {
-    translateY: number;
+    translateY: number | string;
 }
 
 interface SkewXTransform {
