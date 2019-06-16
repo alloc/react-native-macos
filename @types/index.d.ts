@@ -2091,6 +2091,7 @@ export interface ViewProps
     removeClippedSubviews?: boolean;
 
     style?: StyleProp<ViewStyle>;
+    children?: React.ReactNode
 
     /**
      * Used to locate this view in end-to-end tests.
