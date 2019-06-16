@@ -728,12 +728,6 @@ export interface TransformsStyle {
         | TranslateYTransform
         | SkewXTransform
         | SkewYTransform)[];
-    transformMatrix?: Array<number>;
-    rotation?: number;
-    scaleX?: number;
-    scaleY?: number;
-    translateX?: number;
-    translateY?: number;
 }
 
 export interface StyleSheetProperties {
