@@ -570,25 +570,19 @@ const TextInput = createReactClass({
 
   componentDidMount: function() {
     this._lastNativeText = this.props.value;
-    if (!this.context.focusEmitter) {
-      if (this.props.autoFocus) {
-        this.requestAnimationFrame(this.focus);
-      }
-      return;
+    if (this.context.focusEmitter) {
+      this._focusSubscription = this.context.focusEmitter.addListener(
+        'focus',
+        el => {
+          if (this === el) {
+            this.requestAnimationFrame(this.focus);
+          } else if (this.isFocused()) {
+            this.blur();
+          }
+        },
+      );
     }
-    this._focusSubscription = this.context.focusEmitter.addListener(
-      'focus',
-      el => {
-        if (this === el) {
-          this.requestAnimationFrame(this.focus);
-        } else if (this.isFocused()) {
-          this.blur();
-        }
-      },
-    );
-    if (this.props.autoFocus) {
-      this.context.onFocusRequested(this);
-    }
+    this._autoFocus();
   },
 
   componentWillUnmount: function() {
@@ -628,6 +622,16 @@ const TextInput = createReactClass({
       return this._renderIOS();
     } else if (Platform.OS === 'android') {
       return this._renderAndroid();
+    }
+  },
+
+  _autoFocus: function() {
+    if (this.props.autoFocus) {
+      if (this.context.focusEmitter) {
+        this.context.onFocusRequested(this);
+      } else {
+        this.requestAnimationFrame(this.focus);
+      }
     }
   },
 
@@ -892,7 +896,11 @@ const TextInput = createReactClass({
     }
   },
 
-  componentDidUpdate: function() {
+  componentDidUpdate: function(prevProps) {
+    if (this.props.autoFocus && !prevProps.autoFocus) {
+      this._autoFocus();
+    }
+
     // This is necessary in case native updates the text and JS decides
     // that the update should be ignored and we should stick with the value
     // that we have in JS.
