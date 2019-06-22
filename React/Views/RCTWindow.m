@@ -210,7 +210,9 @@ static inline BOOL hasFlag(NSUInteger flags, NSUInteger flag) {
   // By convention, all coordinates, whether they be touch coordinates, or
   // measurement coordinates are with respect to the root view.
   CGPoint absoluteLocation = [self.rootView convertPoint:point fromView:nil];
-  CGPoint relativeLocation = [self.rootView convertPoint:absoluteLocation toView:targetView];
+  CGPoint relativeLocation = targetView.layer
+    ? [self.rootView.layer convertPoint:absoluteLocation toLayer:targetView.layer]
+    : [self.rootView convertPoint:absoluteLocation toView:targetView];
 
   _mouseInfo[@"pageX"] = @(RCTSanitizeNaNValue(absoluteLocation.x, @"pageX"));
   _mouseInfo[@"pageY"] = @(RCTSanitizeNaNValue(absoluteLocation.y, @"pageY"));
