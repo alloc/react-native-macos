@@ -18,6 +18,7 @@ const PropTypes = require('prop-types');
 const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 const React = require('React');
 const ReactNative = require('ReactNative');
+const RootTagContext = require('./RootTagContext');
 const StyleSheet = require('StyleSheet');
 const View = require('View');
 
@@ -119,11 +120,13 @@ class AppContainer extends React.Component<Props, State> {
       innerView = <Wrapper>{innerView}</Wrapper>;
     }
     return (
-      <View style={styles.appContainer} pointerEvents="box-none">
-        {innerView}
-        {yellowBox}
-        {this.state.inspector}
-      </View>
+      <RootTagContext.Provider value={this.props.rootTag}>
+        <View style={styles.appContainer} pointerEvents="box-none">
+          {innerView}
+          {yellowBox}
+          {this.state.inspector}
+        </View>
+      </RootTagContext.Provider>
     );
   }
 }

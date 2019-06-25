@@ -108,6 +108,7 @@ const ReactNative = {
   get Platform() { return require('Platform'); },
   get processColor() { return require('processColor'); },
   get requireNativeComponent() { return require('requireNativeComponent'); },
+  get unstable_RootTagContext() { return require('../ReactNative/RootTagContext'); },
   get takeSnapshot() { return require('takeSnapshot'); },
 
   // Prop Types
