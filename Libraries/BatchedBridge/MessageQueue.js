@@ -271,7 +271,7 @@ class MessageQueue {
       };
 
       if (!validate(params)) {
-        console.warn(
+        return console.warn(
           'Native method call has arguments which cannot be serialized: %O',
           params,
         );
