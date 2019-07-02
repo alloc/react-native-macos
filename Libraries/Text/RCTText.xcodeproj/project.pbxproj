@@ -60,8 +60,6 @@
 		70588F642227335B00CD1EEA /* NSLabel.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 705EDE4422138919000CAA67 /* NSLabel.h */; };
 		70588F652227336100CD1EEA /* NSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 705EDE422213890E000CAA67 /* NSLabel.m */; };
 		70588F6922273F2300CD1EEA /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70588F6822273F2300CD1EEA /* AppKit.framework */; };
-		70588F6C222741ED00CD1EEA /* RCTFieldEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = 70588F6B222741EC00CD1EEA /* RCTFieldEditor.m */; };
-		70588F6D222741F600CD1EEA /* RCTFieldEditor.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 70588F6A222741EC00CD1EEA /* RCTFieldEditor.h */; };
 		70588F702227427700CD1EEA /* NSText+Editing.m in Sources */ = {isa = PBXBuildFile; fileRef = 70588F6E2227427600CD1EEA /* NSText+Editing.m */; };
 		70588F712227428000CD1EEA /* NSText+Editing.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 70588F6F2227427700CD1EEA /* NSText+Editing.h */; };
 		705EDE3022132863000CAA67 /* NSBezierPath+CGPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 705EDE2F22132863000CAA67 /* NSBezierPath+CGPath.m */; };
@@ -78,7 +76,6 @@
 			dstSubfolderSpec = 16;
 			files = (
 				70588F712227428000CD1EEA /* NSText+Editing.h in Copy Headers */,
-				70588F6D222741F600CD1EEA /* RCTFieldEditor.h in Copy Headers */,
 				70588F642227335B00CD1EEA /* NSLabel.h in Copy Headers */,
 				70588F3A222715DD00CD1EEA /* NSValue+CoreGraphics.h in Copy Headers */,
 				70588F392227118900CD1EEA /* NSFont+LineHeight.h in Copy Headers */,
@@ -165,8 +162,6 @@
 		5956B12E200FEBAA008D9D16 /* RCTVirtualTextShadowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTVirtualTextShadowView.m; sourceTree = "<group>"; };
 		5956B12F200FEBAA008D9D16 /* RCTConvert+Text.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCTConvert+Text.m"; sourceTree = "<group>"; };
 		70588F6822273F2300CD1EEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
-		70588F6A222741EC00CD1EEA /* RCTFieldEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTFieldEditor.h; sourceTree = "<group>"; };
-		70588F6B222741EC00CD1EEA /* RCTFieldEditor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTFieldEditor.m; sourceTree = "<group>"; };
 		70588F6E2227427600CD1EEA /* NSText+Editing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSText+Editing.m"; sourceTree = "<group>"; };
 		70588F6F2227427700CD1EEA /* NSText+Editing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSText+Editing.h"; sourceTree = "<group>"; };
 		705EDE2E22132863000CAA67 /* NSBezierPath+CGPath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+CGPath.h"; sourceTree = "<group>"; };
@@ -264,8 +259,6 @@
 		5956B100200FEBA9008D9D16 /* Singleline */ = {
 			isa = PBXGroup;
 			children = (
-				70588F6A222741EC00CD1EEA /* RCTFieldEditor.h */,
-				70588F6B222741EC00CD1EEA /* RCTFieldEditor.m */,
 				5956B104200FEBA9008D9D16 /* RCTSinglelineTextInputView.h */,
 				5956B101200FEBA9008D9D16 /* RCTSinglelineTextInputView.m */,
 				5956B102200FEBA9008D9D16 /* RCTSinglelineTextInputViewManager.h */,
@@ -401,7 +394,6 @@
 				5956B13C200FEBAA008D9D16 /* RCTUITextView.m in Sources */,
 				5956B136200FEBAA008D9D16 /* RCTBackedTextInputDelegateAdapter.m in Sources */,
 				5956B13E200FEBAA008D9D16 /* RCTBaseTextViewManager.m in Sources */,
-				70588F6C222741ED00CD1EEA /* RCTFieldEditor.m in Sources */,
 				5956B145200FEBAA008D9D16 /* RCTVirtualTextShadowView.m in Sources */,
 				5956B142200FEBAA008D9D16 /* RCTTextViewManager.m in Sources */,
 				705EDE4022137BE7000CAA67 /* NSValue+CoreGraphics.m in Sources */,
