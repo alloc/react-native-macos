@@ -74,7 +74,7 @@ devDependencies:
   jest: 22.0.0
   polished: 1.9.3
   prettier: 1.18.2
-  react: 16.8.4
+  react: 16.8.6
   react-test-renderer: 16.2.0
   shelljs: 0.7.8
   sinon: 2.4.1
@@ -4525,7 +4525,7 @@ packages:
     dev: false
     resolution:
       integrity: sha512-4+ow23tp/Tv7hBM5Az5/Be/eKKF7DIvJ09voz5LyHGQaqqz9WV8YMs31eFvcYQs7d451LSg7kDJV70XYN/Ug/Q==
-  /react/16.8.4:
+  /react/16.8.6:
     dependencies:
       loose-envify: 1.4.0
       object-assign: 4.1.1
@@ -4535,7 +4535,7 @@ packages:
     engines:
       node: '>=0.10.0'
     resolution:
-      integrity: sha512-0GQ6gFXfUH7aZcjGVymlPOASTuSjlQL4ZtVC5YKH+3JL6bBLCVO21DknzmaPlI90LN253ojj02nsapy+j7wIjg==
+      integrity: sha512-pC0uMkhLaHm11ZSJULfOBqV4tIZkx87ZLvbbQYunNixAAvjnC+snJCg0XQXn9VIsttVsbZP/H/ewzgsd5fxKXw==
   /read-pkg-up/1.0.1:
     dependencies:
       find-up: 1.1.2
@@ -5974,7 +5974,7 @@ specifiers:
   pretty-format: ^4.2.1
   promise: ^7.1.1
   prop-types: ^15.5.8
-  react: 16.8.4
+  react: 16.8.6
   react-clone-referenced-element: ^1.0.1
   react-devtools-core: ^3.6.0
   react-test-renderer: 16.2.0
