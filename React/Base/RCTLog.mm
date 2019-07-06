@@ -10,6 +10,7 @@
 #import "RCTLog.h"
 
 #include <cxxabi.h>
+#include <os/log.h>
 
 #import "RCTAssert.h"
 #import "RCTBridge+Private.h"
@@ -54,9 +55,25 @@ RCTLogFunction RCTDefaultLogFunction = ^(
   NSString *message
 )
 {
-  NSString *log = RCTFormatLog([NSDate date], level, fileName, lineNumber, message);
-  fprintf(stderr, "%s\n", log.UTF8String);
-  fflush(stderr);
+  os_log_type_t logType;
+  switch(level) {
+    case RCTLogLevelTrace:
+      logType = OS_LOG_TYPE_DEBUG;
+      break;
+    case RCTLogLevelInfo:
+    case RCTLogLevelWarning:
+      logType = OS_LOG_TYPE_DEFAULT;
+      break;
+    case RCTLogLevelError:
+      logType = OS_LOG_TYPE_ERROR;
+      break;
+    case RCTLogLevelFatal:
+      logType = OS_LOG_TYPE_FAULT;
+      break;
+  }
+  
+  NSString *log = RCTFormatLog(nil, level, fileName, lineNumber, message);
+  os_log_with_type(OS_LOG_DEFAULT, logType, "%{public}s", log.UTF8String);
 };
 
 void RCTSetLogFunction(RCTLogFunction logFunction)
