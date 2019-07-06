@@ -1179,25 +1179,17 @@ RCT_EXPORT_METHOD(measure:(nonnull NSNumber *)reactTag
       return;
     }
 
-    NSView *rootView = view;
-    while (rootView && ![rootView isReactRootView]) {
-      rootView = rootView.superview;
-    }
-
     // By convention, all coordinates, whether they be touch coordinates, or
     // measurement coordinates are with respect to the root view.
     CGRect frame = view.frame;
-    CGRect globalBounds = view.layer
-      ? [view.layer convertRect:view.bounds toLayer:rootView.layer]
-      : [view convertRect:view.bounds toView:rootView];
-
+    CGRect globalFrame = view.reactGlobalFrame;
     callback(@[
       @(frame.origin.x),
       @(frame.origin.y),
-      @(globalBounds.size.width),
-      @(globalBounds.size.height),
-      @(globalBounds.origin.x),
-      @(globalBounds.origin.y),
+      @(globalFrame.size.width),
+      @(globalFrame.size.height),
+      @(globalFrame.origin.x),
+      @(globalFrame.origin.y),
     ]);
   }];
 }

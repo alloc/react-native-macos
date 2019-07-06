@@ -99,6 +99,7 @@
 @property (nonatomic, readonly) NSEdgeInsets reactPaddingInsets;
 @property (nonatomic, readonly) NSEdgeInsets reactCompoundInsets;
 @property (nonatomic, readonly) CGRect reactContentFrame;
+@property (nonatomic, readonly) CGRect reactGlobalFrame;
 
 /**
  * The (sub)view which represents this view in terms of accessibility.

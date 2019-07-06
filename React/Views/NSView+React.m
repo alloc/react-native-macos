@@ -289,6 +289,17 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   return NSEdgeInsetsInsetRect(self.bounds, self.reactCompoundInsets);
 }
 
+- (CGRect)reactGlobalFrame
+{
+  NSView *rootView = self;
+  while (rootView && !rootView.isReactRootView) {
+    rootView = rootView.superview;
+  }
+  return self.layer
+    ? [self.layer convertRect:self.bounds toLayer:rootView.layer]
+    : [self convertRect:self.bounds toView:rootView];
+}
+
 #pragma mark - Accessiblity
 
 - (NSView *)reactAccessibilityElement
