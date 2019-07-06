@@ -3094,6 +3094,180 @@
 			};
 			name = Release;
 		};
+		702A3D5222CD4BA800395CCD /* QA */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "RCT_DEBUG=1";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				SDKROOT = macosx;
+				TVOS_DEPLOYMENT_TARGET = 9.2;
+				WARNING_CFLAGS = (
+					"-Wextra",
+					"-Wall",
+					"-Wno-semicolon-before-method-body",
+				);
+			};
+			name = QA;
+		};
+		702A3D5322CD4BA800395CCD /* QA */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3D788F841EBD2D240063D616 /* third-party.xcconfig */;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				CLANG_STATIC_ANALYZER_MODE = deep;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include/React;
+				RUN_CLANG_STATIC_ANALYZER = YES;
+			};
+			name = QA;
+		};
+		702A3D5422CD4BA800395CCD /* QA */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				CLANG_STATIC_ANALYZER_MODE = deep;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include/yoga;
+				RUN_CLANG_STATIC_ANALYZER = YES;
+			};
+			name = QA;
+		};
+		702A3D5522CD4BA800395CCD /* QA */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3D788F841EBD2D240063D616 /* third-party.xcconfig */;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				CLANG_STATIC_ANALYZER_MODE = deep;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include/cxxreact;
+				RUN_CLANG_STATIC_ANALYZER = YES;
+			};
+			name = QA;
+		};
+		702A3D5622CD4BA800395CCD /* QA */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3D788F841EBD2D240063D616 /* third-party.xcconfig */;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				CLANG_STATIC_ANALYZER_MODE = deep;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include/jschelpers;
+				RUN_CLANG_STATIC_ANALYZER = YES;
+			};
+			name = QA;
+		};
+		702A3D5722CD4BA800395CCD /* QA */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3D788F841EBD2D240063D616 /* third-party.xcconfig */;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				CLANG_STATIC_ANALYZER_MODE = deep;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include/jsinspector;
+				RUN_CLANG_STATIC_ANALYZER = YES;
+			};
+			name = QA;
+		};
+		702A3D5822CD4BA800395CCD /* QA */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3D788F841EBD2D240063D616 /* third-party.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = V9WTTPBFK9;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = QA;
+		};
+		702A3D5922CD4BA800395CCD /* QA */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = V9WTTPBFK9;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				OTHER_LDFLAGS = "-ObjC";
+				PRIVATE_HEADERS_FOLDER_PATH = "/usr/local/include/double-conversion";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = QA;
+		};
+		702A3D5A22CD4BA800395CCD /* QA */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3D788F841EBD2D240063D616 /* third-party.xcconfig */;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				CLANG_STATIC_ANALYZER_MODE = deep;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include/privatedata;
+				RUN_CLANG_STATIC_ANALYZER = YES;
+			};
+			name = QA;
+		};
 		83CBBA201A601CBA00E9B192 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3120,12 +3294,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"RCT_DEBUG=1",
-					"RCT_DEV=1",
-					"RCT_NSASSERT=1",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
@@ -3297,6 +3466,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				139D7E8F1E25C6D100323FB7 /* Debug */,
+				702A3D5922CD4BA800395CCD /* QA */,
 				139D7E901E25C6D100323FB7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -3306,6 +3476,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				139D7ED51E25DB7D00323FB7 /* Debug */,
+				702A3D5822CD4BA800395CCD /* QA */,
 				139D7ED61E25DB7D00323FB7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -3315,6 +3486,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3D3C05981DE3340900C268FA /* Debug */,
+				702A3D5422CD4BA800395CCD /* QA */,
 				3D3C05991DE3340900C268FA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -3324,6 +3496,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3D3CD9091DE5FBD600167DC4 /* Debug */,
+				702A3D5622CD4BA800395CCD /* QA */,
 				3D3CD90A1DE5FBD600167DC4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -3333,6 +3506,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3D3CD9231DE5FBEC00167DC4 /* Debug */,
+				702A3D5522CD4BA800395CCD /* QA */,
 				3D3CD9241DE5FBEC00167DC4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -3342,6 +3516,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
+				702A3D5222CD4BA800395CCD /* QA */,
 				83CBBA211A601CBA00E9B192 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -3351,6 +3526,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA401A601D0F00E9B192 /* Debug */,
+				702A3D5322CD4BA800395CCD /* QA */,
 				83CBBA411A601D0F00E9B192 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -3360,6 +3536,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9936F3111F5F2E4B0010BF04 /* Debug */,
+				702A3D5A22CD4BA800395CCD /* QA */,
 				9936F3121F5F2E4B0010BF04 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -3369,6 +3546,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EBF21BDA1FC498900052F4D5 /* Debug */,
+				702A3D5722CD4BA800395CCD /* QA */,
 				EBF21BDB1FC498900052F4D5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
