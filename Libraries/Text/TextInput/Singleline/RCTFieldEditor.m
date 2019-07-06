@@ -37,6 +37,10 @@
 - (void)keyDown:(NSEvent *)event
 {
   [super keyDown:event];
+  
+  if (event.modifierFlags != 256) {
+    [self.nextResponder keyDown:event];
+  }
 
   if (event.keyCode == 36 && [self.delegate respondsToSelector:@selector(fieldEditorDidReturn:)]) {
     [self.delegate fieldEditorDidReturn:self];
