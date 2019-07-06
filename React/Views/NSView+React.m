@@ -296,17 +296,6 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   return self;
 }
 
-#pragma mark - Interaction
-
-- (NSView *)reactHitTest:(NSPoint)point
-{
-  NSView *view = [self hitTest:point];
-  while (view && !view.reactTag) {
-    view = view.superview;
-  }
-  return view;
-}
-
 #pragma mark - Other
 
 - (void)ensureLayerExists

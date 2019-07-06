@@ -21,4 +21,7 @@
 
 @property (nullable, strong) RCTRootView *contentView;
 
+// Only exists between mouseDown and mouseUp events (may not be a React view)
+@property (nullable, strong) NSView *clickOrigin;
+
 @end

@@ -20,8 +20,8 @@
   RCTBridge *_bridge;
 
   NSMutableDictionary *_mouseInfo;
-  NSView *_hoveredView;
-  NSView *_clickedView;
+  NSView *_hoverTarget;
+  NSView *_clickTarget;
   NSEventType _clickType;
   uint16_t _coalescingKey;
 
@@ -77,11 +77,9 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
 
 - (void)sendEvent:(NSEvent *)event
 {
-  [super sendEvent:event];
-
   // Avoid sending JS events too early.
   if (_enabled == NO) {
-    return;
+    return [super sendEvent:event];
   }
 
   NSEventType type = event.type;
@@ -90,38 +88,42 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
     if (event.trackingArea.owner == self.contentView) {
       _inContentView = YES;
     }
-    return;
+    return [super sendEvent:event];
   }
 
   if (type == NSEventTypeMouseExited) {
     if (event.trackingArea.owner == self.contentView) {
       _inContentView = NO;
 
-      if (_clickedView) {
+      if (_clickTarget) {
         if (_clickType == NSEventTypeLeftMouseDown) {
           [self _sendTouchEvent:@"touchCancel"];
         }
-        _clickedView = nil;
+        _clickTarget = nil;
         _clickType = 0;
       }
 
-      [self _setHoveredView:nil];
+      [self _setHoverTarget:nil];
     }
-    return;
+    return [super sendEvent:event];
   }
 
-  if (type != NSEventTypeMouseMoved &&
-      type != NSEventTypeLeftMouseDragged &&
-      type != NSEventTypeLeftMouseUp &&
-      type != NSEventTypeLeftMouseDown &&
-      type != NSEventTypeRightMouseUp &&
-      type != NSEventTypeRightMouseDown) {
-    return;
+  if (
+    type != NSEventTypeMouseMoved &&
+    type != NSEventTypeLeftMouseDragged &&
+    type != NSEventTypeLeftMouseUp &&
+    type != NSEventTypeLeftMouseDown &&
+    type != NSEventTypeRightMouseUp &&
+    type != NSEventTypeRightMouseDown
+  ) {
+    return [super sendEvent:event];
   }
 
+  // Perform a hitTest before sendEvent in case a field editor is active.
   NSView *targetView = [self hitTest:event.locationInWindow withEvent:event];
+  [super sendEvent:event];
 
-  if (_clickedView) {
+  if (_clickTarget) {
     if (type == NSEventTypeLeftMouseDragged) {
       if (_clickType == NSEventTypeLeftMouseDown) {
         [self _sendTouchEvent:@"touchMove"];
@@ -134,7 +136,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
         return; // Ignore "mouseMove" events outside the "contentView"
       }
 
-      [self _setHoveredView:targetView];
+      [self _setHoverTarget:targetView];
       return;
     }
 
@@ -146,9 +148,8 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
       // When the "firstResponder" is a NSTextView, "mouseUp" and "mouseDragged" events are swallowed,
       // so we should skip tracking of "mouseDown" events in order to avoid corrupted state.
       if ([self.firstResponder isKindOfClass:NSTextView.class]) {
-        NSView *clickedView = [self.rootView hitTest:event.locationInWindow];
         NSView *fieldEditor = (NSView *)self.firstResponder;
-        if ([clickedView isDescendantOf:fieldEditor]) {
+        if ([_clickOrigin isDescendantOf:fieldEditor]) {
           return;
         }
 
@@ -163,7 +164,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
         [self _sendTouchEvent:@"touchStart"];
       }
 
-      _clickedView = targetView;
+      _clickTarget = targetView;
       _clickType = type;
       return;
     }
@@ -172,27 +173,27 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
   if (type == NSEventTypeLeftMouseUp) {
     if (_clickType == NSEventTypeLeftMouseDown) {
       [self _sendTouchEvent:@"touchEnd"];
-      _clickedView = nil;
+      _clickTarget = nil;
       _clickType = 0;
     }
 
     // Update the "hoveredView" now, instead of waiting for the next "mouseMove" event.
-    [self _setHoveredView:targetView];
+    [self _setHoverTarget:targetView];
     return;
   }
 
   if (type == NSEventTypeRightMouseUp) {
     if (_clickType == NSEventTypeRightMouseDown) {
       // Right clicks must end in the same React "ancestor chain" they started in.
-      if ([_clickedView isDescendantOf:targetView]) {
+      if ([_clickTarget isDescendantOf:targetView]) {
         [self _sendMouseEvent:@"contextMenu"];
       }
-      _clickedView = nil;
+      _clickTarget = nil;
       _clickType = 0;
     }
 
     // Update the "hoveredView" now, instead of waiting for the next "mouseMove" event.
-    [self _setHoveredView:targetView];
+    [self _setHoverTarget:targetView];
     return;
   }
 }
@@ -205,7 +206,17 @@ static inline BOOL hasFlag(NSUInteger flags, NSUInteger flag) {
 
 - (NSView *)hitTest:(NSPoint)point withEvent:(NSEvent *)event
 {
-  NSView *targetView = [self.rootView reactHitTest:point];
+  NSView *targetView = [self.rootView hitTest:point];
+  // The "clickOrigin" is used for special handling of field editors. It only exists between mouseUp and mouseDown events.
+  if (event.type == NSEventTypeLeftMouseDown || event.type == NSEventTypeRightMouseDown) {
+    _clickOrigin = targetView;
+  } else if (event.type == NSEventTypeLeftMouseUp || event.type == NSEventMaskRightMouseUp) {
+    _clickOrigin = nil;
+  }
+  // The "targetView" must be a React-managed view.
+  while (targetView && !targetView.reactTag) {
+    targetView = targetView.superview;
+  }
 
   // By convention, all coordinates, whether they be touch coordinates, or
   // measurement coordinates are with respect to the root view.
@@ -231,18 +242,18 @@ static inline BOOL hasFlag(NSUInteger flags, NSUInteger flag) {
   return targetView;
 }
 
-- (void)_setHoveredView:(NSView *)view
+- (void)_setHoverTarget:(NSView *)view
 {
   NSNumber *target = view.reactTag;
   NSNumber *relatedTarget;
 
-  if (_hoveredView) {
-    relatedTarget = view == _hoveredView ? nil : _hoveredView.reactTag;
+  if (_hoverTarget) {
+    relatedTarget = view == _hoverTarget ? nil : _hoverTarget.reactTag;
     if (relatedTarget) {
       _mouseInfo[@"target"] = relatedTarget;
       _mouseInfo[@"relatedTarget"] = target;
 
-      _hoveredView = nil;
+      _hoverTarget = nil;
       [self _sendMouseEvent:@"mouseOut"];
     }
   }
@@ -251,8 +262,8 @@ static inline BOOL hasFlag(NSUInteger flags, NSUInteger flag) {
     _mouseInfo[@"target"] = target;
     _mouseInfo[@"relatedTarget"] = relatedTarget;
 
-    if (_hoveredView == nil) {
-      _hoveredView = view;
+    if (_hoverTarget == nil) {
+      _hoverTarget = view;
       [self _sendMouseEvent:@"mouseOver"];
 
       // Ensure "mouseMove" events have no "relatedTarget" property.
