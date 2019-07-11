@@ -16,22 +16,12 @@
 
 static NSString *RCTCurrentAppBackgroundState()
 {
-  static NSDictionary *states;
-  static dispatch_once_t onceToken;
-  dispatch_once(&onceToken, ^{
-    states = @{
-//      @(NSApplication): @"active",
-//      @(UIApplicationStateBackground): @"background",
-//      @(UIApplicationStateInactive): @"inactive"
-    };
-  });
-
   if (RCTRunningInAppExtension()) {
     return @"extension";
   }
 
-  //return states[@(RCTSharedApplication().applicationState)] ?: @"unknown";
-  return @"unknown";
+  NSApplication *app = RCTSharedApplication();
+  return app.active ? @"active" : @"inactive";
 }
 
 @implementation RCTAppState
