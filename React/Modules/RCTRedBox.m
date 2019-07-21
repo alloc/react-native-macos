@@ -142,6 +142,11 @@ const CGFloat buttonMargin = 10;
     [rootView addSubview:reloadButton];
     [rootView addSubview:copyButton];
     [self setContentView:rootView];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(orderFrontRegardless)
+                                                 name:NSApplicationDidBecomeActiveNotification
+                                               object:nil];
   }
   return self;
 }
