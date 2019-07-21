@@ -57,8 +57,8 @@ RCT_EXPORT_MODULE()
 {
   _lastKnownState = RCTCurrentAppBackgroundState();
 
-  for (NSString *name in @[NSApplicationWillBecomeActiveNotification,
-                           NSApplicationDidHideNotification,
+  for (NSString *name in @[NSApplicationDidBecomeActiveNotification,
+                           NSApplicationDidResignActiveNotification,
                            NSApplicationDidFinishLaunchingNotification]) {
 
     [[NSNotificationCenter defaultCenter] addObserver:self
