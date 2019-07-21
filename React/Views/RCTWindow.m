@@ -206,7 +206,7 @@ static inline BOOL hasFlag(NSUInteger flags, NSUInteger flag) {
 
 - (NSView *)hitTest:(NSPoint)point withEvent:(NSEvent *)event
 {
-  NSView *targetView = [self.rootView hitTest:point];
+  NSView *targetView = _clickOrigin ?: [self.rootView hitTest:point];
   // The "clickOrigin" is used for special handling of field editors. It only exists between mouseUp and mouseDown events.
   if (event.type == NSEventTypeLeftMouseDown || event.type == NSEventTypeRightMouseDown) {
     _clickOrigin = targetView;
