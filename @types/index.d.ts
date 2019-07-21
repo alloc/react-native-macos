@@ -9272,7 +9272,9 @@ export const DeviceEventEmitter: DeviceEventEmitterStatic;
  * Abstract base class for implementing event-emitting modules. This implements
  * a subset of the standard EventEmitter node module API.
  */
-export interface NativeEventEmitter extends EventEmitter {}
+export interface NativeEventEmitter extends EventEmitter {
+    new (nativeModule?: any): NativeEventEmitter;
+}
 export const NativeEventEmitter: NativeEventEmitter;
 /**
  * Deprecated - subclass NativeEventEmitter to create granular event modules instead of
