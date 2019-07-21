@@ -77,6 +77,8 @@ const CGFloat buttonMargin = 10;
                           styleMask:NSWindowStyleMaskClosable | NSWindowStyleMaskTitled
                             backing:NSBackingStoreBuffered defer:NO];
   if (self) {
+    self.collectionBehavior = NSWindowCollectionBehaviorMoveToActiveSpace;
+    
     NSColor *backgroundColor = [NSColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:1];
     RCTView *rootView = [[RCTView alloc] initWithFrame:frame];
     rootView.backgroundColor = backgroundColor;
