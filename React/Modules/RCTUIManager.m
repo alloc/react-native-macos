@@ -1186,8 +1186,8 @@ RCT_EXPORT_METHOD(measure:(nonnull NSNumber *)reactTag
     callback(@[
       @(frame.origin.x),
       @(frame.origin.y),
-      @(globalFrame.size.width),
-      @(globalFrame.size.height),
+      @(frame.size.width),
+      @(frame.size.height),
       @(globalFrame.origin.x),
       @(globalFrame.origin.y),
     ]);
