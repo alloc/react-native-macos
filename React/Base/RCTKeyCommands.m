@@ -101,11 +101,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
 
 @implementation RCTKeyCommands
 
-+ (void)initialize
-{
-
-}
-
 + (instancetype)sharedInstance
 {
   static RCTKeyCommands *sharedInstance;
