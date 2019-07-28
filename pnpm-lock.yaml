@@ -1,7 +1,7 @@
 dependencies:
   '@babel/runtime': 7.4.5
   '@types/prop-types': 15.7.1
-  '@types/react': 16.8.22
+  '@types/react': 16.8.23
   absolute-path: 0.0.0
   art: 0.10.3
   babel-core: 6.26.3
@@ -104,13 +104,13 @@ packages:
     dev: false
     resolution:
       integrity: sha512-CFzn9idOEpHrgdw8JsoTkaDDyRWk1jrzIV8djzcgpq0y9tG4B4lFT+Nxh52DVpDXV+n4+NPNv7M1Dj5uMp6XFg==
-  /@types/react/16.8.22:
+  /@types/react/16.8.23:
     dependencies:
       '@types/prop-types': 15.7.1
-      csstype: 2.6.5
+      csstype: 2.6.6
     dev: false
     resolution:
-      integrity: sha512-C3O1yVqk4sUXqWyx0wlys76eQfhrQhiDhDlHBrjER76lR2S2Agiid/KpOU9oCqj1dISStscz7xXz1Cg8+sCQeA==
+      integrity: sha512-abkEOIeljniUN9qB5onp++g0EY38h7atnDHxwKUFz1r3VH1+yG1OKi2sNPTyObL40goBmfKFpdii2lEzwLX1cA==
   /abab/2.0.0:
     dev: true
     resolution:
@@ -1486,10 +1486,10 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-wXsoRfsRfsLVNaVzoKdqvEmK/5PFaEXNspVT22Ots6K/cnJdpoDKuQFw+qlMiXnmaif1OgeC466X1zISgAOcGg==
-  /csstype/2.6.5:
+  /csstype/2.6.6:
     dev: false
     resolution:
-      integrity: sha512-JsTaiksRsel5n7XwqPAfB0l3TFKdpjW/kgAELf9vrb5adGA7UCPLajKK5s3nFrcFm3Rkyp/Qkgl73ENc1UY3cA==
+      integrity: sha512-RpFbQGUE74iyPgvr46U9t1xoQBM8T4BL8SxrN66Le2xYAPSaDJJKeztV3awugusb3g3G9iL8StmkBBXhcbbXhg==
   /csurf/1.8.3:
     dependencies:
       cookie: 0.1.3
