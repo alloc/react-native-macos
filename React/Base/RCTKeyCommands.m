@@ -162,47 +162,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
   return NO;
 }
 
-- (void)registerDoublePressKeyCommandWithInput:(NSString *)input
-                      modifierFlags:(NSEventModifierFlags)flags
-                             action:(void (^)(NSEvent *))block
-{
-  RCTAssertMainQueue();
-
-//  NSEvent *command = [NSEvent keyCommandWithInput:input
-//                                              modifierFlags:flags
-//                                                     action:@selector(RCT_handleDoublePressKeyCommand:)];
-//
-//  RCTKeyCommand *keyCommand = [[RCTKeyCommand alloc] initWithKeyCommand:command block:block];
-//  [_commands removeObject:keyCommand];
-//  [_commands addObject:keyCommand];
-}
-
-- (void)unregisterDoublePressKeyCommandWithInput:(NSString *)input
-                        modifierFlags:(NSEventModifierFlags)flags
-{
-  RCTAssertMainQueue();
-
-  for (RCTKeyCommand *command in _commands.allObjects) {
-    if ([command matchesInput:input flags:flags]) {
-      [_commands removeObject:command];
-      break;
-    }
-  }
-}
-
-- (BOOL)isDoublePressKeyCommandRegisteredForInput:(NSString *)input
-                         modifierFlags:(NSEventModifierFlags)flags
-{
-  RCTAssertMainQueue();
-
-  for (RCTKeyCommand *command in _commands) {
-    if ([command matchesInput:input flags:flags]) {
-      return YES;
-    }
-  }
-  return NO;
-}
-
 @end
 
 #else
@@ -223,19 +182,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
 
 - (BOOL)isKeyCommandRegisteredForInput:(__unused NSString *)input
                          modifierFlags:(__unused NSEventModifierFlags)flags
-{
-  return NO;
-}
-
-- (void)registerDoublePressKeyCommandWithInput:(NSString *)input
-                      modifierFlags:(NSEventModifierFlags)flags
-                             action:(void (^)(NSEvent *))block {}
-
-- (void)unregisterDoublePressKeyCommandWithInput:(NSString *)input
-                        modifierFlags:(NSEventModifierFlags)flags {}
-
-- (BOOL)isDoublePressKeyCommandRegisteredForInput:(NSString *)input
-                         modifierFlags:(NSEventModifierFlags)flags
 {
   return NO;
 }
