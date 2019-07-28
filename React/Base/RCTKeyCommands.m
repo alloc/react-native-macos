@@ -14,8 +14,6 @@
 #import "RCTDefines.h"
 #import "RCTUtils.h"
 
-#if RCT_DEV
-
 @interface RCTKeyCommand : NSObject <NSCopying>
 
 @property (nonatomic, strong) NSString *keyCommand;
@@ -158,29 +156,3 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
 }
 
 @end
-
-#else
-
-@implementation RCTKeyCommands
-
-+ (instancetype)sharedInstance
-{
-  return nil;
-}
-
-- (void)registerKeyCommandWithInput:(__unused NSString *)input
-                      modifierFlags:(__unused NSEventModifierFlags)flags
-                             action:(void (^)(__unused NSEvent *))block {}
-
-- (void)unregisterKeyCommandWithInput:(__unused NSString *)input
-                        modifierFlags:(__unused NSEventModifierFlags)flags {}
-
-- (BOOL)isKeyCommandRegisteredForInput:(__unused NSString *)input
-                         modifierFlags:(__unused NSEventModifierFlags)flags
-{
-  return NO;
-}
-
-@end
-
-#endif
