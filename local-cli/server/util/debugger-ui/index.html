@@ -91,7 +91,7 @@
       const silence = document.getElementById('silence');
       silence.volume = 0.1;
       if (isPriorityMaintained) {
-        silence.play();
+        silence.play().catch(console.error);
       } else {
         silence.pause();
       }
