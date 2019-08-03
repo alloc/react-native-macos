@@ -52,7 +52,6 @@ const CGFloat buttonMargin = 10;
 
 @protocol RCTRedBoxWindowActionDelegate <NSObject>
 
-- (void)redBoxWindowWillClose:(RCTRedBoxWindow *)redBoxWindow;
 - (void)redBoxWindow:(RCTRedBoxWindow *)redBoxWindow openStackFrameInEditor:(RCTJSStackFrame *)stackFrame;
 - (void)reloadFromRedBoxWindow:(RCTRedBoxWindow *)redBoxWindow;
 - (void)loadExtraDataViewController;
@@ -78,9 +77,10 @@ const CGFloat buttonMargin = 10;
                           styleMask:NSWindowStyleMaskClosable | NSWindowStyleMaskTitled
                             backing:NSBackingStoreBuffered defer:NO];
   if (self) {
-    self.collectionBehavior = NSWindowCollectionBehaviorMoveToActiveSpace;
     self.delegate = self;
-    
+    self.releasedWhenClosed = NO;
+    self.collectionBehavior = NSWindowCollectionBehaviorMoveToActiveSpace;
+
     NSColor *backgroundColor = [NSColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:1];
     RCTView *rootView = [[RCTView alloc] initWithFrame:frame];
     rootView.backgroundColor = backgroundColor;
@@ -160,11 +160,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
     _stackTraceTableView.dataSource = nil;
     _stackTraceTableView.delegate = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)windowWillClose:(NSNotification *)notification
-{
-  [_actionDelegate redBoxWindowWillClose:self];
 }
 
 - (NSString *)stripAnsi:(NSString *)text
@@ -536,11 +531,6 @@ RCT_EXPORT_METHOD(dismiss)
 - (BOOL)isVisible
 {
     return _window.contentView.superview != nil && _window.isVisible;
-}
-
-- (void)redBoxWindowWillClose:(__unused RCTRedBoxWindow *)redBoxWindow
-{
-    self->_window = nil;
 }
 
 - (void)redBoxWindow:(__unused RCTRedBoxWindow *)redBoxWindow openStackFrameInEditor:(RCTJSStackFrame *)stackFrame
