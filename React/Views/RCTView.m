@@ -180,17 +180,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:unused)
   return self.clipsToBounds;
 }
 
-- (void)setPointerEvents:(RCTPointerEvents)pointerEvents
-{
-   NSLog(@" setPointerEvents is not implemented");
-  _pointerEvents = pointerEvents;
-
-//  self.userInteractionEnabled = (pointerEvents != RCTPointerEventsNone);
-//  if (pointerEvents == RCTPointerEventsBoxNone) {
-//    self.accessibilityViewIsModal = NO;
-//  }
-}
-
 - (void)setTransform:(CATransform3D)transform
 {
   _transform = transform;
@@ -199,13 +188,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:unused)
 
 - (NSView *)hitTest:(CGPoint)point
 {
-  // TODO: implement "isUserInteractionEnabled"
-//  BOOL canReceiveTouchEvents = ([self isUserInteractionEnabled] && ![self isHidden]);
-//  if(!canReceiveTouchEvents) {
-//    return nil;
-//  }
-
-  if (self.isHidden) {
+  if (self.isHidden || _pointerEvents == RCTPointerEventsNone) {
     return nil;
   }
 
@@ -213,7 +196,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:unused)
   // be outside the bounds of `view` (e.g., if -clipsToBounds is NO).
   NSView *hitSubview = nil;
   BOOL isPointInside = [self pointInside:point];
-  BOOL needsHitSubview = !(_pointerEvents == RCTPointerEventsNone || _pointerEvents == RCTPointerEventsBoxOnly);
+  BOOL needsHitSubview = _pointerEvents != RCTPointerEventsBoxOnly;
   if (needsHitSubview && (![self clipsToBounds] || isPointInside)) {
     // Take z-index into account when calculating the touch target.
     NSArray<NSView *> *sortedSubviews = [self reactZIndexSortedSubviews];
@@ -236,22 +219,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:unused)
     }
   }
 
-  return hitSubview ?: (isPointInside ? self : nil);
-
-  // TODO: implement "pointerEvents"
-//  switch (_pointerEvents) {
-//    case RCTPointerEventsNone:
-//      return nil;
-//    case RCTPointerEventsUnspecified:
-//      return hitSubview ?: hitView;
-//    case RCTPointerEventsBoxOnly:
-//      return hitView;
-//    case RCTPointerEventsBoxNone:
-//      return hitSubview;
-//    default:
-//      RCTLogError(@"Invalid pointer-events specified %lld on %@", (long long)_pointerEvents, self);
-//      return hitSubview ?: hitView;
-//  }
+  return hitSubview ?: (isPointInside && _pointerEvents != RCTPointerEventsBoxNone ? self : nil);
 }
 
 static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
