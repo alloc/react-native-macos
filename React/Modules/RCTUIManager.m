@@ -1178,10 +1178,16 @@ RCT_EXPORT_METHOD(measure:(nonnull NSNumber *)reactTag
       callback(@[]);
       return;
     }
-
+    
+    // Yoga skips layout for hidden subtrees.
+    CGRect frame = view.frame;
+    if (NSEqualSizes(NSZeroSize, frame.size) && view.isHiddenOrHasHiddenAncestor) {
+      RCTLogWarn(@"UIManager.measure failed on view with tag #%@ due to hidden ancestor", reactTag);
+      return callback(@[]);
+    }
+    
     // By convention, all coordinates, whether they be touch coordinates, or
     // measurement coordinates are with respect to the root view.
-    CGRect frame = view.frame;
     CGRect globalFrame = view.reactGlobalFrame;
     callback(@[
       @(frame.origin.x),
