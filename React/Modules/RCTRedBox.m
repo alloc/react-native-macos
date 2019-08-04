@@ -502,18 +502,16 @@ RCT_EXPORT_MODULE()
 }
 
 - (void)loadExtraDataViewController {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        // Make sure the CMD+E shortcut doesn't call this twice
-        NSLog(@"_extraDataViewController is not yet implemented");
-      // if (self->_extraDataViewController != nil && ![self->_window.contentViewController presentedViewControllers]) {
-      //     [self->_window.contentViewController presentViewControllerAsSheet:self->_extraDataViewController];
-      //   }
-    });
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        // Make sure the CMD+E shortcut doesn't call this twice
+//        if (self->_extraDataViewController != nil && ![self->_window.contentViewController presentedViewControllers]) {
+//            [self->_window.contentViewController presentViewControllerAsSheet:self->_extraDataViewController];
+//        }
+//    });
 }
 
 RCT_EXPORT_METHOD(setExtraData:(NSDictionary *)extraData forIdentifier:(__unused NSString *)identifier) {
-    // [_extraDataViewController addExtraData:extraData forIdentifier:identifier];
-    NSLog(@"_extraDataViewController is not yet implemented %@", extraData);
+//    [_extraDataViewController addExtraData:extraData forIdentifier:identifier];
 }
 
 RCT_EXPORT_METHOD(dismiss)
