@@ -47,8 +47,6 @@ export type MeasureOnSuccessCallback = (
     y: number,
     width: number,
     height: number,
-    pageX: number,
-    pageY: number
 ) => void;
 
 export type MeasureInWindowOnSuccessCallback = (x: number, y: number, width: number, height: number) => void;
@@ -288,8 +286,6 @@ export interface NativeMethodsMixinStatic {
      *  - y
      *  - width
      *  - height
-     *  - pageX
-     *  - pageY
      *
      * Note that these measurements are not available until after the rendering
      * has been completed in native. If you need the measurements as soon as
@@ -8269,8 +8265,6 @@ export interface UIManagerStatic {
      *  - y
      *  - width
      *  - height
-     *  - pageX
-     *  - pageY
      *
      * Note that these measurements are not available until after the rendering
      * has been completed in native. If you need the measurements as soon as

@@ -602,17 +602,19 @@ var TouchableMixin = {
     UIManager.measure(tag, this._handleQueryLayout);
   },
 
-  _handleQueryLayout: function(l, t, w, h, globalX, globalY) {
-    //don't do anything UIManager failed to measure node
-    if (!l && !t && !w && !h && !globalX && !globalY) {
-      return;
+  _handleQueryLayout: function(pageX, pageY, width, height) {
+    // The measurement may have failed.
+    if (arguments.length) {
+      const state = this.state.touchable;
+      if (state.positionOnActivate) {
+        Position.release(state.positionOnActivate);
+      }
+      if (state.dimensionsOnActivate) {
+        BoundingDimensions.release(state.dimensionsOnActivate);
+      }
+      state.positionOnActivate = Position.getPooled(pageX, pageY);
+      state.dimensionsOnActivate = BoundingDimensions.getPooled(width, height);
     }
-    this.state.touchable.positionOnActivate &&
-      Position.release(this.state.touchable.positionOnActivate);
-    this.state.touchable.dimensionsOnActivate &&
-      BoundingDimensions.release(this.state.touchable.dimensionsOnActivate);
-    this.state.touchable.positionOnActivate = Position.getPooled(globalX, globalY);
-    this.state.touchable.dimensionsOnActivate = BoundingDimensions.getPooled(w, h);
   },
 
   _handleDelay: function(e) {

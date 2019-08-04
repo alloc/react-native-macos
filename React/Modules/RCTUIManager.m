@@ -1190,12 +1190,10 @@ RCT_EXPORT_METHOD(measure:(nonnull NSNumber *)reactTag
     // measurement coordinates are with respect to the root view.
     CGRect globalFrame = view.reactGlobalFrame;
     callback(@[
-      @(frame.origin.x),
-      @(frame.origin.y),
-      @(frame.size.width),
-      @(frame.size.height),
       @(globalFrame.origin.x),
       @(globalFrame.origin.y),
+      @(globalFrame.size.width),
+      @(globalFrame.size.height),
     ]);
   }];
 }
