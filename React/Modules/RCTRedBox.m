@@ -77,6 +77,8 @@ const CGFloat buttonMargin = 10;
                           styleMask:NSWindowStyleMaskClosable | NSWindowStyleMaskTitled
                             backing:NSBackingStoreBuffered defer:NO];
   if (self) {
+    self.level = kCGMaximumWindowLevel;
+    self.canHide = NO;
     self.delegate = self;
     self.releasedWhenClosed = NO;
     self.collectionBehavior = NSWindowCollectionBehaviorMoveToActiveSpace;
@@ -185,6 +187,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
     
     NSApplication *app = [NSApplication sharedApplication];
     [app setActivationPolicy:NSApplicationActivationPolicyRegular];
+    [app activateIgnoringOtherApps:YES];
     
     [self makeKeyAndOrderFront:nil];
     [self makeFirstResponder:self];
