@@ -207,7 +207,7 @@
     "shell-quote": "1.6.1",
     "stacktrace-parser": "^0.1.3",
     "uuid": "^3.3.2",
-    "whatwg-fetch": "^1.0.0",
+    "whatwg-fetch": "npm:@aleclarson/whatwg-fetch@^3.0.0",
     "ws": "^1.1.0",
     "xcode": "^0.9.1",
     "xmldoc": "^0.4.0",
