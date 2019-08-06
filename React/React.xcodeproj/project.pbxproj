@@ -556,6 +556,8 @@
 		70A2DF0D22B406A8008A2DA2 /* YGStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 70A2DEE922B3FE78008A2DA2 /* YGStyle.h */; };
 		70A2DF0E22B406A8008A2DA2 /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 705EDE2722107DD0000CAA67 /* Utils.h */; };
 		70BA7CC32217790F006B6654 /* RCTLayout.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 70D4B5142217707C0007C3F1 /* RCTLayout.h */; };
+		70CDF31422F9DF6B00ECA452 /* RCTBlendMode.h in Headers */ = {isa = PBXBuildFile; fileRef = 70CDF31322F9DE9600ECA452 /* RCTBlendMode.h */; };
+		70CDF31522F9E3BE00ECA452 /* RCTBlendMode.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 70CDF31322F9DE9600ECA452 /* RCTBlendMode.h */; };
 		70D4B5162217707D0007C3F1 /* RCTLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 70D4B5142217707C0007C3F1 /* RCTLayout.h */; };
 		70D4B5172217707D0007C3F1 /* RCTLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 70D4B5152217707C0007C3F1 /* RCTLayout.m */; };
 		70FF881022C8038400A4164C /* RCTFieldEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = 70FF880F22C8038400A4164C /* RCTFieldEditor.m */; };
@@ -698,6 +700,7 @@
 			dstPath = include/React;
 			dstSubfolderSpec = 16;
 			files = (
+				70CDF31522F9E3BE00ECA452 /* RCTBlendMode.h in Copy Headers */,
 				7095B6D02247C86300BE2245 /* RCTFieldEditor.h in Copy Headers */,
 				702B7FFF221C88D70027174A /* RCTWindow.h in Copy Headers */,
 				702B7FFE221C88CE0027174A /* RCTMouseEvent.h in Copy Headers */,
@@ -1294,6 +1297,7 @@
 		70A2DEE722B3FE77008A2DA2 /* YGLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YGLayout.h; sourceTree = "<group>"; };
 		70A2DEE922B3FE78008A2DA2 /* YGStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YGStyle.h; sourceTree = "<group>"; };
 		70A2DEEA22B3FE78008A2DA2 /* YGConfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = YGConfig.cpp; sourceTree = "<group>"; };
+		70CDF31322F9DE9600ECA452 /* RCTBlendMode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTBlendMode.h; sourceTree = "<group>"; };
 		70D4B5142217707C0007C3F1 /* RCTLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTLayout.h; sourceTree = "<group>"; };
 		70D4B5152217707C0007C3F1 /* RCTLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTLayout.m; sourceTree = "<group>"; };
 		70FF880F22C8038400A4164C /* RCTFieldEditor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCTFieldEditor.m; path = TextInput/Singleline/RCTFieldEditor.m; sourceTree = "<group>"; };
@@ -1605,6 +1609,7 @@
 			children = (
 				D4EEE2F9201DF64800C4CBB6 /* NSView+NSViewAnimationWithBlocks.h */,
 				D4EEE2FA201DF64800C4CBB6 /* NSView+NSViewAnimationWithBlocks.m */,
+				70CDF31322F9DE9600ECA452 /* RCTBlendMode.h */,
 				D4EEE2F2201DF63F00C4CBB6 /* RCTButton.h */,
 				D4EEE2F3201DF63F00C4CBB6 /* RCTButton.m */,
 				D4EEE2F1201DF63F00C4CBB6 /* RCTButtonManager.h */,
@@ -2223,6 +2228,7 @@
 				3D80DA2F1DF820620028D040 /* RCTInvalidating.h in Headers */,
 				3D80DA341DF820620028D040 /* RCTLog.h in Headers */,
 				D49593E0202C937C00A7694B /* RCTMenuManager.h in Headers */,
+				70CDF31422F9DF6B00ECA452 /* RCTBlendMode.h in Headers */,
 				199B8A6F1F44DB16005DEF67 /* RCTVersion.h in Headers */,
 				3D80DA1A1DF820620028D040 /* RCTImageStoreManager.h in Headers */,
 				130443A11E3FEAA900D93A67 /* RCTFollyConvert.h in Headers */,

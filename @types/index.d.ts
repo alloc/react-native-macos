@@ -1828,6 +1828,13 @@ export interface ViewStyle extends FlexStyle, ShadowStyleIOS, TransformsStyle {
     elevation?: number;
 }
 
+export interface ViewPropsMacOS {
+    /**
+     * Blend this view's layer into any layers behind it.
+     */
+    blendMode?: "none" | "overlay"
+}
+
 export interface ViewPropsIOS {
     /**
      * A Boolean value indicating whether VoiceOver should ignore the elements within views that are siblings of the receiver.
@@ -2038,6 +2045,7 @@ type AccessibilityTrait =
 export interface ViewProps
     extends ViewPropsAndroid,
         ViewPropsIOS,
+        ViewPropsMacOS,
         GestureResponderHandlers,
         Touchable,
         AccessibilityProps {

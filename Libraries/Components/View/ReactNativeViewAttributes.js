@@ -38,6 +38,7 @@ ReactNativeViewAttributes.UIView = {
   onContextMenu: true,
   onAccessibilityTap: true,
   onMagicTap: true,
+  blendMode: true,
   collapsable: true,
   needsOffscreenAlphaCompositing: true,
   style: ReactNativeStyleAttributes,

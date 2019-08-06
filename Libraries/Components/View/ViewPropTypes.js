@@ -454,4 +454,12 @@ module.exports = {
    * @platform macos
    */
   contextMenu: PropTypes.array,
+  /**
+   * Layer blending
+   * @platform macos
+   */
+  blendMode: PropTypes.oneOf([
+    'none',
+    'overlay',
+  ]),
 };

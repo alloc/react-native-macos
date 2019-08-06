@@ -640,6 +640,11 @@ RCT_ENUM_CONVERTER(RCTAnimationType, (@{
   @"keyboard": @(RCTAnimationTypeKeyboard),
 }), RCTAnimationTypeEaseInEaseOut, integerValue)
 
+RCT_ENUM_CONVERTER(RCTBlendMode, (@{
+  @"none": @(RCTBlendModeNone),
+  @"overlay": @(RCTBlendModeOverlay),
+}), RCTBlendModeNone, integerValue)
+
 @end
 
 @interface RCTImageSource (Packager)

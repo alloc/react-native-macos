@@ -12,6 +12,7 @@
 #import "RCTViewManager.h"
 
 #import "RCTBorderStyle.h"
+#import "RCTBlendMode.h"
 #import "RCTBridge.h"
 #import "RCTConvert.h"
 #import "RCTEventDispatcher.h"
@@ -203,6 +204,21 @@ RCT_CUSTOM_VIEW_PROPERTY(hitSlop, UIEdgeInsets, RCTView)
       view.hitTestEdgeInsets = defaultView.hitTestEdgeInsets;
     }
   }
+}
+RCT_CUSTOM_VIEW_PROPERTY(blendMode, NSString *, RCTView)
+{
+  if (json) {
+    [view ensureLayerExists];
+  }
+  RCTBlendMode blendMode = [RCTConvert RCTBlendMode:json];
+  CIFilter *filter;
+  switch (blendMode) {
+    case RCTBlendModeNone: break;
+    case RCTBlendModeOverlay:
+      filter = [CIFilter filterWithName:@"CIOverlayBlendMode"];
+      break;
+  }
+  view.compositingFilter = filter;
 }
 
 // RCT_EXPORT_VIEW_PROPERTY(onAccessibilityTap, RCTDirectEventBlock)
