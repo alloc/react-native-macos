@@ -122,7 +122,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
   // Perform a hitTest before sendEvent in case a field editor is active.
   NSView *targetView = [self hitTest:event.locationInWindow withEvent:event];
   [super sendEvent:event];
-
+  
   if (_clickTarget) {
     if (type == NSEventTypeLeftMouseDragged) {
       if (_clickType == NSEventTypeLeftMouseDown) {
@@ -216,6 +216,10 @@ static inline BOOL hasFlag(NSUInteger flags, NSUInteger flag) {
   // The "targetView" must be a React-managed view.
   while (targetView && !targetView.reactTag) {
     targetView = targetView.superview;
+  }
+  
+  if (!targetView) {
+    return nil;
   }
 
   // By convention, all coordinates, whether they be touch coordinates, or
