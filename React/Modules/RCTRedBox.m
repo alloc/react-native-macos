@@ -405,6 +405,16 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 
 RCT_EXPORT_MODULE()
 
+- (void)setBridge:(RCTBridge *)bridge
+{
+  _bridge = bridge;
+  
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(dismiss)
+                                               name:RCTBridgeWillReloadNotification
+                                             object:[bridge valueForKey:@"_parentBridge"]];
+}
+
 - (void)registerErrorCustomizer:(id<RCTErrorCustomizer>)errorCustomizer
 {
     dispatch_async(dispatch_get_main_queue(), ^{
