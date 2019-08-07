@@ -148,7 +148,7 @@ const CGFloat buttonMargin = 10;
     [self setContentView:rootView];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(orderFrontRegardless)
+                                             selector:@selector(bringToAttention)
                                                  name:NSApplicationDidBecomeActiveNotification
                                                object:nil];
   }
@@ -156,6 +156,13 @@ const CGFloat buttonMargin = 10;
 }
 
 RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
+
+- (void)bringToAttention
+{
+  if (self.isVisible) {
+    [self orderFrontRegardless];
+  }
+}
 
 - (void)dealloc
 {
