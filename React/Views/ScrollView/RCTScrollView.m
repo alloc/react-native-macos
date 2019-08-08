@@ -259,7 +259,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 - (NSArray *)calculateChildFramesData
 {
   NSMutableArray *updatedChildFrames = [NSMutableArray new];
-  [[_contentView reactSubviews] enumerateObjectsUsingBlock:
+  [[self.contentView reactSubviews] enumerateObjectsUsingBlock:
    ^(NSView *subview, NSUInteger idx, __unused BOOL *stop) {
 
      // Check if new or changed
@@ -689,22 +689,6 @@ for (NSObject<UIScrollViewDelegate> *scrollViewListener in _scrollListeners) { \
                                                                  userData:userData
                                                             coalescingKey:_coalescingKey];
   [_eventDispatcher sendEvent:scrollEvent];
-}
-
-@end
-
-@implementation RCTEventDispatcher (RCTScrollView)
-
-- (void)sendFakeScrollEvent:(NSNumber *)reactTag
-{
-  // Use the selector here in case the onScroll block property is ever renamed
-  NSString *eventName = NSStringFromSelector(@selector(onScroll));
-  RCTScrollEvent *fakeScrollEvent = [[RCTScrollEvent alloc] initWithEventName:eventName
-                                                                     reactTag:reactTag
-                                                                   scrollView:nil
-                                                                     userData:nil
-                                                                coalescingKey:0];
-  [self sendEvent:fakeScrollEvent];
 }
 
 @end

@@ -429,7 +429,7 @@ static BOOL _animationsEnabled = YES;
 
 - (id)actionForLayer:(CALayer *)theLayer forKey:(NSString *)event
 {
-  if (_animationsEnabled && [_animationGroups lastObject] && theLayer == _layer) {
+  if (_animationsEnabled && [_animationGroups lastObject] && theLayer == self.layer) {
     return [[_animationGroups lastObject] actionForView:self forKey:event] ?: (id)[NSNull null];
   } else {
     return [NSNull null];
