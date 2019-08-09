@@ -77,7 +77,6 @@ const CGFloat buttonMargin = 10;
                           styleMask:NSWindowStyleMaskClosable | NSWindowStyleMaskTitled
                             backing:NSBackingStoreBuffered defer:NO];
   if (self) {
-    self.level = kCGMaximumWindowLevel;
     self.canHide = NO;
     self.delegate = self;
     self.releasedWhenClosed = NO;
@@ -192,13 +191,21 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
     [_stackTraceTableView reloadData];
     [_stackTraceTableView sizeToFit];
     
-    NSApplication *app = [NSApplication sharedApplication];
-    [app setActivationPolicy:NSApplicationActivationPolicyRegular];
-    [app activateIgnoringOtherApps:YES];
+    if (!isUpdate) {
+      NSApplication *app = [NSApplication sharedApplication];
+      [app setActivationPolicy:NSApplicationActivationPolicyRegular];
+      [app activateIgnoringOtherApps:YES];
     
-    [self makeKeyAndOrderFront:nil];
-    [self makeFirstResponder:self];
+      self.level = kCGMaximumWindowLevel;
+      [self makeKeyAndOrderFront:nil];
+    }
   }
+}
+
+- (void)windowDidResignKey:(__unused NSNotification *)notification
+{
+  self.level = kCGNormalWindowLevel;
+  [self orderBack:nil];
 }
 
 - (void)dismiss
@@ -501,7 +508,7 @@ RCT_EXPORT_MODULE()
         //     self->_extraDataViewController = [RCTRedBoxExtraDataViewController new];
         //     self->_extraDataViewController.actionDelegate = self;
         // }
-        [self->_bridge.eventDispatcher sendDeviceEventWithName:@"collectRedBoxExtraData" body:nil];
+        // [self->_bridge.eventDispatcher sendDeviceEventWithName:@"collectRedBoxExtraData" body:nil];
 
         if (!self->_window) {
           NSSize screenSize = NSScreen.mainScreen.frame.size;
