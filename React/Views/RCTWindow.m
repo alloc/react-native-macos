@@ -126,6 +126,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
   
   if (_clickTarget) {
     if (type == NSEventTypeLeftMouseDragged) {
+      _lastLeftMouseEvent = event;
       if (_clickType == NSEventTypeLeftMouseDown) {
         [self _sendTouchEvent:@"touchMove"];
       }
@@ -162,6 +163,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
       }
 
       if (type == NSEventTypeLeftMouseDown) {
+        _lastLeftMouseEvent = event;
         [self _sendTouchEvent:@"touchStart"];
       }
 
@@ -172,6 +174,8 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
   }
 
   if (type == NSEventTypeLeftMouseUp) {
+    _lastLeftMouseEvent = event;
+    
     if (_clickType == NSEventTypeLeftMouseDown) {
       [self _sendTouchEvent:@"touchEnd"];
       _clickTarget = nil;

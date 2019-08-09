@@ -24,4 +24,6 @@
 // Only exists between mouseDown and mouseUp events (may not be a React view)
 @property (nullable, strong) NSView *clickOrigin;
 
+@property (nonatomic, readonly) NSEvent *lastLeftMouseEvent;
+
 @end

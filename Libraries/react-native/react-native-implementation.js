@@ -60,6 +60,7 @@ const ReactNative = {
   get ViewPagerAndroid() { return require('ViewPagerAndroid'); },
   get VirtualizedList() { return require('VirtualizedList'); },
   get WebView() { return require('WebView'); },
+  get WindowDrag() { return require('WindowDrag'); },
 
   // APIs
   get ActionSheetIOS() { return require('ActionSheetIOS'); },

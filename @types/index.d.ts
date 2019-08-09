@@ -8425,6 +8425,14 @@ declare const SwitchBase: Constructor<NativeMethodsMixin> & typeof SwitchCompone
 export class Switch extends SwitchBase {}
 
 /**
+ * The `WindowDrag` component provides an area where the mouse can left-click
+ * and then drag in order to move the native `RCTWindow` that contains this view.
+ *
+ * @platform macos
+ */
+export class WindowDrag extends React.Component<ViewProps> {}
+
+/**
  * NOTE: `VibrationIOS` is being deprecated. Use `Vibration` instead.
  *
  * The Vibration API is exposed at VibrationIOS.vibrate().

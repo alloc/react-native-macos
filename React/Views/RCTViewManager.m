@@ -22,6 +22,7 @@
 #import "RCTUIManagerUtils.h"
 #import "RCTUtils.h"
 #import "RCTView.h"
+#import "RCTWindow.h"
 #import "NSView+React.h"
 #import "RCTConvert+Transform.h"
 
@@ -363,5 +364,29 @@ RCT_EXPORT_SHADOW_PROPERTY(display, YGDisplay)
 RCT_EXPORT_SHADOW_PROPERTY(onLayout, RCTDirectEventBlock)
 
 RCT_EXPORT_SHADOW_PROPERTY(direction, YGDirection)
+
+RCT_EXPORT_METHOD(performWindowDrag:(nonnull NSNumber *)reactTag)
+{
+  [self.bridge.uiManager addUIBlock:
+   ^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTView *> *viewRegistry) {
+     
+     RCTView *view = viewRegistry[reactTag];
+     if (!view || ![view isKindOfClass:[RCTView class]]) {
+       RCTLogError(@"Cannot find RCTView with tag #%@", reactTag);
+       return;
+     }
+     
+     RCTWindow *window = (RCTWindow *)view.window;
+     if (!window || ![window isKindOfClass:[RCTWindow class]]) {
+       RCTLogError(@"Expected RCTView.window to be a RCTWindow, but got a %@", window.className);
+       return;
+     }
+     
+     NSEvent *event = window.lastLeftMouseEvent;
+     if (event && event.type != NSLeftMouseUp) {
+       [window performWindowDragWithEvent:window.lastLeftMouseEvent];
+     }
+   }];
+}
 
 @end
