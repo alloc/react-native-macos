@@ -287,7 +287,7 @@ static inline BOOL hasFlag(NSUInteger flags, NSUInteger flag) {
 {
   RCTMouseEvent *event = [[RCTMouseEvent alloc] initWithEventName:eventName
                                                            target:_mouseInfo[@"target"]
-                                                         userInfo:_mouseInfo
+                                                         userInfo:[_mouseInfo copy]
                                                     coalescingKey:_coalescingKey];
 
   if (![eventName isEqualToString:@"mouseMove"]) {
@@ -301,7 +301,7 @@ static inline BOOL hasFlag(NSUInteger flags, NSUInteger flag) {
 {
   RCTTouchEvent *event = [[RCTTouchEvent alloc] initWithEventName:eventName
                                                          reactTag:self.rootView.reactTag
-                                                     reactTouches:@[_mouseInfo]
+                                                     reactTouches:@[[_mouseInfo copy]]
                                                    changedIndexes:@[@0]
                                                     coalescingKey:_coalescingKey];
 
