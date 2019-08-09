@@ -647,16 +647,6 @@ const ScrollView = createReactClass({
         {children}
       </ScrollContentContainerViewClass>;
 
-    const alwaysBounceHorizontal =
-      this.props.alwaysBounceHorizontal !== undefined ?
-        this.props.alwaysBounceHorizontal :
-        this.props.horizontal;
-
-    const alwaysBounceVertical =
-      this.props.alwaysBounceVertical !== undefined ?
-        this.props.alwaysBounceVertical :
-        !this.props.horizontal;
-
     const DEPRECATED_sendUpdatedChildFrames =
       !!this.props.DEPRECATED_sendUpdatedChildFrames;
 
