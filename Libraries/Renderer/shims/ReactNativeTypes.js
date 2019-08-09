@@ -199,8 +199,8 @@ export type ReactNativeResponderEvent = {
 
 export type ReactNativeResponderContext = {
   dispatchEvent: (
-    eventProp: string,
     eventValue: any,
+    listener: (any) => void,
     eventPriority: EventPriority,
   ) => void,
   isTargetWithinNode: (
