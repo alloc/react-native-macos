@@ -43,6 +43,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
 
   if (self) {
     _bridge = bridge;
+    _enabled = !bridge.isLoading;
 
     _mouseInfo = [NSMutableDictionary new];
     _mouseInfo[@"changedTouches"] = @[]; // Required for "mouseMove" events
