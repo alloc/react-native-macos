@@ -691,4 +691,10 @@ for (NSObject<UIScrollViewDelegate> *scrollViewListener in _scrollListeners) { \
   [_eventDispatcher sendEvent:scrollEvent];
 }
 
+- (NSView *)hitTest:(NSPoint)point
+{
+  // TODO: adjust "point" based on scroll offset
+  return [self.documentView hitTest:point];
+}
+
 @end
