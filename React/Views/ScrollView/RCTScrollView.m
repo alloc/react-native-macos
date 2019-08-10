@@ -175,22 +175,20 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher
 {
   if ((self = [super initWithFrame:CGRectZero])) {
-    _backgroundColor = [NSColor clearColor];
     _eventDispatcher = eventDispatcher;
+    _backgroundColor = NSColor.clearColor;
+    _cachedChildFrames = [NSMutableArray new];
+    _lastClippedToRect = CGRectNull;
+    
+    // Note: This also makes "opaque" return NO.
     [self setDrawsBackground:NO];
-
+    
     [self.contentView setPostsBoundsChangedNotifications:YES];
     [[NSNotificationCenter defaultCenter]
                                   addObserver:self
                                   selector:@selector(boundsDidChange:)
                                   name:NSViewBoundsDidChangeNotification
                                   object:self.contentView];
-
-    _scrollEventThrottle = 0.0;
-    _lastScrollDispatchTime = CACurrentMediaTime();
-    _cachedChildFrames = [NSMutableArray new];
-    _lastClippedToRect = CGRectNull;
-
   }
   return self;
 }
@@ -208,13 +206,17 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
   }
 }
 
+- (void)removeReactSubview:(__unused NSView *)subview
+{
+  // The "documentView" is never removed.
+}
+
 - (void)setAutoScrollToBottom:(BOOL)autoScrollToBottom
 {
   _autoScrollToBottom = autoScrollToBottom;
   [self setDocumentView:[self documentView]];
   [self setFrame:[self frame]];
 }
-
 
 - (void)setFrame:(NSRect)frameRect
 {
@@ -292,32 +294,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 - (void)scrollToBottom
 {
   [[self documentView] scrollPoint:NSMakePoint(0, 100000)]; // TODO: avoid this hack
-}
-
-- (BOOL)opaque
-{
-  return NO;
-}
-
-- (void)setShowsVerticalScrollIndicator:(BOOL)value
-{
-  self.hasVerticalScroller = value;
-}
-
-- (void)setShowsHorizontalScrollIndicator:(BOOL)value
-{
-  self.hasHorizontalScroller = value;
-}
-
-- (void)removeReactSubview:(NSView *)subview
-{
-  [subview removeFromSuperview];
-}
-
-
-- (BOOL)isFlipped
-{
-  return YES;
 }
 
 - (void)setBackgroundColor:(NSColor *)backgroundColor

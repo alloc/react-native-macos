@@ -79,8 +79,8 @@ RCT_REMAP_VIEW_PROPERTY(pinchGestureEnabled, scrollView.pinchGestureEnabled, BOO
 // RCT_EXPORT_VIEW_PROPERTY(scrollsToTop, BOOL)
 #endif
 
-RCT_EXPORT_VIEW_PROPERTY(showsHorizontalScrollIndicator, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(showsVerticalScrollIndicator, BOOL)
+RCT_REMAP_VIEW_PROPERTY(showsHorizontalScrollIndicator, hasHorizontalScroller, BOOL)
+RCT_REMAP_VIEW_PROPERTY(showsVerticalScrollIndicator, hasVerticalScroller, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(scrollEventThrottle, NSTimeInterval)
 RCT_EXPORT_VIEW_PROPERTY(zoomScale, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(contentInset, UIEdgeInsets)
