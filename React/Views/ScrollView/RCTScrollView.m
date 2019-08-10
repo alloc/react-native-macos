@@ -343,24 +343,41 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
   if (!clipView) {
     return;
   }
-
+  
   static const CGFloat leeway = 1.0;
-
-  const CGSize contentSize = [[self documentView] bounds].size;
-  const CGRect bounds = [[self contentView] bounds];
-  const BOOL scrollsHorizontally = contentSize.width > bounds.size.width;
-  const BOOL scrollsVertically = contentSize.height > bounds.size.height;
-  const BOOL shouldClipAgain =
-  CGRectIsNull(_lastClippedToRect) ||
-  (scrollsHorizontally && (bounds.size.width < leeway || fabs(_lastClippedToRect.origin.x - bounds.origin.x) >= leeway)) ||
-  (scrollsVertically && (bounds.size.height < leeway || fabs(_lastClippedToRect.origin.y - bounds.origin.y) >= leeway));
-
-  if (shouldClipAgain) {
+  
+  const CGRect viewportRect = self.contentView.bounds;
+  const CGSize viewportSize = viewportRect.size;
+  
+  const CGSize contentSize = self.documentView.bounds.size;
+  const CGPoint contentOffset = viewportRect.origin;
+  
+  const BOOL scrollsHorizontally = contentSize.width > viewportSize.width;
+  const BOOL scrollsVertically = contentSize.height > viewportSize.height;
+  
+  BOOL shouldUpdate = CGRectIsNull(_lastClippedToRect);
+  if (scrollsVertically && !shouldUpdate) {
+    const CGPoint prevContentOffset = _lastClippedToRect.origin;
+    const CGFloat maxOffset = contentSize.height - viewportSize.height;
+    // Avoid subview clipping while rebounding.
+    if (MAX(contentOffset.y, prevContentOffset.y) > 0 && MIN(contentOffset.y, prevContentOffset.y) < maxOffset) {
+      shouldUpdate = viewportSize.height < leeway || fabs(prevContentOffset.y - contentOffset.y) >= leeway;
+    }
+  }
+  if (scrollsHorizontally && !shouldUpdate) {
+    const CGPoint prevContentOffset = _lastClippedToRect.origin;
+    const CGFloat maxOffset = contentSize.width - viewportSize.width;
+    // Avoid subview clipping while rebounding.
+    if (MAX(contentOffset.x, prevContentOffset.x) > 0 && MIN(contentOffset.x, prevContentOffset.x) < maxOffset) {
+      shouldUpdate = viewportSize.width < leeway || fabs(prevContentOffset.x - contentOffset.x) >= leeway;
+    }
+  }
+  
+  if (shouldUpdate) {
+    _lastClippedToRect = viewportRect;
+    
     const CGRect clipRect = CGRectInset(clipView.bounds, -leeway, -leeway);
-   // NSLog(@"clipRect %f %f", [[self contentView] bounds].size.height, [[self contentView] bounds].origin.y);
-
     [self react_updateClippedSubviewsWithClipRect:clipRect relativeToView:clipView];
-    _lastClippedToRect = bounds;
   }
 }
 
