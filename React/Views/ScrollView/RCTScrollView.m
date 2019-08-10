@@ -180,6 +180,9 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
     _cachedChildFrames = [NSMutableArray new];
     _lastClippedToRect = CGRectNull;
     
+    self.hasVerticalScroller = YES;
+    self.hasHorizontalScroller = YES;
+    
     // Note: This also makes "opaque" return NO.
     [self setDrawsBackground:NO];
     
