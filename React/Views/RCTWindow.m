@@ -20,7 +20,6 @@
   RCTBridge *_bridge;
 
   NSMutableDictionary *_mouseInfo;
-  NSView *_hoverTarget;
   NSView *_clickTarget;
   NSEventType _clickType;
   uint16_t _coalescingKey;
@@ -201,6 +200,12 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
     [self _setHoverTarget:targetView];
     return;
   }
+}
+
+- (void)scrollViewDidScroll
+{
+  // TODO: Find the new hover target.
+  [self _setHoverTarget:nil];
 }
 
 #pragma mark - Private methods

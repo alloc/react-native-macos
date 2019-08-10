@@ -16,6 +16,7 @@
 #import "RCTLog.h"
 #import "RCTUIManager.h"
 #import "RCTUtils.h"
+#import "RCTWindow.h"
 #import "NSView+Private.h"
 #import "NSView+React.h"
 
@@ -441,6 +442,13 @@ for (NSObject<UIScrollViewDelegate> *scrollViewListener in _scrollListeners) { \
    //[_scrollView dockClosestSectionHeader];
   [self updateClippedSubviews];
   NSTimeInterval now = CACurrentMediaTime();
+
+  RCTWindow *window = (RCTWindow *)self.window;
+  if ([window isKindOfClass:[RCTWindow class]]) {
+    if ([window.hoverTarget isDescendantOf:self]) {
+      [window scrollViewDidScroll];
+    }
+  }
 
   /**
    * TODO: this logic looks wrong, and it may be because it is. Currently, if _scrollEventThrottle

@@ -26,4 +26,10 @@
 
 @property (nonatomic, readonly) NSEvent *lastLeftMouseEvent;
 
+// The view directly under the mouse.
+@property (nonatomic, readonly) NSView *hoverTarget;
+
+// Updates the hover target while scrolling.
+- (void)scrollViewDidScroll;
+
 @end
