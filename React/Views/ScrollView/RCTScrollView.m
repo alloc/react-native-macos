@@ -718,8 +718,12 @@ for (NSObject<UIScrollViewDelegate> *scrollViewListener in _scrollListeners) { \
 
 - (NSView *)hitTest:(NSPoint)point
 {
-  // TODO: adjust "point" based on scroll offset
-  return [self.documentView hitTest:point];
+  // Note: This assumes "contentView.clipsToBounds" is YES.
+  if (!CGRectContainsPoint(self.frame, point)) {
+    return nil;
+  }
+  NSPoint contentOffset = self.contentView.bounds.origin;
+  return [self.documentView hitTest:(NSPoint){point.x + contentOffset.x, point.y + contentOffset.y}];
 }
 
 @end
