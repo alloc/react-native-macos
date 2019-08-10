@@ -603,7 +603,7 @@ for (NSObject<UIScrollViewDelegate> *scrollViewListener in _scrollListeners) { \
 
 - (NSView *)viewForZoomingInScrollView:(__unused NSScrollView *)scrollView
 {
-  return _contentView;
+  return self.contentView;
 }
 
 #pragma mark - Setters
