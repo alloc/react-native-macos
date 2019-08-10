@@ -19,11 +19,12 @@
                      styleMask:(NSWindowStyleMask)style
                          defer:(BOOL)defer NS_DESIGNATED_INITIALIZER;
 
-@property (nullable, strong) RCTRootView *contentView;
+@property (nonatomic) RCTRootView *contentView;
 
 // Only exists between mouseDown and mouseUp events (may not be a React view)
-@property (nullable, strong) NSView *clickOrigin;
+@property (nonatomic, readonly) NSView *clickOrigin;
 
+// Used in RCTViewManager for the WindowDrag component.
 @property (nonatomic, readonly) NSEvent *lastLeftMouseEvent;
 
 // The view directly under the mouse.
