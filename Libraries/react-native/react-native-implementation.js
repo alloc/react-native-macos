@@ -26,6 +26,7 @@ const ReactNative = {
   get DatePickerIOS() { return require('DatePickerIOS'); },
   get DrawerLayoutAndroid() { return require('DrawerLayoutAndroid'); },
   get FlatList() { return require('FlatList'); },
+  get Gradient() { return require('Gradient'); },
   get Image() { return require('Image'); },
   get ImageBackground() { return require('ImageBackground'); },
   get ImageEditor() { return require('ImageEditor'); },

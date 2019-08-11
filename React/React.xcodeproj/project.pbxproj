@@ -525,6 +525,10 @@
 		702B7FFD221C88BB0027174A /* RCTMouseEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 702B7FFB221C88BB0027174A /* RCTMouseEvent.m */; };
 		702B7FFE221C88CE0027174A /* RCTMouseEvent.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 702B7FFA221C88BB0027174A /* RCTMouseEvent.h */; };
 		702B7FFF221C88D70027174A /* RCTWindow.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 702B7FF6221C88AF0027174A /* RCTWindow.h */; };
+		70347E1F22FF447400A4F09B /* RCTGradient.h in Headers */ = {isa = PBXBuildFile; fileRef = 70347E1E22FF447400A4F09B /* RCTGradient.h */; };
+		70347E2122FF448600A4F09B /* RCTGradient.m in Sources */ = {isa = PBXBuildFile; fileRef = 70347E2022FF448600A4F09B /* RCTGradient.m */; };
+		70347E2322FF44B700A4F09B /* RCTGradientManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 70347E2222FF44B700A4F09B /* RCTGradientManager.m */; };
+		70347E2522FF44C100A4F09B /* RCTGradientManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 70347E2422FF44BF00A4F09B /* RCTGradientManager.h */; };
 		705EDE2922107DD0000CAA67 /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 705EDE2722107DD0000CAA67 /* Utils.h */; };
 		705EDE2A22107DD0000CAA67 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 705EDE2822107DD0000CAA67 /* Utils.cpp */; };
 		705EDE2C221082CB000CAA67 /* RCTSurfaceSizeMeasureMode.mm in Sources */ = {isa = PBXBuildFile; fileRef = 705EDE2B221082CB000CAA67 /* RCTSurfaceSizeMeasureMode.mm */; };
@@ -1278,6 +1282,10 @@
 		702B7FF7221C88AF0027174A /* RCTWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTWindow.m; sourceTree = "<group>"; };
 		702B7FFA221C88BB0027174A /* RCTMouseEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMouseEvent.h; sourceTree = "<group>"; };
 		702B7FFB221C88BB0027174A /* RCTMouseEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMouseEvent.m; sourceTree = "<group>"; };
+		70347E1E22FF447400A4F09B /* RCTGradient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTGradient.h; sourceTree = "<group>"; };
+		70347E2022FF448600A4F09B /* RCTGradient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTGradient.m; sourceTree = "<group>"; };
+		70347E2222FF44B700A4F09B /* RCTGradientManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTGradientManager.m; sourceTree = "<group>"; };
+		70347E2422FF44BF00A4F09B /* RCTGradientManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTGradientManager.h; sourceTree = "<group>"; };
 		705EDE2722107DD0000CAA67 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		705EDE2822107DD0000CAA67 /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
 		705EDE2B221082CB000CAA67 /* RCTSurfaceSizeMeasureMode.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTSurfaceSizeMeasureMode.mm; sourceTree = "<group>"; };
@@ -1636,6 +1644,10 @@
 				58C571BF1AA56C1900CDF9C8 /* RCTDatePickerManager.m */,
 				3D37B5801D522B190042D5B5 /* RCTFont.h */,
 				3D37B5811D522B190042D5B5 /* RCTFont.mm */,
+				70347E1E22FF447400A4F09B /* RCTGradient.h */,
+				70347E2022FF448600A4F09B /* RCTGradient.m */,
+				70347E2422FF44BF00A4F09B /* RCTGradientManager.h */,
+				70347E2222FF44B700A4F09B /* RCTGradientManager.m */,
 				70D4B5142217707C0007C3F1 /* RCTLayout.h */,
 				70D4B5152217707C0007C3F1 /* RCTLayout.m */,
 				66CD94AD1F1045E700CB3C7C /* RCTMaskedView.h */,
@@ -2234,6 +2246,7 @@
 				130443A11E3FEAA900D93A67 /* RCTFollyConvert.h in Headers */,
 				3D80DA1B1DF820620028D040 /* RCTResizeMode.h in Headers */,
 				3D80DA1C1DF820620028D040 /* RCTLinkingManager.h in Headers */,
+				70347E2522FF44C100A4F09B /* RCTGradientManager.h in Headers */,
 				3D80DA1D1DF820620028D040 /* RCTNetworking.h in Headers */,
 				3D80DA1E1DF820620028D040 /* RCTNetworkTask.h in Headers */,
 				657734841EE834C900A0E9EA /* RCTInspectorDevServerHelper.h in Headers */,
@@ -2383,6 +2396,7 @@
 				3D80DA8D1DF820620028D040 /* RCTView.h in Headers */,
 				3D80DA8E1DF820620028D040 /* RCTViewControllerProtocol.h in Headers */,
 				590D7BFD1EBD458B00D8A370 /* RCTShadowView+Layout.h in Headers */,
+				70347E1F22FF447400A4F09B /* RCTGradient.h in Headers */,
 				3D80DA8F1DF820620028D040 /* RCTViewManager.h in Headers */,
 				13134CA01E296B2A00B9F3CB /* RCTCxxUtils.h in Headers */,
 				599FAA4A1FB274980058CCF6 /* RCTSurfaceView.h in Headers */,
@@ -2830,9 +2844,11 @@
 				EBF21BBD1FC498270052F4D5 /* InspectorInterfaces.cpp in Sources */,
 				59EDBCAF1FDF4E0C003573DE /* RCTScrollContentView.m in Sources */,
 				135A9C001E7B0EE600587AEB /* RCTJSCHelpers.mm in Sources */,
+				70347E2122FF448600A4F09B /* RCTGradient.m in Sources */,
 				B233E6EA1D2D845D00BC68BA /* RCTI18nManager.m in Sources */,
 				3D7BFD1F1EA8E351008DFB7A /* RCTPackagerConnection.mm in Sources */,
 				13456E931ADAD2DE009F94A7 /* RCTConvert+CoreLocation.m in Sources */,
+				70347E2322FF44B700A4F09B /* RCTGradientManager.m in Sources */,
 				D49593DF202C937C00A7694B /* RCTCursorManager.m in Sources */,
 				13A1F71E1A75392D00D3D453 /* RCTKeyCommands.m in Sources */,
 				83CBBA531A601E3B00E9B192 /* RCTUtils.m in Sources */,

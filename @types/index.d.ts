@@ -8424,6 +8424,42 @@ declare class SwitchComponent extends React.Component<SwitchProps> {}
 declare const SwitchBase: Constructor<NativeMethodsMixin> & typeof SwitchComponent;
 export class Switch extends SwitchBase {}
 
+export interface GradientProps extends ViewProps {
+    /** The starting color of the gradient. */
+    startColor: string;
+    /** The ending color of the gradient. */
+    endColor: string;
+    /**
+     * Where the gradient begins, relative to the view's coordinate space.
+     *
+     * Defaults to `{x: 0, y: 0.5}`
+     */
+    startPoint?: PointPropType;
+    /**
+     * Where the gradient ends, relative to the view's coordinate space.
+     *
+     * Defaults to `{x: 1, y: 0.5}`
+     */
+    endPoint?: PointPropType;
+    /**
+     * The interpolation factor of the gradient. This defines how smooth the color transition is.
+     *
+     * Defaults to `1`, which is linear smoothing.
+     */
+    slopeFactor?: number;
+    /** If true, the gradient is drawn before the start point. */
+    drawsBeforeStart?: boolean;
+    /** If true, the gradient is drawn past the end point. */
+    drawsAfterEnd?: boolean;
+}
+
+/**
+ * The `Gradient` component blends two colors smoothly in its background.
+ *
+ * @platform macos
+ */
+export class Gradient extends React.Component<GradientProps> {}
+
 /**
  * The `WindowDrag` component provides an area where the mouse can left-click
  * and then drag in order to move the native `RCTWindow` that contains this view.
