@@ -182,7 +182,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
     }
 
     // Update the "hoveredView" now, instead of waiting for the next "mouseMove" event.
-    [self _setHoverTarget:targetView];
+    [self _setHoverTarget:[self.rootView hitTest:event.locationInWindow]];
     return;
   }
 
@@ -197,7 +197,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
     }
 
     // Update the "hoveredView" now, instead of waiting for the next "mouseMove" event.
-    [self _setHoverTarget:targetView];
+    [self _setHoverTarget:[self.rootView hitTest:event.locationInWindow]];
     return;
   }
 }
