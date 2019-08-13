@@ -19,7 +19,7 @@
                      styleMask:(NSWindowStyleMask)style
                          defer:(BOOL)defer NS_DESIGNATED_INITIALIZER;
 
-@property (nonatomic) RCTRootView *contentView;
+@property (atomic) RCTRootView *contentView;
 
 // Only exists between mouseDown and mouseUp events (may not be a React view)
 @property (nonatomic, readonly) NSView *clickOrigin;
