@@ -10,6 +10,7 @@
 #import "RCTWindow.h"
 
 #import "RCTUtils.h"
+#import "RCTCursor.h"
 #import "RCTMouseEvent.h"
 #import "RCTTouchEvent.h"
 #import "RCTFieldEditor.h"
@@ -19,6 +20,7 @@
 {
   RCTBridge *_bridge;
 
+  RCTCursor _lastCursor;
   NSMutableDictionary *_mouseInfo;
   NSView *_clickTarget;
   NSEventType _clickType;
@@ -256,6 +258,53 @@ static inline BOOL hasFlag(NSUInteger flags, NSUInteger flag) {
   return targetView;
 }
 
+static NSCursor *NSCursorForRCTCursor(RCTCursor cursor)
+{
+  switch (cursor) {
+    case RCTCursorDefault: return NSCursor.arrowCursor;
+    case RCTCursorPointer: return NSCursor.pointingHandCursor;
+    case RCTCursorText: return NSCursor.IBeamCursor;
+    case RCTCursorMove: return NSCursor._moveCursor;
+    case RCTCursorGrab: return NSCursor.openHandCursor;
+    case RCTCursorGrabbing: return NSCursor.closedHandCursor;
+    default: return nil;
+  }
+}
+
+// HACK: Do nothing here to prevent AppKit default behavior of updating the cursor whenever a view moves.
+- (void)_setCursorForMouseLocation:(__unused CGPoint)point {}
+
+- (void)_updateCursor:(NSView *)view
+{
+  // Find the nearest React-managed view with a defined cursor.
+  while (view) {
+    RCTCursor cursor = view.cursor;
+    if (cursor != RCTCursorInherit) {
+      if (cursor == _lastCursor) {
+        return;
+      }
+      
+      if (cursor == RCTCursorNone) {
+        [NSCursor hide];
+      } else {
+        [NSCursor unhide];
+        [NSCursorForRCTCursor(cursor) set];
+      }
+      
+      _lastCursor = cursor;
+      return;
+    }
+    view = view.superview;
+  }
+  // Reset the cursor to its default.
+  if (_lastCursor != RCTCursorDefault) {
+    _lastCursor = RCTCursorDefault;
+    
+    [NSCursor unhide];
+    [NSCursor.arrowCursor set];
+  }
+}
+
 - (void)_setHoverTarget:(NSView *)view
 {
   NSNumber *target = view.reactTag;
@@ -269,6 +318,9 @@ static inline BOOL hasFlag(NSUInteger flags, NSUInteger flag) {
 
       _hoverTarget = nil;
       [self _sendMouseEvent:@"mouseOut"];
+      if (!view) {
+        [self _updateCursor:nil];
+      }
     }
   }
 
@@ -279,6 +331,7 @@ static inline BOOL hasFlag(NSUInteger flags, NSUInteger flag) {
     if (_hoverTarget == nil) {
       _hoverTarget = view;
       [self _sendMouseEvent:@"mouseOver"];
+      [self _updateCursor:view];
 
       // Ensure "mouseMove" events have no "relatedTarget" property.
       _mouseInfo[@"relatedTarget"] = nil;

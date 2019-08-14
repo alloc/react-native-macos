@@ -11,6 +11,7 @@
 
 #import <React/RCTBorderStyle.h>
 #import <React/RCTComponent.h>
+#import <React/RCTCursor.h>
 #import <React/RCTPointerEvents.h>
 #import <React/RCTView.h>
 
@@ -128,5 +129,10 @@
 @property (nonatomic, copy) RCTDirectEventBlock onDragLeave;
 @property (nonatomic, copy) RCTDirectEventBlock onDrop;
 @property (nonatomic, copy) RCTDirectEventBlock onContextMenuItemClick;
+
+/**
+ * The cursor image to show while the mouse is inside this view.
+ */
+@property (nonatomic, assign) RCTCursor cursor;
 
 @end

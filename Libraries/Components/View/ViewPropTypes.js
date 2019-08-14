@@ -443,6 +443,16 @@ module.exports = {
   onDrop: PropTypes.func,
   onContextMenu: PropTypes.func,
   onContextMenuItemClick: PropTypes.func,
+  cursor: PropTypes.oneOf([
+    'inherit',
+    'none',
+    'default',
+    'pointer',
+    'text',
+    'move',
+    'grab',
+    'grabbing',
+  ]),
   /**
    * Mapped to toolTip property of NSView. Used to show extra information when
    * mouse hovering.

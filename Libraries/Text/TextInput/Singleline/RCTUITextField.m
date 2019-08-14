@@ -111,6 +111,9 @@
   }
 }
 
+// Do nothing here, as it messes with RCTWindow cursor support.
+- (void)resetCursorRects {}
+
 - (BOOL)becomeFirstResponder
 {
   if ([super becomeFirstResponder]) {

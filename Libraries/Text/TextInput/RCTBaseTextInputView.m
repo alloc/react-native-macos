@@ -39,6 +39,7 @@
     _eventDispatcher = bridge.eventDispatcher;
 
     self.clipsToBounds = YES;
+    self.cursor = RCTCursorText;
   }
 
   return self;

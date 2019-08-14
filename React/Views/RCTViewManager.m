@@ -111,7 +111,8 @@ RCT_EXPORT_LAYER_PROPERTY(shadowColor, CGColor)
 RCT_EXPORT_LAYER_PROPERTY(shadowOffset, CGSize)
 RCT_EXPORT_LAYER_PROPERTY(shadowOpacity, float)
 RCT_EXPORT_LAYER_PROPERTY(shadowRadius, CGFloat)
-RCT_REMAP_VIEW_PROPERTY(toolTip, toolTip, NSString)
+RCT_EXPORT_VIEW_PROPERTY(cursor, RCTCursor)
+RCT_EXPORT_VIEW_PROPERTY(toolTip, NSString)
 RCT_CUSTOM_VIEW_PROPERTY(overflow, YGOverflow, RCTView)
 {
   if (json) {

@@ -10,6 +10,7 @@
 #import <AppKit/AppKit.h>
 
 #import <React/RCTComponent.h>
+#import <React/RCTCursor.h>
 #import <yoga/YGEnums.h>
 
 @class RCTShadowView;
@@ -118,6 +119,9 @@
 
 /** Populate the `layer` ivar when nil */
 - (void)ensureLayerExists;
+
+/** Default implementation to avoid crashes */
+- (RCTCursor)cursor;
 
 @end
 

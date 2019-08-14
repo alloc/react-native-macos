@@ -13,6 +13,7 @@
 #import <React/RCTAnimationType.h>
 #import <React/RCTBlendMode.h>
 #import <React/RCTBorderStyle.h>
+#import <React/RCTCursor.h>
 #import <React/RCTDefines.h>
 #import <React/RCTLog.h>
 #import <React/RCTPointerEvents.h>
@@ -114,6 +115,7 @@ typedef BOOL css_backface_visibility_t;
 + (RCTAnimationType)RCTAnimationType:(id)json;
 + (RCTBlendMode)RCTBlendMode:(id)json;
 + (RCTBorderStyle)RCTBorderStyle:(id)json;
++ (RCTCursor)RCTCursor:(id)json;
 + (RCTTextDecorationLineType)RCTTextDecorationLineType:(id)json;
 
 @end

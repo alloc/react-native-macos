@@ -645,6 +645,17 @@ RCT_ENUM_CONVERTER(RCTBlendMode, (@{
   @"overlay": @(RCTBlendModeOverlay),
 }), RCTBlendModeNone, integerValue)
 
+RCT_ENUM_CONVERTER(RCTCursor, (@{
+  @"inherit": @(RCTCursorInherit),
+  @"none": @(RCTCursorNone),
+  @"default": @(RCTCursorDefault),
+  @"pointer": @(RCTCursorPointer),
+  @"text": @(RCTCursorText),
+  @"move": @(RCTCursorMove),
+  @"grab": @(RCTCursorGrab),
+  @"grabbing": @(RCTCursorGrabbing),
+}), RCTCursorInherit, integerValue)
+
 @end
 
 @interface RCTImageSource (Packager)

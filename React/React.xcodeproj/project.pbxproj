@@ -529,6 +529,8 @@
 		70347E2122FF448600A4F09B /* RCTGradient.m in Sources */ = {isa = PBXBuildFile; fileRef = 70347E2022FF448600A4F09B /* RCTGradient.m */; };
 		70347E2322FF44B700A4F09B /* RCTGradientManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 70347E2222FF44B700A4F09B /* RCTGradientManager.m */; };
 		70347E2522FF44C100A4F09B /* RCTGradientManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 70347E2422FF44BF00A4F09B /* RCTGradientManager.h */; };
+		7045C32223038208000AB285 /* RCTCursor.h in Headers */ = {isa = PBXBuildFile; fileRef = 7045C32123038208000AB285 /* RCTCursor.h */; };
+		7045C323230384FE000AB285 /* RCTCursor.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 7045C32123038208000AB285 /* RCTCursor.h */; };
 		705EDE2922107DD0000CAA67 /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 705EDE2722107DD0000CAA67 /* Utils.h */; };
 		705EDE2A22107DD0000CAA67 /* Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 705EDE2822107DD0000CAA67 /* Utils.cpp */; };
 		705EDE2C221082CB000CAA67 /* RCTSurfaceSizeMeasureMode.mm in Sources */ = {isa = PBXBuildFile; fileRef = 705EDE2B221082CB000CAA67 /* RCTSurfaceSizeMeasureMode.mm */; };
@@ -599,8 +601,6 @@
 		CF2731C11E7B8DE40044CA4F /* RCTDeviceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = CF2731BF1E7B8DE40044CA4F /* RCTDeviceInfo.m */; };
 		D426ACD020D57642003B4C4D /* RCTAppearance.h in Headers */ = {isa = PBXBuildFile; fileRef = D426ACCF20D57642003B4C4D /* RCTAppearance.h */; };
 		D426ACD220D57659003B4C4D /* RCTAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = D426ACD120D57659003B4C4D /* RCTAppearance.m */; };
-		D49593DE202C937C00A7694B /* RCTCursorManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D49593D8202C937B00A7694B /* RCTCursorManager.h */; };
-		D49593DF202C937C00A7694B /* RCTCursorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D49593D9202C937B00A7694B /* RCTCursorManager.m */; };
 		D49593E0202C937C00A7694B /* RCTMenuManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D49593DA202C937B00A7694B /* RCTMenuManager.h */; };
 		D49593E1202C937C00A7694B /* RCTMenuManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D49593DB202C937C00A7694B /* RCTMenuManager.m */; };
 		D49593E7202C970600A7694B /* YGNode.h in Headers */ = {isa = PBXBuildFile; fileRef = D49593E3202C96FF00A7694B /* YGNode.h */; };
@@ -704,6 +704,7 @@
 			dstPath = include/React;
 			dstSubfolderSpec = 16;
 			files = (
+				7045C323230384FE000AB285 /* RCTCursor.h in Copy Headers */,
 				70CDF31522F9E3BE00ECA452 /* RCTBlendMode.h in Copy Headers */,
 				7095B6D02247C86300BE2245 /* RCTFieldEditor.h in Copy Headers */,
 				702B7FFF221C88D70027174A /* RCTWindow.h in Copy Headers */,
@@ -1286,6 +1287,7 @@
 		70347E2022FF448600A4F09B /* RCTGradient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTGradient.m; sourceTree = "<group>"; };
 		70347E2222FF44B700A4F09B /* RCTGradientManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTGradientManager.m; sourceTree = "<group>"; };
 		70347E2422FF44BF00A4F09B /* RCTGradientManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTGradientManager.h; sourceTree = "<group>"; };
+		7045C32123038208000AB285 /* RCTCursor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTCursor.h; sourceTree = "<group>"; };
 		705EDE2722107DD0000CAA67 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		705EDE2822107DD0000CAA67 /* Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utils.cpp; sourceTree = "<group>"; };
 		705EDE2B221082CB000CAA67 /* RCTSurfaceSizeMeasureMode.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTSurfaceSizeMeasureMode.mm; sourceTree = "<group>"; };
@@ -1362,8 +1364,6 @@
 		CF2731BF1E7B8DE40044CA4F /* RCTDeviceInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTDeviceInfo.m; sourceTree = "<group>"; };
 		D426ACCF20D57642003B4C4D /* RCTAppearance.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTAppearance.h; sourceTree = "<group>"; };
 		D426ACD120D57659003B4C4D /* RCTAppearance.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTAppearance.m; sourceTree = "<group>"; };
-		D49593D8202C937B00A7694B /* RCTCursorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTCursorManager.h; sourceTree = "<group>"; };
-		D49593D9202C937B00A7694B /* RCTCursorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTCursorManager.m; sourceTree = "<group>"; };
 		D49593DA202C937B00A7694B /* RCTMenuManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMenuManager.h; sourceTree = "<group>"; };
 		D49593DB202C937C00A7694B /* RCTMenuManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMenuManager.m; sourceTree = "<group>"; };
 		D49593E3202C96FF00A7694B /* YGNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YGNode.h; sourceTree = "<group>"; };
@@ -1562,8 +1562,6 @@
 		13B07FE01A69315300A75B9A /* Modules */ = {
 			isa = PBXGroup;
 			children = (
-				D49593D8202C937B00A7694B /* RCTCursorManager.h */,
-				D49593D9202C937B00A7694B /* RCTCursorManager.m */,
 				D49593DA202C937B00A7694B /* RCTMenuManager.h */,
 				D49593DB202C937C00A7694B /* RCTMenuManager.m */,
 				13B07FE71A69327A00A75B9A /* RCTAlertManager.h */,
@@ -1638,6 +1636,7 @@
 				13456E921ADAD2DE009F94A7 /* RCTConvert+CoreLocation.m */,
 				130443C31E401A8C00D93A67 /* RCTConvert+Transform.h */,
 				130443C41E401A8C00D93A67 /* RCTConvert+Transform.m */,
+				7045C32123038208000AB285 /* RCTCursor.h */,
 				133CAE8C1B8E5CFD00F6AD92 /* RCTDatePicker.h */,
 				133CAE8D1B8E5CFD00F6AD92 /* RCTDatePicker.m */,
 				58C571C01AA56C1900CDF9C8 /* RCTDatePickerManager.h */,
@@ -2251,6 +2250,7 @@
 				3D80DA1E1DF820620028D040 /* RCTNetworkTask.h in Headers */,
 				657734841EE834C900A0E9EA /* RCTInspectorDevServerHelper.h in Headers */,
 				3D80DA1F1DF820620028D040 /* RCTPushNotificationManager.h in Headers */,
+				7045C32223038208000AB285 /* RCTCursor.h in Headers */,
 				3D80DA211DF820620028D040 /* RCTBridge.h in Headers */,
 				13F880381E296D2800C3C7A1 /* JSCWrapper.h in Headers */,
 				3D80DA221DF820620028D040 /* RCTBridge+Private.h in Headers */,
@@ -2382,7 +2382,6 @@
 				657734901EE8354A00A0E9EA /* RCTInspectorPackagerConnection.h in Headers */,
 				3D7BFD1D1EA8E351008DFB7A /* RCTPackagerConnection.h in Headers */,
 				3D80DA811DF820620028D040 /* RCTSegmentedControl.h in Headers */,
-				D49593DE202C937C00A7694B /* RCTCursorManager.h in Headers */,
 				599FAA3C1FB274980058CCF6 /* RCTSurfaceRootShadowView.h in Headers */,
 				3D80DA821DF820620028D040 /* RCTSegmentedControlManager.h in Headers */,
 				3D80DA831DF820620028D040 /* RCTShadowView.h in Headers */,
@@ -2849,7 +2848,6 @@
 				3D7BFD1F1EA8E351008DFB7A /* RCTPackagerConnection.mm in Sources */,
 				13456E931ADAD2DE009F94A7 /* RCTConvert+CoreLocation.m in Sources */,
 				70347E2322FF44B700A4F09B /* RCTGradientManager.m in Sources */,
-				D49593DF202C937C00A7694B /* RCTCursorManager.m in Sources */,
 				13A1F71E1A75392D00D3D453 /* RCTKeyCommands.m in Sources */,
 				83CBBA531A601E3B00E9B192 /* RCTUtils.m in Sources */,
 				130443C61E401A8C00D93A67 /* RCTConvert+Transform.m in Sources */,

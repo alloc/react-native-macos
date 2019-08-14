@@ -2094,6 +2094,11 @@ export interface ViewProps
     pointerEvents?: "box-none" | "none" | "box-only" | "auto";
 
     /**
+     * The cursor image to show while the mouse is in inside this view.
+     */
+    cursor?: "inherit" | "none" | "default" | "pointer" | "text" | "move" | "grab" | "grabbing"
+
+    /**
      *
      * This is a special performance property exposed by RCTView and is useful for scrolling content when there are many subviews,
      * most of which are offscreen. For this property to be effective, it must be applied to a view that contains many subviews that extend outside its bound.

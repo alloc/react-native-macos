@@ -329,6 +329,12 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   // override "displayLayer:", and apply the transform there.
 }
 
+// Default implementation for React-managed views.
+- (RCTCursor)cursor
+{
+  return RCTCursorInherit;
+}
+
 @end
 
 #pragma mark -

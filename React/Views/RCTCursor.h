@@ -7,8 +7,21 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-#import <AppKit/AppKit.h>
-#import "RCTBridgeModule.h"
+#import <Foundation/Foundation.h>
 
-@interface RCTCursorManager : NSObject <RCTBridgeModule>
+@interface NSCursor (Private)
+
++ (NSCursor *)_moveCursor;
+
 @end
+
+typedef NS_ENUM(NSInteger, RCTCursor) {
+  RCTCursorInherit = 0,
+  RCTCursorNone,
+  RCTCursorDefault,
+  RCTCursorPointer,
+  RCTCursorText,
+  RCTCursorMove,
+  RCTCursorGrab,
+  RCTCursorGrabbing,
+};
