@@ -11,6 +11,7 @@
 
 #import <React/RCTUtils.h>
 #import <React/NSView+React.h>
+#import <React/RCTWindow.h>
 #import <objc/runtime.h>
 
 #import "RCTBackedTextInputDelegateAdapter.h"
@@ -108,6 +109,15 @@
   [super textDidEndEditing:notification];
   if (self.currentEditor == nil) {
     [_textInputDelegateAdapter textFieldDidBlur];
+  }
+}
+
+- (void)mouseDown:(NSEvent *)event
+{
+  RCTWindow *window = (RCTWindow *)self.window;
+  // BUGFIX: Avoid handling mouseDown events not meant for us.
+  if ([window.clickOrigin isDescendantOf:self]) {
+    [super mouseDown:event];
   }
 }
 

@@ -7,7 +7,6 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-#import "RCTWindow.h"
 #import "RCTFieldEditor.h"
 
 @implementation RCTFieldEditor
@@ -51,15 +50,6 @@
 {
   NSView *view = [super hitTest:point];
   return !view && CGRectContainsPoint(self.frame, point) ? self : view;
-}
-
-- (void)mouseDown:(NSEvent *)event
-{
-  RCTWindow *window = (RCTWindow *)self.window;
-  // Prevent the field editor from stealing mouseDown events from overlayed views.
-  if ([window.clickOrigin isDescendantOf:self]) {
-    [super mouseDown:event];
-  }
 }
 
 @end
