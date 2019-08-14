@@ -121,6 +121,8 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
     return [super sendEvent:event];
   }
 
+  NSResponder *prevResponder = self.firstResponder;
+
   // Perform a hitTest before sendEvent in case a field editor is active.
   NSView *targetView = [self hitTest:event.locationInWindow withEvent:event];
   [super sendEvent:event];
@@ -152,7 +154,10 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
       // so we should skip tracking of "mouseDown" events in order to avoid corrupted state.
       if ([self.firstResponder isKindOfClass:NSTextView.class]) {
         NSView *fieldEditor = (NSView *)self.firstResponder;
-        if ([_clickOrigin isDescendantOf:fieldEditor]) {
+
+        // The field editor may be newly focused, or the user is clicking inside it.
+        if (fieldEditor != prevResponder || [_clickOrigin isDescendantOf:fieldEditor]) {
+          _clickOrigin = nil;
           return;
         }
 
