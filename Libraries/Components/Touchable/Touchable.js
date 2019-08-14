@@ -359,7 +359,7 @@ var TouchableMixin = {
    */
   touchableGetInitialState: function() {
     return {
-      touchable: {touchState: undefined, responderID: null}
+      touchable: {touchState: States.NOT_RESPONDER, responderID: null}
     };
   },
 
@@ -374,8 +374,8 @@ var TouchableMixin = {
   /**
    * Must return true to start the process of `Touchable`.
    */
-  touchableHandleStartShouldSetResponder: function() {
-    return !this.props.disabled;
+  touchableHandleStartShouldSetResponder: function(e) {
+    return !this.props.disabled && !!(this.state.touchable.responderID = e.target);
   },
 
   /**
@@ -391,7 +391,9 @@ var TouchableMixin = {
    *
    */
   touchableHandleResponderGrant: function(e) {
-    var dispatchID = e.currentTarget;
+    if (!this.state.touchable.responderID) {
+      return; // Responder was not granted from a touch event.
+    }
     // Since e is used in a callback invoked on another event loop
     // (as in setTimeout etc), we need to call e.persist() on the
     // event to make sure it doesn't get reused in the event object pool.
@@ -400,8 +402,7 @@ var TouchableMixin = {
     this.pressOutDelayTimeout && clearTimeout(this.pressOutDelayTimeout);
     this.pressOutDelayTimeout = null;
 
-    this.state.touchable.touchState = States.NOT_RESPONDER;
-    this.state.touchable.responderID = dispatchID;
+    this.state.touchable.responderID = e.currentTarget;
     this._receiveSignal(Signals.RESPONDER_GRANT, e);
     var delayMS =
       this.touchableGetHighlightDelayMS !== undefined ?
@@ -430,14 +431,18 @@ var TouchableMixin = {
    * Place as callback for a DOM element's `onResponderRelease` event.
    */
   touchableHandleResponderRelease: function(e) {
-    this._receiveSignal(Signals.RESPONDER_RELEASE, e);
+    if (this.state.touchable.responderID) {
+      this._receiveSignal(Signals.RESPONDER_RELEASE, e);
+    }
   },
 
   /**
    * Place as callback for a DOM element's `onResponderTerminate` event.
    */
   touchableHandleResponderTerminate: function(e) {
-    this._receiveSignal(Signals.RESPONDER_TERMINATED, e);
+    if (this.state.touchable.responderID) {
+      this._receiveSignal(Signals.RESPONDER_TERMINATED, e);
+    }
   },
 
   /**
@@ -447,6 +452,11 @@ var TouchableMixin = {
     // Not enough time elapsed yet, wait for highlight -
     // this is just a perf optimization.
     if (this.state.touchable.touchState === States.RESPONDER_INACTIVE_PRESS_IN) {
+      return;
+    }
+
+    // Not responding to a touch event.
+    if (!this.state.touchable.responderID) {
       return;
     }
 
@@ -647,9 +657,6 @@ var TouchableMixin = {
     var responderID = this.state.touchable.responderID;
     var curState = this.state.touchable.touchState;
     var nextState = Transitions[curState] && Transitions[curState][signal];
-    if (!responderID && signal === Signals.RESPONDER_RELEASE) {
-      return;
-    }
     if (!nextState) {
       throw new Error(
         'Unrecognized signal `' + signal + '` or state `' + curState +
@@ -713,6 +720,7 @@ var TouchableMixin = {
       signal === Signals.RESPONDER_RELEASE;
 
     if (isFinalSignal) {
+      this.state.touchable.responderID = null;
       this._cancelLongPressDelayTimeout();
     }
 
