@@ -28,7 +28,7 @@
 
 @implementation NSLabel
 {
-  NSRect _drawingRect;
+  CGRect _contentRect;
 }
 
 #pragma mark - NSView overrides
@@ -41,13 +41,13 @@
 - (instancetype)initWithFrame:(NSRect)frameRect
 {
   if (self = [super initWithFrame:frameRect]) {
-    // _text, _attributedText and _preferredMaxLayoutWidth are nil/0 by default
     _font            = self.defaultFont;
     _textColor       = self.defaultTextColor;
     _backgroundColor = self.defaultBackgroundColor;
     _numberOfLines   = 1;
     _alignment       = NSTextAlignmentLeft;
     _lineBreakMode   = NSLineBreakByTruncatingTail;
+    _contentRect     = CGRectNull;
   }
 
   return self;
@@ -60,79 +60,88 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)coder)
   return self.backgroundColor.alphaComponent == 1.0;
 }
 
+- (BOOL)isFlipped
+{
+  return YES;
+}
+
 - (CGFloat)baselineOffsetFromBottom
 {
-  return self.drawingRect.origin.y;
+  return self.contentRect.origin.y;
 }
 
 - (NSSize)intrinsicContentSize
 {
-  return self.drawingRect.size;
+  return self.contentRect.size;
 }
 
 - (void)invalidateIntrinsicContentSize
 {
-  _drawingRect = NSZeroRect;
+  _contentRect = CGRectNull;
   [super invalidateIntrinsicContentSize];
 }
+
+#define SCALED_CEIL(n, scale) ceil((n) * scale) / scale
 
 - (void)drawRect:(NSRect)dirtyRect
 {
   NSRect bounds = self.bounds;
-  NSRect drawRect = {self.drawingRect.origin, bounds.size};
-  NSString* text = nil;
-  NSAttributedString* attributedText = nil;
 
-  [self.backgroundColor setFill];
-  NSRectFillUsingOperation(bounds, NSCompositeSourceOver);
+  if (_backgroundColor != NSColor.clearColor) {
+    [_backgroundColor setFill];
+    NSRectFillUsingOperation(bounds, NSCompositeSourceOver);
+  }
 
-  if ((text = self.text)) {
-    [text drawWithRect:drawRect options:self.drawingOptions attributes:@{
-      NSFontAttributeName            : self.font,
-      NSForegroundColorAttributeName : self.textColor,
-      NSBackgroundColorAttributeName : self.backgroundColor,
-      NSParagraphStyleAttributeName  : self.drawingParagraphStyle,
-    }];
-  } else if ((attributedText = self.attributedText)) {
-    [attributedText drawWithRect:drawRect options:self.drawingOptions];
+  if (_text || _attributedText) {
+    NSRect contentRect = self.contentRect;
+
+    // https://github.com/lhecker/NSLabel/commit/4f4bb3588051952a0c99f38741dc1e4c7b5a0052#r34695340
+    CGFloat scale = self.window.backingScaleFactor;
+    CGFloat bottom = SCALED_CEIL(contentRect.size.height, scale);
+    CGFloat baselineX = -SCALED_CEIL(contentRect.origin.x, scale);
+    CGFloat baselineY = -SCALED_CEIL(contentRect.origin.y, scale);
+
+    NSRect drawRect = (NSRect){
+      // The origin represents the baseline.
+      {baselineX, bottom - baselineY},
+      // The available size for proper alignment.
+      bounds.size,
+    };
+
+    if (_text) {
+      [_text drawWithRect:drawRect options:self.drawingOptions attributes:self.textAttributes context:nil];
+    } else {
+      [_attributedText drawWithRect:drawRect options:self.drawingOptions];
+    }
   }
 }
 
 #pragma mark - Private
 
-- (NSRect)drawingRect
+// invalidated by [NSLabel invalidateIntrinsicContentSize]
+- (NSRect)contentRect
 {
-  // invalidated by [NSLabel invalidateIntrinsicContentSize]
-
-  NSString* text = nil;
-  NSAttributedString* attributedText = nil;
-
-  if (NSIsEmptyRect(_drawingRect) && ((text = self.text) || (attributedText = self.attributedText))) {
-    NSSize size = NSMakeSize(self.preferredMaxLayoutWidth, 0.0);
-
-    if (text) {
-      _drawingRect = [text boundingRectWithSize:size options:self.drawingOptions attributes:@{
-        NSFontAttributeName            : self.font,
-        NSForegroundColorAttributeName : self.textColor,
-        NSBackgroundColorAttributeName : self.backgroundColor,
-        NSParagraphStyleAttributeName  : self.drawingParagraphStyle,
-      }];
-    } else {
-      _drawingRect = [attributedText boundingRectWithSize:size options:self.drawingOptions];
-    }
-
-    _drawingRect = (NSRect) {
-      {
-        ceil(-_drawingRect.origin.x),
-        ceil(-_drawingRect.origin.y),
-      }, {
-        ceil(_drawingRect.size.width),
-        ceil(_drawingRect.size.height),
-      }
-    };
+  if (CGRectIsNull(_contentRect) && (_text || _attributedText)) {
+    // TODO: Use infinite width when limited to one line?
+    _contentRect = _text
+      ? [_text boundingRectWithSize:self.bounds.size options:self.drawingOptions attributes:self.textAttributes context:nil]
+      : [_attributedText boundingRectWithSize:self.bounds.size options:self.drawingOptions context:nil];
   }
 
-  return _drawingRect;
+  return _contentRect;
+}
+
+- (NSDictionary *)textAttributes
+{
+  NSMutableParagraphStyle* style = [NSMutableParagraphStyle new];
+  style.alignment = _alignment;
+  style.lineBreakMode = _lineBreakMode;
+  return @{
+    NSFontAttributeName            : _font,
+    NSForegroundColorAttributeName : _textColor,
+    NSBackgroundColorAttributeName : _backgroundColor,
+    NSParagraphStyleAttributeName  : style,
+  };
 }
 
 - (NSStringDrawingOptions)drawingOptions
@@ -140,18 +149,11 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)coder)
   NSStringDrawingOptions options = NSStringDrawingUsesFontLeading;
 
   if (self.numberOfLines == 0) {
+    // TODO: This probably affects drawRect origin
     options |= NSStringDrawingUsesLineFragmentOrigin;
   }
 
   return options;
-}
-
-- (NSParagraphStyle*)drawingParagraphStyle
-{
-  NSMutableParagraphStyle* ps = [NSMutableParagraphStyle new];
-  ps.alignment = self.alignment;
-  ps.lineBreakMode = self.lineBreakMode;
-  return ps;
 }
 
 - (NSFont*)defaultFont
@@ -223,13 +225,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)coder)
 - (void)setLineBreakMode:(NSLineBreakMode)lineBreakMode
 {
   _lineBreakMode = lineBreakMode;
-  [self invalidateIntrinsicContentSize];
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setPreferredMaxLayoutWidth:(CGFloat)preferredMaxLayoutWidth
-{
-  _preferredMaxLayoutWidth = preferredMaxLayoutWidth;
   [self invalidateIntrinsicContentSize];
   [self setNeedsDisplay:YES];
 }

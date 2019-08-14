@@ -34,7 +34,6 @@
 @property (nonatomic, assign) NSInteger numberOfLines;
 @property (nonatomic, assign) NSTextAlignment alignment;
 @property (nonatomic, assign) NSLineBreakMode lineBreakMode;
-@property (nonatomic, assign) CGFloat preferredMaxLayoutWidth;
 
 - (instancetype)init;
 - (instancetype)initWithFrame:(NSRect)frameRect NS_DESIGNATED_INITIALIZER;

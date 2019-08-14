@@ -518,7 +518,6 @@ static BOOL findMismatch(NSString *first, NSString *second, NSRange *firstRange,
   if (placeholder) {
     // Use "self" to ensure "placeholderView" exists.
     self.placeholderView.text = placeholder;
-    [self updatePlaceholderFrame];
   } else if (_placeholderView) {
     [_placeholderView removeFromSuperview];
     _placeholderView = nil;
@@ -548,13 +547,7 @@ static BOOL findMismatch(NSString *first, NSString *second, NSRange *firstRange,
 - (void)updatePlaceholderFrame
 {
   if (_placeholderView) {
-    NSEdgeInsets insets = self.reactCompoundInsets;
-    CGFloat maxWidth = self.bounds.size.width - (insets.left + insets.right);
-    if (maxWidth != _placeholderView.preferredMaxLayoutWidth) {
-      _placeholderView.preferredMaxLayoutWidth = maxWidth;
-    }
-    NSRect bounds = (NSRect){NSZeroPoint, _placeholderView.intrinsicContentSize};
-    _placeholderView.frame = NSOffsetRect(bounds, insets.left, insets.top - 1);
+    _placeholderView.frame = self.reactContentFrame;
   }
 }
 
