@@ -149,15 +149,6 @@
   self.attributedStringValue = attributedText;
 }
 
-- (void)setPaddingInsets:(NSEdgeInsets)paddingInsets
-{
-  // Account for strange rendering offset. (NSTextView doesn't have this issue)
-  paddingInsets.top -= 1;
-  paddingInsets.left -= 2;
-
-  _paddingInsets = paddingInsets;
-}
-
 - (void)selectAll:(nullable id)sender
 {
   [self.currentEditor selectAll:sender];
