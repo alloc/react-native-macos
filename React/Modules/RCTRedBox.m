@@ -196,7 +196,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
       [app setActivationPolicy:NSApplicationActivationPolicyRegular];
       [app activateIgnoringOtherApps:YES];
     
-      self.level = kCGMaximumWindowLevel;
+      self.level = kCGStatusWindowLevelKey;
       [self makeKeyAndOrderFront:nil];
     }
   }
