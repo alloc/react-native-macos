@@ -9069,73 +9069,6 @@ interface ImageEditorStatic {
     ): void;
 }
 
-export interface ARTNodeMixin {
-    opacity?: number;
-    originX?: number;
-    originY?: number;
-    scaleX?: number;
-    scaleY?: number;
-    scale?: number;
-    title?: string;
-    x?: number;
-    y?: number;
-    visible?: boolean;
-}
-
-export interface ARTGroupProps extends ARTNodeMixin {
-    width?: number;
-    height?: number;
-}
-
-export interface ARTClippingRectangleProps extends ARTNodeMixin {
-    width?: number;
-    height?: number;
-}
-
-export interface ARTRenderableMixin extends ARTNodeMixin {
-    fill?: string;
-    stroke?: string;
-    strokeCap?: "butt" | "square" | "round";
-    strokeDash?: number[];
-    strokeJoin?: "bevel" | "miter" | "round";
-    strokeWidth?: number;
-}
-
-export interface ARTShapeProps extends ARTRenderableMixin {
-    d: string;
-    width?: number;
-    height?: number;
-}
-
-export interface ARTTextProps extends ARTRenderableMixin {
-    font?: string;
-    alignment?: string;
-}
-
-export interface ARTSurfaceProps {
-    style?: StyleProp<ViewStyle>;
-    width: number;
-    height: number;
-}
-
-export class ClippingRectangle extends React.Component<ARTClippingRectangleProps> {}
-
-export class Group extends React.Component<ARTGroupProps> {}
-
-export class Shape extends React.Component<ARTShapeProps> {}
-
-export class Surface extends React.Component<ARTSurfaceProps> {}
-
-export class ARTText extends React.Component<ARTTextProps> {}
-
-export interface ARTStatic {
-    ClippingRectangle: typeof ClippingRectangle;
-    Group: typeof Group;
-    Shape: typeof Shape;
-    Surface: typeof Surface;
-    Text: typeof ARTText;
-}
-
 export type KeyboardEventName =
     | "keyboardWillShow"
     | "keyboardDidShow"
@@ -9181,11 +9114,6 @@ export interface KeyboardStatic extends NativeEventEmitter {
 //  R E - E X P O R T S
 //
 //////////////////////////////////////////////////////////////////////////
-
-// TODO: The following components need to be added
-// - [ ] ART
-export const ART: ARTStatic;
-export type ART = ARTStatic;
 
 export const ImagePickerIOS: ImagePickerIOSStatic;
 export type ImagePickerIOS = ImagePickerIOSStatic;

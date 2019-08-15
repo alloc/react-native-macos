@@ -19,7 +19,6 @@ const ReactNative = {
   get Appearance() { return require('Appearance'); },
   get AccessibilityInfo() { return require('AccessibilityInfo'); },
   get ActivityIndicator() { return require('ActivityIndicator'); },
-  get ART() { return require('ReactNativeART'); },
   get Button() { return require('Button'); },
   get CheckBox() { return require('CheckBox'); },
   get DatePickerIOS() { return require('DatePickerIOS'); },
