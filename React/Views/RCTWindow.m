@@ -227,7 +227,7 @@ static inline BOOL hasFlag(NSUInteger flags, NSUInteger flag) {
   // The "clickOrigin" is used for special handling of field editors. It only exists between mouseUp and mouseDown events.
   if (event.type == NSEventTypeLeftMouseDown || event.type == NSEventTypeRightMouseDown) {
     _clickOrigin = targetView;
-  } else if (event.type == NSEventTypeLeftMouseUp || event.type == NSEventMaskRightMouseUp) {
+  } else if (event.type == NSEventTypeLeftMouseUp || event.type == NSEventTypeRightMouseUp) {
     _clickOrigin = nil;
   }
   // The "targetView" must be a React-managed view.
