@@ -163,7 +163,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
 
         // Blur the field editor when clicking outside it, except when "prefersFocus" is true.
         BOOL isReactInput = [fieldEditor isKindOfClass:[RCTFieldEditor class]];
-        if (!isReactInput || !((RCTFieldEditor *)fieldEditor).delegate.prefersFocus) {
+        if (isReactInput && !((RCTFieldEditor *)fieldEditor).delegate.prefersFocus) {
           [self makeFirstResponder:nil];
         }
       }
