@@ -83,20 +83,10 @@ NSString *const RCTContentDidAppearNotification = @"RCTContentDidAppearNotificat
     _loadingViewFadeDuration = 0.25;
     _sizeFlexibility = RCTRootViewSizeFlexibilityNone;
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(bridgeDidReload)
-                                                 name:RCTJavaScriptWillStartLoadingNotification
-                                               object:_bridge];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(javaScriptDidLoad:)
-                                                 name:RCTJavaScriptDidLoadNotification
-                                               object:_bridge];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(hideLoadingView)
-                                                 name:RCTContentDidAppearNotification
-                                               object:self];
+    [self addTrackingArea:[[NSTrackingArea alloc] initWithRect:NSZeroRect
+                                                       options:NSTrackingActiveAlways | NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved | NSTrackingInVisibleRect
+                                                         owner:self
+                                                      userInfo:nil]];
 
 #if TARGET_OS_TV
     self.tvRemoteHandler = [RCTTVRemoteHandler new];
@@ -145,12 +135,25 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 - (void)viewDidMoveToWindow
 {
   [super viewDidMoveToWindow];
-  NSTrackingArea *trackingArea = [[NSTrackingArea alloc] initWithRect:NSZeroRect
-                                                              options:NSTrackingActiveAlways | NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved | NSTrackingInVisibleRect
-                                                                owner:self
-                                                             userInfo:nil];
 
-  [self addTrackingArea:trackingArea];
+  if (self.window) {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(bridgeDidReload)
+                                                 name:RCTJavaScriptWillStartLoadingNotification
+                                               object:_bridge];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(javaScriptDidLoad:)
+                                                 name:RCTJavaScriptDidLoadNotification
+                                               object:_bridge];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(hideLoadingView)
+                                                 name:RCTContentDidAppearNotification
+                                               object:self];
+  } else {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+  }
 }
 
 - (void)mouseMoved:(NSEvent *)theEvent
@@ -393,7 +396,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 
 - (void)dealloc
 {
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
   [_contentView invalidate];
 }
 
