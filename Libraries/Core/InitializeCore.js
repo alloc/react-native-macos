@@ -35,6 +35,10 @@ if (global.window === undefined) {
   global.window = global;
 }
 
+if (global.self === undefined) {
+  global.self = global;
+}
+
 const defineLazyObjectProperty = require('defineLazyObjectProperty');
 
 // Set up collections
