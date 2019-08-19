@@ -32,12 +32,12 @@ NSData *UIImageJPEGRepresentation(NSImage *image, float quality);
 void UIGraphicsBeginImageContextWithOptions(CGSize size, BOOL opaque, CGFloat scale);
 
 void UIGraphicsPushContext(CGContextRef ctx);
-void UIGraphicsPopContext();
+void UIGraphicsPopContext(void);
 
-CGContextRef UIGraphicsGetCurrentContext();
+CGContextRef UIGraphicsGetCurrentContext(void);
 
-NSImage *UIGraphicsGetImageFromCurrentImageContext();
+NSImage *UIGraphicsGetImageFromCurrentImageContext(void);
 
-void UIGraphicsEndImageContext();
+void UIGraphicsEndImageContext(void);
 
 CGImageRef RCTGetCGImageRef(NSImage *image);
