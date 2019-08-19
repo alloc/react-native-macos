@@ -301,7 +301,7 @@ RCT_EXPORT_METHOD(createTimer:(nonnull NSNumber *)callbackID
 RCT_EXPORT_METHOD(deleteTimer:(nonnull NSNumber *)timerID)
 {
   [_timers removeObjectForKey:timerID];
-  if (![self hasPendingTimers]) {
+  if (!_sendIdleEvents && ![self hasPendingTimers]) {
     [self stopTimers];
   }
 }
