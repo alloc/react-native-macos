@@ -69,10 +69,24 @@ const CGFloat buttonMargin = 10;
   NSString *_lastErrorMessage;
   NSArray<RCTJSStackFrame *> *_lastStackTrace;
   NSTextField * _temporaryHeader;
+  BOOL _closed;
 }
 
-- (instancetype)initWithContentRect:(NSRect)frame
++ (instancetype)sharedWindow
 {
+  static RCTRedBoxWindow *sharedInstance;
+  static dispatch_once_t once_token;
+  dispatch_once(&once_token, ^{
+    sharedInstance = [RCTRedBoxWindow new];
+  });
+  return sharedInstance;
+}
+
+- (instancetype)init
+{
+  NSSize screenSize = NSScreen.mainScreen.frame.size;
+  NSRect frame = (CGRect){NSZeroPoint, {screenSize.width / 3, screenSize.height / 1.5}};
+  
   self = [super initWithContentRect:frame
                           styleMask:NSWindowStyleMaskClosable | NSWindowStyleMaskTitled
                             backing:NSBackingStoreBuffered defer:NO];
@@ -147,7 +161,7 @@ const CGFloat buttonMargin = 10;
     [self setContentView:rootView];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(bringToAttention)
+                                             selector:@selector(applicationDidBecomeActive)
                                                  name:NSApplicationDidBecomeActiveNotification
                                                object:nil];
   }
@@ -156,18 +170,11 @@ const CGFloat buttonMargin = 10;
 
 RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 
-- (void)bringToAttention
-{
-  if (self.isVisible) {
-    [self orderFrontRegardless];
-  }
-}
-
 - (void)dealloc
 {
-    _stackTraceTableView.dataSource = nil;
-    _stackTraceTableView.delegate = nil;
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+  _stackTraceTableView.dataSource = nil;
+  _stackTraceTableView.delegate = nil;
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (NSString *)stripAnsi:(NSString *)text
@@ -182,47 +189,78 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
   // Remove ANSI color codes from the message
   NSString *messageWithoutAnsi = [self stripAnsi:message];
   
-  if (!self.isVisible || (isUpdate && [messageWithoutAnsi isEqualToString:_lastErrorMessage])) {
+  if (!_lastErrorMessage || (isUpdate && [messageWithoutAnsi isEqualToString:_lastErrorMessage])) {
+    _lastErrorMessage = messageWithoutAnsi;
     _lastStackTrace = [stack filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(RCTJSStackFrame *stackFrame, __unused NSDictionary *bindings) {
       return stackFrame.file != nil;
     }]];
-    _lastErrorMessage = messageWithoutAnsi;
     
     [_stackTraceTableView reloadData];
     [_stackTraceTableView sizeToFit];
     
-    if (!isUpdate) {
+    if (!isUpdate && !_closed) {
       NSApplication *app = [NSApplication sharedApplication];
       [app setActivationPolicy:NSApplicationActivationPolicyRegular];
       [app activateIgnoringOtherApps:YES];
-    
-      self.level = kCGStatusWindowLevelKey;
-      [self makeKeyAndOrderFront:nil];
     }
   }
 }
 
-- (void)windowDidResignKey:(__unused NSNotification *)notification
+- (BOOL)canBecomeFirstResponder
 {
-  self.level = kCGNormalWindowLevel;
-  [self orderBack:nil];
+  return YES;
+}
+
+- (BOOL)canBecomeKeyWindow
+{
+  return YES;
+}
+
+- (void)applicationDidBecomeActive
+{
+  [self bringToAttention];
+}
+
+- (void)bringToAttention
+{
+  if (_lastErrorMessage) {
+    _closed = NO;
+    
+    self.level = kCGStatusWindowLevelKey;
+    [self makeKeyAndOrderFront:nil];
+  }
 }
 
 - (void)dismiss
 {
-  [self resignFirstResponder];
-  [[[NSApplication sharedApplication] mainWindow] makeKeyWindow];
+  self.level = kCGNormalWindowLevel;
   [self orderOut:nil];
+}
+
+- (void)windowDidResignKey:(__unused NSNotification *)notification
+{
+  [self orderOut:nil];
+}
+
+- (void)windowWillClose:(__unused NSNotification *)notification
+{
+  [NSApp hide:nil];
+  _closed = YES;
+}
+
+- (void)bridgeWillReload
+{
+  _lastErrorMessage = nil;
 }
 
 - (void)reload
 {
-    [_actionDelegate reloadFromRedBoxWindow:self];
+  [_actionDelegate reloadFromRedBoxWindow:self];
 }
 
 - (void)showExtraDataViewController
 {
-    [_actionDelegate loadExtraDataViewController];
+  [_actionDelegate loadExtraDataViewController];
 }
 
 - (void)copyStack
@@ -367,15 +405,17 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 
 #pragma mark - Key commands
 
-- (void)keyDown:(NSEvent *)theEvent {
+- (void)keyDown:(NSEvent *)theEvent
+{
   [super keyDown:theEvent];
+
   if (theEvent.modifierFlags == (NSCommandKeyMask & NSDeviceIndependentModifierFlagsMask)
       && [theEvent.characters isEqualToString:@"r"]) {
     [self reload];
   }
-  if (theEvent.keyCode == 53)
-  {
-    [self dismiss];
+
+  if (theEvent.keyCode == 53) {
+    [self close];
   }
 
   // Copy = Cmd-Option C since Cmd-C in the simulator copies the pasteboard from
@@ -386,16 +426,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
   }
 }
 
-- (BOOL)canBecomeFirstResponder
-{
-    return YES;
-}
-
-- (BOOL)canBecomeKeyWindow
-{
-  return YES;
-}
-
 @end
 
 @interface RCTRedBox () <RCTInvalidating, RCTRedBoxWindowActionDelegate>
@@ -403,9 +433,9 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 
 @implementation RCTRedBox
 {
-    RCTRedBoxWindow *_window;
-    NSMutableArray<id<RCTErrorCustomizer>> *_errorCustomizers;
-    //RCTRedBoxExtraDataViewController *_extraDataViewController;
+  RCTRedBoxWindow *_window;
+  NSMutableArray<id<RCTErrorCustomizer>> *_errorCustomizers;
+//  RCTRedBoxExtraDataViewController *_extraDataViewController;
 }
 
 @synthesize bridge = _bridge;
@@ -417,181 +447,186 @@ RCT_EXPORT_MODULE()
   _bridge = bridge;
   
   [[NSNotificationCenter defaultCenter] addObserver:self
-                                           selector:@selector(dismiss)
+                                           selector:@selector(bridgeWillReload)
                                                name:RCTBridgeWillReloadNotification
                                              object:[bridge valueForKey:@"_parentBridge"]];
 }
 
+- (void)bridgeWillReload
+{
+  [_window bridgeWillReload];
+}
+
 - (void)registerErrorCustomizer:(id<RCTErrorCustomizer>)errorCustomizer
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self->_errorCustomizers) {
-            self->_errorCustomizers = [NSMutableArray array];
-        }
-        if (![self->_errorCustomizers containsObject:errorCustomizer]) {
-            [self->_errorCustomizers addObject:errorCustomizer];
-        }
-    });
+  RCTExecuteOnMainQueue(^{
+    if (!self->_errorCustomizers) {
+      self->_errorCustomizers = [NSMutableArray array];
+    }
+    if (![self->_errorCustomizers containsObject:errorCustomizer]) {
+      [self->_errorCustomizers addObject:errorCustomizer];
+    }
+  });
 }
 
 // WARNING: Should only be called from the main thread/dispatch queue.
 - (RCTErrorInfo *)_customizeError:(RCTErrorInfo *)error
 {
-    RCTAssertMainQueue();
-    if (!self->_errorCustomizers) {
-        return error;
-    }
-    for (id<RCTErrorCustomizer> customizer in self->_errorCustomizers) {
-        RCTErrorInfo *newInfo = [customizer customizeErrorInfo:error];
-        if (newInfo) {
-            error = newInfo;
-        }
-    }
+  RCTAssertMainQueue();
+  if (!self->_errorCustomizers) {
     return error;
+  }
+  for (id<RCTErrorCustomizer> customizer in self->_errorCustomizers) {
+    RCTErrorInfo *newInfo = [customizer customizeErrorInfo:error];
+    if (newInfo) {
+      error = newInfo;
+    }
+  }
+  return error;
 }
 
 - (void)showError:(NSError *)error
 {
-    [self showErrorMessage:error.localizedDescription
-               withDetails:error.localizedFailureReason
-                     stack:error.userInfo[RCTJSStackTraceKey]];
+  [self showErrorMessage:error.localizedDescription
+             withDetails:error.localizedFailureReason
+                   stack:error.userInfo[RCTJSStackTraceKey]];
 }
 
 - (void)showErrorMessage:(NSString *)message
 {
-    [self showErrorMessage:message withParsedStack:nil isUpdate:NO];
+  [self showErrorMessage:message withParsedStack:nil isUpdate:NO];
 }
 
 - (void)showErrorMessage:(NSString *)message withDetails:(NSString *)details
 {
-    [self showErrorMessage:message withDetails:details stack:nil];
+  [self showErrorMessage:message withDetails:details stack:nil];
 }
 
-- (void)showErrorMessage:(NSString *)message withDetails:(NSString *)details stack:(NSArray<RCTJSStackFrame *> *)stack {
-    NSString *combinedMessage = message;
-    if (details) {
-        combinedMessage = [NSString stringWithFormat:@"%@\n\n%@", message, details];
-    }
-    [self showErrorMessage:combinedMessage withParsedStack:stack isUpdate:NO];
+- (void)showErrorMessage:(NSString *)message withDetails:(NSString *)details stack:(NSArray<RCTJSStackFrame *> *)stack
+{
+  NSString *combinedMessage = message;
+  if (details) {
+    combinedMessage = [NSString stringWithFormat:@"%@\n\n%@", message, details];
+  }
+  [self showErrorMessage:combinedMessage withParsedStack:stack isUpdate:NO];
 }
 
 - (void)showErrorMessage:(NSString *)message withRawStack:(NSString *)rawStack
 {
-    NSArray<RCTJSStackFrame *> *stack = [RCTJSStackFrame stackFramesWithLines:rawStack];
-    [self showErrorMessage:message withParsedStack:stack isUpdate:NO];
+  NSArray<RCTJSStackFrame *> *stack = [RCTJSStackFrame stackFramesWithLines:rawStack];
+  [self showErrorMessage:message withParsedStack:stack isUpdate:NO];
 }
 
 - (void)showErrorMessage:(NSString *)message withStack:(NSArray<NSDictionary *> *)stack
 {
-    [self showErrorMessage:message withParsedStack:[RCTJSStackFrame stackFramesWithDictionaries:stack] isUpdate:NO];
+  [self showErrorMessage:message withParsedStack:[RCTJSStackFrame stackFramesWithDictionaries:stack] isUpdate:NO];
 }
 
 - (void)updateErrorMessage:(NSString *)message withStack:(NSArray<NSDictionary *> *)stack
 {
-    [self showErrorMessage:message withParsedStack:[RCTJSStackFrame stackFramesWithDictionaries:stack] isUpdate:YES];
+  [self showErrorMessage:message withParsedStack:[RCTJSStackFrame stackFramesWithDictionaries:stack] isUpdate:YES];
 }
 
 - (void)showErrorMessage:(NSString *)message withParsedStack:(NSArray<RCTJSStackFrame *> *)stack
 {
-    [self showErrorMessage:message withParsedStack:stack isUpdate:NO];
+  [self showErrorMessage:message withParsedStack:stack isUpdate:NO];
 }
 
 - (void)updateErrorMessage:(NSString *)message withParsedStack:(NSArray<RCTJSStackFrame *> *)stack
 {
-    [self showErrorMessage:message withParsedStack:stack isUpdate:YES];
+  [self showErrorMessage:message withParsedStack:stack isUpdate:YES];
 }
 
 - (void)showErrorMessage:(NSString *)message withParsedStack:(NSArray<RCTJSStackFrame *> *)stack isUpdate:(BOOL)isUpdate
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        // if (self->_extraDataViewController == nil) {
-        //     self->_extraDataViewController = [RCTRedBoxExtraDataViewController new];
-        //     self->_extraDataViewController.actionDelegate = self;
-        // }
-        // [self->_bridge.eventDispatcher sendDeviceEventWithName:@"collectRedBoxExtraData" body:nil];
+  RCTExecuteOnMainQueue(^{
+//     if (self->_extraDataViewController == nil) {
+//       self->_extraDataViewController = [RCTRedBoxExtraDataViewController new];
+//       self->_extraDataViewController.actionDelegate = self;
+//     }
+//     [self->_bridge.eventDispatcher sendDeviceEventWithName:@"collectRedBoxExtraData" body:nil];
 
-        if (!self->_window) {
-          NSSize screenSize = NSScreen.mainScreen.frame.size;
-          NSRect contentRect = (CGRect){NSZeroPoint, {screenSize.width / 3, screenSize.height / 1.5}};
+    if (!self->_window) {
+      self->_window = RCTRedBoxWindow.sharedWindow;
+      self->_window.actionDelegate = self;
+      [self->_window center];
+    }
 
-          self->_window = [[RCTRedBoxWindow alloc] initWithContentRect:contentRect];
-          self->_window.actionDelegate = self;
-          [self->_window center];
-        }
-
-        RCTErrorInfo *errorInfo = [[RCTErrorInfo alloc] initWithErrorMessage:message
-                                                                       stack:stack];
-        errorInfo = [self _customizeError:errorInfo];
-        [self->_window showErrorMessage:errorInfo.errorMessage
-                              withStack:errorInfo.stack
-                               isUpdate:isUpdate];
-    });
+    RCTErrorInfo *errorInfo = [[RCTErrorInfo alloc] initWithErrorMessage:message
+                                                                   stack:stack];
+    errorInfo = [self _customizeError:errorInfo];
+    [self->_window showErrorMessage:errorInfo.errorMessage
+                          withStack:errorInfo.stack
+                           isUpdate:isUpdate];
+  });
 }
 
-- (void)loadExtraDataViewController {
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        // Make sure the CMD+E shortcut doesn't call this twice
-//        if (self->_extraDataViewController != nil && ![self->_window.contentViewController presentedViewControllers]) {
-//            [self->_window.contentViewController presentViewControllerAsSheet:self->_extraDataViewController];
-//        }
-//    });
+- (void)loadExtraDataViewController
+{
+//  RCTExecuteOnMainQueue(^{
+//    // Make sure the CMD+E shortcut doesn't call this twice
+//    if (self->_extraDataViewController != nil && ![self->_window.contentViewController presentedViewControllers]) {
+//      [self->_window.contentViewController presentViewControllerAsSheet:self->_extraDataViewController];
+//    }
+//  });
 }
 
-RCT_EXPORT_METHOD(setExtraData:(NSDictionary *)extraData forIdentifier:(__unused NSString *)identifier) {
-//    [_extraDataViewController addExtraData:extraData forIdentifier:identifier];
+RCT_EXPORT_METHOD(setExtraData:(NSDictionary *)extraData forIdentifier:(__unused NSString *)identifier)
+{
+//  [_extraDataViewController addExtraData:extraData forIdentifier:identifier];
 }
 
 RCT_EXPORT_METHOD(dismiss)
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self->_window dismiss];
-    });
+  RCTExecuteOnMainQueue(^{
+    [self->_window dismiss];
+  });
 }
 
 - (void)invalidate
 {
-    [self dismiss];
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
+  [self dismiss];
 }
 
 - (BOOL)isVisible
 {
-    return _window.contentView.superview != nil && _window.isVisible;
+  return _window.contentView.superview != nil && _window.isVisible;
 }
 
 - (void)redBoxWindow:(__unused RCTRedBoxWindow *)redBoxWindow openStackFrameInEditor:(RCTJSStackFrame *)stackFrame
 {
-    NSURL *const bundleURL = _overrideBundleURL ?: _bridge.bundleURL;
-    if (![bundleURL.scheme hasPrefix:@"http"]) {
-        RCTLogWarn(@"Cannot open stack frame in editor because you're not connected to the packager.");
-        return;
-    }
+  NSURL *const bundleURL = _overrideBundleURL ?: _bridge.bundleURL;
+  if (![bundleURL.scheme hasPrefix:@"http"]) {
+    RCTLogWarn(@"Cannot open stack frame in editor because you're not connected to the packager.");
+    return;
+  }
 
-    NSData *stackFrameJSON = [RCTJSONStringify([stackFrame toDictionary], NULL) dataUsingEncoding:NSUTF8StringEncoding];
-    NSString *postLength = [NSString stringWithFormat:@"%tu", stackFrameJSON.length];
-    NSMutableURLRequest *request = [NSMutableURLRequest new];
-    request.URL = [RCTConvert NSURL:@"http://localhost:8081/open-stack-frame"];
-    request.HTTPMethod = @"POST";
-    request.HTTPBody = stackFrameJSON;
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+  NSData *stackFrameJSON = [RCTJSONStringify([stackFrame toDictionary], NULL) dataUsingEncoding:NSUTF8StringEncoding];
+  NSString *postLength = [NSString stringWithFormat:@"%tu", stackFrameJSON.length];
+  NSMutableURLRequest *request = [NSMutableURLRequest new];
+  request.URL = [RCTConvert NSURL:@"http://localhost:8081/open-stack-frame"];
+  request.HTTPMethod = @"POST";
+  request.HTTPBody = stackFrameJSON;
+  [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+  [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
 
-    [[[NSURLSession sharedSession] dataTaskWithRequest:request] resume];
+  [[[NSURLSession sharedSession] dataTaskWithRequest:request] resume];
 }
 
 - (void)reload
 {
-    // Window is not used and can be nil
-    [self reloadFromRedBoxWindow:nil];
+  if (_overrideReloadAction) {
+    _overrideReloadAction();
+  } else {
+    [_bridge reload];
+  }
+  [self dismiss];
 }
 
 - (void)reloadFromRedBoxWindow:(__unused RCTRedBoxWindow *)redBoxWindow
 {
-    if (_overrideReloadAction) {
-        _overrideReloadAction();
-    } else {
-        [_bridge reload];
-    }
-    [self dismiss];
+  [self reload];
 }
 
 @end
@@ -601,17 +636,17 @@ RCT_EXPORT_METHOD(dismiss)
 
 @implementation RCTRedBoxButton
 
-+ (Class)cellClass {
++ (Class)cellClass
+{
   return [RCTRedBoxButtonCell class];
 }
 
 - (instancetype)init
 {
-    self = [super init];
-    if (self) {
-        self.bezelStyle = NSBezelStyleRecessed;
-    }
-    return self;
+  if (self = [super init]) {
+    self.bezelStyle = NSBezelStyleRecessed;
+  }
+  return self;
 }
 
 - (void)setBackgroundColor:(NSColor *)backgroundColor
@@ -626,17 +661,17 @@ RCT_EXPORT_METHOD(dismiss)
 
 - (NSRect)titleRectForBounds:(NSRect)rect
 {
-    NSRect titleFrame = [super titleRectForBounds:rect];
-    NSSize titleSize = self.attributedTitle.size;
-    titleFrame.origin.x = (rect.size.width - titleSize.width) / 2;
-    titleFrame.origin.y = (rect.size.height - titleSize.height) / 2;
-    return titleFrame;
+  NSRect titleFrame = [super titleRectForBounds:rect];
+  NSSize titleSize = self.attributedTitle.size;
+  titleFrame.origin.x = (rect.size.width - titleSize.width) / 2;
+  titleFrame.origin.y = (rect.size.height - titleSize.height) / 2;
+  return titleFrame;
 }
 
 - (void)drawWithFrame:(NSRect)cellFrame inView:(__unused NSView *)controlView
 {
-    NSRect titleRect = [self titleRectForBounds:cellFrame];
-    [self.attributedTitle drawInRect:titleRect];
+  NSRect titleRect = [self titleRectForBounds:cellFrame];
+  [self.attributedTitle drawInRect:titleRect];
 }
 
 @end
@@ -645,7 +680,7 @@ RCT_EXPORT_METHOD(dismiss)
 
 - (RCTRedBox *)redBox
 {
-    return [self moduleForClass:[RCTRedBox class]];
+  return [self moduleForClass:[RCTRedBox class]];
 }
 
 @end
