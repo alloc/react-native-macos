@@ -180,6 +180,12 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:unused)
   return self.clipsToBounds;
 }
 
+- (void)setCursor:(RCTCursor)cursor
+{
+  _cursor = cursor;
+  [super setCursor:cursor];
+}
+
 - (void)setTransform:(CATransform3D)transform
 {
   _transform = transform;

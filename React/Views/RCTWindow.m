@@ -16,6 +16,31 @@
 #import "RCTFieldEditor.h"
 #import "NSView+React.h"
 
+@implementation NSView (RCTCursor)
+
+- (RCTCursor)cursor
+{
+  return RCTCursorInherit;
+}
+
+// NSView subclasses must synthesize their own "_cursor" ivar.
+- (void)setCursor:(__unused RCTCursor)cursor
+{
+  RCTWindow *window = self.window;
+  if ([window isKindOfClass:[RCTWindow class]]) {
+    if (self == window.cursorProvider) {
+      window.cursorProvider = self;
+    } else if (
+      [window.hoverTarget isDescendantOf:self] &&
+      [self isDescendantOf:window.cursorProvider]
+    ) {
+      [window updateCursorImage];
+    }
+  }
+}
+
+@end
+
 @implementation RCTWindow
 {
   RCTBridge *_bridge;
@@ -209,6 +234,36 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
   }
 }
 
+- (void)updateCursorImage
+{
+  NSView *view = _hoverTarget;
+  while (view) {
+    if (view.cursor != RCTCursorInherit) {
+      self.cursorProvider = view;
+      return;
+    }
+    view = view.superview;
+  }
+}
+
+- (void)setCursorProvider:(NSView *)view
+{
+  RCTAssert([_hoverTarget isDescendantOf:view], @"The 'cursorProvider' must contain the 'hoverTarget'");
+  _cursorProvider = view;
+  
+  RCTCursor cursor = view.cursor;
+  if (cursor != _lastCursor) {
+    _lastCursor = cursor;
+    
+    if (cursor == RCTCursorNone) {
+      [NSCursor hide];
+    } else {
+      [NSCursor unhide];
+      [NSCursorForRCTCursor(cursor) set];
+    }
+  }
+}
+
 - (void)scrollViewDidScroll
 {
   // TODO: Find the new hover target.
@@ -279,37 +334,6 @@ static NSCursor *NSCursorForRCTCursor(RCTCursor cursor)
 // HACK: Do nothing here to prevent AppKit default behavior of updating the cursor whenever a view moves.
 - (void)_setCursorForMouseLocation:(__unused CGPoint)point {}
 
-- (void)_updateCursor:(NSView *)view
-{
-  // Find the nearest React-managed view with a defined cursor.
-  while (view) {
-    RCTCursor cursor = view.cursor;
-    if (cursor != RCTCursorInherit) {
-      if (cursor == _lastCursor) {
-        return;
-      }
-      
-      if (cursor == RCTCursorNone) {
-        [NSCursor hide];
-      } else {
-        [NSCursor unhide];
-        [NSCursorForRCTCursor(cursor) set];
-      }
-      
-      _lastCursor = cursor;
-      return;
-    }
-    view = view.superview;
-  }
-  // Reset the cursor to its default.
-  if (_lastCursor != RCTCursorDefault) {
-    _lastCursor = RCTCursorDefault;
-    
-    [NSCursor unhide];
-    [NSCursor.arrowCursor set];
-  }
-}
-
 - (void)_setHoverTarget:(NSView *)view
 {
   NSNumber *target = view.reactTag;
@@ -324,7 +348,7 @@ static NSCursor *NSCursorForRCTCursor(RCTCursor cursor)
       _hoverTarget = nil;
       [self _sendMouseEvent:@"mouseOut"];
       if (!view) {
-        [self _updateCursor:nil];
+        [self updateCursorImage];
       }
     }
   }
@@ -336,7 +360,7 @@ static NSCursor *NSCursorForRCTCursor(RCTCursor cursor)
     if (_hoverTarget == nil) {
       _hoverTarget = view;
       [self _sendMouseEvent:@"mouseOver"];
-      [self _updateCursor:view];
+      [self updateCursorImage];
 
       // Ensure "mouseMove" events have no "relatedTarget" property.
       _mouseInfo[@"relatedTarget"] = nil;

@@ -154,4 +154,9 @@ RCT_NOT_IMPLEMENTED(-(instancetype)initWithCoder:(nonnull NSCoder *)aDecoder)
   }
 }
 
+- (RCTCursor)cursor
+{
+  return RCTCursorDefault;
+}
+
 @end

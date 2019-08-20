@@ -120,8 +120,8 @@
 /** Populate the `layer` ivar when nil */
 - (void)ensureLayerExists;
 
-/** Default implementation to avoid crashes */
-- (RCTCursor)cursor;
+/** Empty implementation to avoid "missing selector" crashes */
+@property (nonatomic, assign) RCTCursor cursor;
 
 @end
 

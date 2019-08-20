@@ -30,6 +30,12 @@
 // The view directly under the mouse.
 @property (nonatomic, readonly) NSView *hoverTarget;
 
+// The current view providing the cursor image.
+@property (nonatomic) NSView *cursorProvider;
+
+// Find the first view that provides a cursor image (starting from the hover target).
+- (void)updateCursorImage;
+
 // Updates the hover target while scrolling.
 - (void)scrollViewDidScroll;
 
