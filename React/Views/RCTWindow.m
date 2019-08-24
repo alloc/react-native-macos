@@ -248,7 +248,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
 
 - (void)setCursorProvider:(NSView *)view
 {
-  RCTAssert([_hoverTarget isDescendantOf:view], @"The 'cursorProvider' must contain the 'hoverTarget'");
+  RCTAssert(_hoverTarget == nil || [_hoverTarget isDescendantOf:view], @"The 'cursorProvider' must contain the 'hoverTarget'");
   _cursorProvider = view;
   
   RCTCursor cursor = view.cursor;
