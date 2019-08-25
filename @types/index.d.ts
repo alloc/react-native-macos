@@ -541,6 +541,33 @@ export interface LayoutAnimationStatic {
 
 type FlexAlignType = "flex-start" | "flex-end" | "center" | "stretch" | "baseline";
 
+export interface BorderStyle {
+    borderBottomColor?: string;
+    borderBottomEndRadius?: number;
+    borderBottomLeftRadius?: number;
+    borderBottomRightRadius?: number;
+    borderBottomStartRadius?: number;
+    borderBottomWidth?: number;
+    borderColor?: string;
+    borderEndColor?: string;
+    borderEndWidth?: number | string;
+    borderLeftColor?: string;
+    borderLeftWidth?: number;
+    borderRadius?: number;
+    borderRightColor?: string;
+    borderRightWidth?: number;
+    borderStartColor?: string;
+    borderStartWidth?: number | string;
+    borderStyle?: "solid" | "dotted" | "dashed";
+    borderTopColor?: string;
+    borderTopEndRadius?: number;
+    borderTopLeftRadius?: number;
+    borderTopRightRadius?: number;
+    borderTopStartRadius?: number;
+    borderTopWidth?: number;
+    borderWidth?: number;
+}
+
 /**
  * Flex Prop Types
  * @see https://facebook.github.io/react-native/docs/flexbox.html#proptypes
@@ -552,13 +579,6 @@ export interface FlexStyle {
     alignItems?: FlexAlignType;
     alignSelf?: "auto" | FlexAlignType;
     aspectRatio?: number;
-    borderBottomWidth?: number;
-    borderEndWidth?: number | string;
-    borderLeftWidth?: number;
-    borderRightWidth?: number;
-    borderStartWidth?: number | string;
-    borderTopWidth?: number;
-    borderWidth?: number;
     bottom?: number | string;
     display?: "none" | "flex";
     end?: number | string;
@@ -1790,31 +1810,9 @@ export interface NativeMouseEvent {
  * @see https://facebook.github.io/react-native/docs/view.html#style
  * @see https://github.com/facebook/react-native/blob/master/Libraries/Components/View/ViewStylePropTypes.js
  */
-export interface ViewStyle extends FlexStyle, ShadowStyleIOS, TransformsStyle {
+export interface ViewStyle extends FlexStyle, BorderStyle, ShadowStyleIOS, TransformsStyle {
     backfaceVisibility?: "visible" | "hidden";
     backgroundColor?: string;
-    borderBottomColor?: string;
-    borderBottomEndRadius?: number;
-    borderBottomLeftRadius?: number;
-    borderBottomRightRadius?: number;
-    borderBottomStartRadius?: number;
-    borderBottomWidth?: number;
-    borderColor?: string;
-    borderEndColor?: string;
-    borderLeftColor?: string;
-    borderLeftWidth?: number;
-    borderRadius?: number;
-    borderRightColor?: string;
-    borderRightWidth?: number;
-    borderStartColor?: string;
-    borderStyle?: "solid" | "dotted" | "dashed";
-    borderTopColor?: string;
-    borderTopEndRadius?: number;
-    borderTopLeftRadius?: number;
-    borderTopRightRadius?: number;
-    borderTopStartRadius?: number;
-    borderTopWidth?: number;
-    borderWidth?: number;
     opacity?: number;
     testID?: string;
     /**
@@ -3574,17 +3572,10 @@ export interface ShadowStyleIOS {
  * @see https://facebook.github.io/react-native/docs/image.html#style
  * @see https://github.com/facebook/react-native/blob/master/Libraries/Image/ImageStylePropTypes.js
  */
-export interface ImageStyle extends FlexStyle, ShadowStyleIOS, TransformsStyle {
+export interface ImageStyle extends FlexStyle, BorderStyle, ShadowStyleIOS, TransformsStyle {
     resizeMode?: ImageResizeMode;
     backfaceVisibility?: "visible" | "hidden";
-    borderBottomLeftRadius?: number;
-    borderBottomRightRadius?: number;
     backgroundColor?: string;
-    borderColor?: string;
-    borderWidth?: number;
-    borderRadius?: number;
-    borderTopLeftRadius?: number;
-    borderTopRightRadius?: number;
     overflow?: "visible" | "hidden";
     overlayColor?: string;
     tintColor?: string;
