@@ -888,13 +888,6 @@ export interface TextProps extends TextPropsIOS, TextPropsAndroid, Accessibility
     numberOfLines?: number;
 
     /**
-     * Invoked on mount and layout changes with
-     *
-     * {nativeEvent: { layout: {x, y, width, height}}}.
-     */
-    onLayout?: (event: LayoutChangeEvent) => void;
-
-    /**
      * This function is called on press.
      * Text intrinsically supports press handling with a default highlight state (which can be disabled with suppressHighlighting).
      */
@@ -1759,17 +1752,6 @@ export interface GestureResponderHandlers {
      * it should have a onStartShouldSetResponderCapture handler which returns true.
      */
     onMoveShouldSetResponderCapture?: (event: GestureResponderEvent) => boolean;
-
-    onMouseMove?: (event: MouseEvent) => void;
-    onMouseEnter?: (event: MouseEvent) => void;
-    onMouseLeave?: (event: MouseEvent) => void;
-    onMouseOver?: (event: MouseEvent) => void;
-    onMouseOut?: (event: MouseEvent) => void;
-    onDragEnter?: (event: MouseEvent) => void;
-    onDragLeave?: (event: MouseEvent) => void;
-    onDrop?: (event: MouseEvent) => void;
-    onContextMenu?: (event: MouseEvent) => void;
-    onContextMenuItemClick?: (event: MouseEvent) => void;
 }
 
 export interface MouseEvent extends NativeSyntheticEvent<NativeMouseEvent> {}
@@ -2037,6 +2019,34 @@ type AccessibilityTrait =
     | "allowsDirectInteraction"
     | "pageTurn";
 
+export interface EventProps {
+    /**
+     * Invoked on mount and layout changes with
+     * {nativeEvent: {layout: {x, y, width, height}}}
+     */
+    onLayout?: (event: LayoutChangeEvent) => void;
+
+    onMouseMove?: (event: MouseEvent) => void;
+
+    onMouseEnter?: (event: MouseEvent) => void;
+
+    onMouseLeave?: (event: MouseEvent) => void;
+
+    onMouseOver?: (event: MouseEvent) => void;
+
+    onMouseOut?: (event: MouseEvent) => void;
+
+    onContextMenu?: (event: MouseEvent) => void;
+
+    onContextMenuItemClick?: (event: MouseEvent) => void;
+
+    onDragEnter?: (event: MouseEvent) => void;
+
+    onDragLeave?: (event: MouseEvent) => void;
+
+    onDrop?: (event: MouseEvent) => void;
+}
+
 /**
  * @see https://facebook.github.io/react-native/docs/view.html#props
  */
@@ -2046,6 +2056,7 @@ export interface ViewProps
         ViewPropsMacOS,
         GestureResponderHandlers,
         Touchable,
+        EventProps,
         AccessibilityProps {
     /**
      * This defines how far a touch event can start away from the view.
@@ -2058,13 +2069,6 @@ export interface ViewProps
      * hits two overlapping views.
      */
     hitSlop?: Insets;
-
-    /**
-     * Invoked on mount and layout changes with
-     *
-     * {nativeEvent: { layout: {x, y, width, height}}}.
-     */
-    onLayout?: (event: LayoutChangeEvent) => void;
 
     /**
      *
@@ -2858,11 +2862,6 @@ export interface ActivityIndicatorIOSProps extends ViewProps {
      * Whether the indicator should hide when not animating (true by default).
      */
     hidesWhenStopped?: boolean;
-
-    /**
-     * Invoked on mount and layout changes with
-     */
-    onLayout?: (event: { nativeEvent: { layout: { x: number; y: number; width: number; height: number } } }) => void;
 
     /**
      * Size of the indicator.
@@ -3758,16 +3757,7 @@ export interface ImageResolvedAssetSource {
 /**
  * @see https://facebook.github.io/react-native/docs/image.html
  */
-export interface ImagePropsBase extends ImagePropsIOS, ImagePropsAndroid, AccessibilityProps {
-    /**
-     * onLayout function
-     *
-     * Invoked on mount and layout changes with
-     *
-     * {nativeEvent: { layout: {x, y, width, height} }}.
-     */
-    onLayout?: (event: LayoutChangeEvent) => void;
-
+export interface ImagePropsBase extends ImagePropsIOS, ImagePropsAndroid, EventProps, AccessibilityProps {
     /**
      * Invoked on load error with {nativeEvent: {error}}
      */
@@ -4473,8 +4463,6 @@ export interface VirtualizedListWithoutRenderItemProps<ItemT> extends ScrollView
 
     onEndReachedThreshold?: number | null;
 
-    onLayout?: (event: LayoutChangeEvent) => void;
-
     /**
      * If provided, a standard RefreshControl will be added for "Pull to Refresh" functionality. Make
      * sure to also set the `refreshing` prop correctly.
@@ -5048,7 +5036,7 @@ interface TouchableMixin {
 /**
  * @see https://facebook.github.io/react-native/docs/touchablewithoutfeedback.html#props
  */
-export interface TouchableWithoutFeedbackProps extends AccessibilityProps {
+export interface TouchableWithoutFeedbackProps extends EventProps, AccessibilityProps {
     /**
      * Delay in ms, from onPressIn, before onLongPress is called.
      */
@@ -5077,12 +5065,6 @@ export interface TouchableWithoutFeedbackProps extends AccessibilityProps {
      * two overlapping views.
      */
     hitSlop?: Insets;
-
-    /**
-     * Invoked on mount and layout changes with
-     * {nativeEvent: {layout: {x, y, width, height}}}
-     */
-    onLayout?: (event: LayoutChangeEvent) => void;
 
     onLongPress?: (event: GestureResponderEvent) => void;
 
@@ -5115,14 +5097,6 @@ export interface TouchableWithoutFeedbackProps extends AccessibilityProps {
      * Used to locate this view in end-to-end tests.
      */
     testID?: string;
-
-    onMouseMove?: (event: MouseEvent) => void;
-    onMouseEnter?: (event: MouseEvent) => void;
-    onMouseLeave?: (event: MouseEvent) => void;
-    onMouseOver?: (event: MouseEvent) => void;
-    onMouseOut?: (event: MouseEvent) => void;
-    onContextMenu?: (event: MouseEvent) => void;
-    onContextMenuItemClick?: (event: MouseEvent) => void;
 }
 
 /**
