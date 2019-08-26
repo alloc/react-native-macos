@@ -214,7 +214,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
     }
 
     // Update the "hoveredView" now, instead of waiting for the next "mouseMove" event.
-    [self _setHoverTarget:[self.rootView hitTest:event.locationInWindow]];
+    [self _setHoverTarget:[self reactHitTest:event.locationInWindow]];
     return;
   }
 
@@ -229,7 +229,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
     }
 
     // Update the "hoveredView" now, instead of waiting for the next "mouseMove" event.
-    [self _setHoverTarget:[self.rootView hitTest:event.locationInWindow]];
+    [self _setHoverTarget:[self reactHitTest:event.locationInWindow]];
     return;
   }
 }
@@ -316,6 +316,15 @@ static inline BOOL hasFlag(NSUInteger flags, NSUInteger flag) {
   _mouseInfo[@"shiftKey"] = @(hasFlag(flags, NSEventModifierFlagShift));
 
   return targetView;
+}
+
+- (NSView *)reactHitTest:(NSPoint)point
+{
+  NSView *view = [self.rootView hitTest:point];
+  while (view && !view.reactTag) {
+    view = view.superview;
+  }
+  return view;
 }
 
 static NSCursor *NSCursorForRCTCursor(RCTCursor cursor)
