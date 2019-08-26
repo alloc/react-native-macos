@@ -21,6 +21,7 @@ const insetsDiffer = require('insetsDiffer');
 const matricesDiffer = require('matricesDiffer');
 const pointsDiffer = require('pointsDiffer');
 const processColor = require('processColor');
+const processTransform = require('processTransform');
 const resolveAssetSource = require('resolveAssetSource');
 const sizesDiffer = require('sizesDiffer');
 const verifyPropTypes = require('verifyPropTypes');
@@ -222,6 +223,7 @@ function processColorArray(colors: ?Array<any>): ?Array<?number> {
 
 const TypeToProcessorMap = {
   // iOS Types
+  CATransform3D: processTransform,
   CGColor: processColor,
   CGColorArray: processColorArray,
   UIColor: processColor,
