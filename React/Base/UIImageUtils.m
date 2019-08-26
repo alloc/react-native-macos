@@ -13,27 +13,26 @@ NSData *UIImagePNGRepresentation(NSImage *image)
 {
   CGImageSourceRef source = CGImageSourceCreateWithData((CFDataRef)[image TIFFRepresentation], NULL);
   CGImageRef maskRef =  CGImageSourceCreateImageAtIndex(source, 0, NULL);
+  CFRelease(source);
 
   NSBitmapImageRep *newRep = [[NSBitmapImageRep alloc] initWithCGImage:maskRef];
+  CGImageRelease(maskRef);
 
-  NSData *pngData = [newRep representationUsingType:NSPNGFileType properties:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                                              [NSNumber numberWithBool:YES], NSImageProgressive, nil]];
-  return pngData;
+  return [newRep representationUsingType:NSPNGFileType
+                              properties:@{ NSImageProgressive: @YES }];
 }
 
 NSData *UIImageJPEGRepresentation(NSImage *image, float quality)
 {
   CGImageSourceRef source = CGImageSourceCreateWithData((CFDataRef)[image TIFFRepresentation], NULL);
   CGImageRef maskRef =  CGImageSourceCreateImageAtIndex(source, 0, NULL);
+  CFRelease(source);
 
   NSBitmapImageRep *newRep = [[NSBitmapImageRep alloc] initWithCGImage:maskRef];
+  CGImageRelease(maskRef);
 
-  NSNumber *compressionFactor = [NSNumber numberWithFloat:quality];
-  NSDictionary *imageProps = [NSDictionary dictionaryWithObject:compressionFactor
-                                                         forKey:NSImageCompressionFactor];
-
-  NSData *jpgData = [newRep representationUsingType:NSJPEGFileType properties:imageProps];
-  return jpgData;
+  return [newRep representationUsingType:NSJPEGFileType
+                              properties:@{ NSImageCompressionFactor: @(quality) }];
 }
 
 
