@@ -26,7 +26,7 @@
 // NSView subclasses must synthesize their own "_cursor" ivar.
 - (void)setCursor:(__unused RCTCursor)cursor
 {
-  RCTWindow *window = self.window;
+  RCTWindow *window = (RCTWindow *)self.window;
   if ([window isKindOfClass:[RCTWindow class]]) {
     if (self == window.cursorProvider) {
       window.cursorProvider = self;
