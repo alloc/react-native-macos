@@ -11,35 +11,32 @@
 
 @implementation NSBezierPath (CGPath)
 
-// Taken from: https://stackoverflow.com/a/1956021/2228559
-- (CGPathRef)CGPath
+- (void)applyToCGPath:(CGMutablePathRef)path
 {
-  CGPathRef path = NULL;
-
   NSInteger numElements = self.elementCount;
   if (numElements > 0) {
-    CGMutablePathRef mutablePath = CGPathCreateMutable();
     BOOL didClosePath = YES;
 
+    // Taken from: https://stackoverflow.com/a/1956021/2228559
     for (NSInteger i = 0; i < numElements; i++) {
       NSPoint p[3];
       switch ([self elementAtIndex:i associatedPoints:p]) {
         case NSMoveToBezierPathElement:
-          CGPathMoveToPoint(mutablePath, NULL, p[0].x, p[0].y);
+          CGPathMoveToPoint(path, NULL, p[0].x, p[0].y);
           break;
 
         case NSLineToBezierPathElement:
-          CGPathAddLineToPoint(mutablePath, NULL, p[0].x, p[0].y);
+          CGPathAddLineToPoint(path, NULL, p[0].x, p[0].y);
           didClosePath = NO;
           break;
 
         case NSCurveToBezierPathElement:
-          CGPathAddCurveToPoint(mutablePath, NULL, p[0].x, p[0].y, p[1].x, p[1].y, p[2].x, p[2].y);
+          CGPathAddCurveToPoint(path, NULL, p[0].x, p[0].y, p[1].x, p[1].y, p[2].x, p[2].y);
           didClosePath = NO;
           break;
 
         case NSClosePathBezierPathElement:
-          CGPathCloseSubpath(mutablePath);
+          CGPathCloseSubpath(path);
           didClosePath = YES;
           break;
       }
@@ -47,14 +44,9 @@
 
     // Be sure the path is closed or Quartz may not do valid hit detection.
     if (!didClosePath) {
-      CGPathCloseSubpath(mutablePath);
+      CGPathCloseSubpath(path);
     }
-
-    path = CGPathCreateCopy(path);
-    CGPathRelease(mutablePath);
   }
-
-  return path;
 }
 
 @end

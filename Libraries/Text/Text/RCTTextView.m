@@ -144,7 +144,10 @@
       [self.layer addSublayer:_highlightLayer];
     }
     _highlightLayer.position = _contentFrame.origin;
-    _highlightLayer.path = highlightPath.CGPath;
+    CGMutablePathRef path = CGPathCreateMutable();
+    [highlightPath applyToCGPath:path];
+    _highlightLayer.path = path;
+    CGPathRelease(path);
   } else {
     [_highlightLayer removeFromSuperlayer];
     _highlightLayer = nil;
