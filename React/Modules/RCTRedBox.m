@@ -164,6 +164,11 @@ const CGFloat buttonMargin = 10;
                                              selector:@selector(applicationDidBecomeActive)
                                                  name:NSApplicationDidBecomeActiveNotification
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationDidResignActive)
+                                                 name:NSApplicationDidResignActiveNotification
+                                               object:nil];
   }
   return self;
 }
@@ -200,8 +205,12 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
     
     if (!isUpdate && !_closed) {
       NSApplication *app = [NSApplication sharedApplication];
-      [app setActivationPolicy:NSApplicationActivationPolicyRegular];
-      [app activateIgnoringOtherApps:YES];
+      if (app.isActive && app.activationPolicy == NSApplicationActivationPolicyRegular) {
+        [self bringToAttention];
+      } else {
+        [app setActivationPolicy:NSApplicationActivationPolicyRegular];
+        [app activateIgnoringOtherApps:YES];
+      }
     }
   }
 }
@@ -221,11 +230,18 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
   [self bringToAttention];
 }
 
+- (void)applicationDidResignActive
+{
+  self.level = kCGNormalWindowLevel;
+  [self orderBack:nil];
+}
+
 - (void)bringToAttention
 {
   if (_lastErrorMessage) {
     _closed = NO;
     
+    [NSApp activateIgnoringOtherApps:YES];
     self.level = kCGStatusWindowLevelKey;
     [self makeKeyAndOrderFront:nil];
   }
@@ -234,11 +250,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 - (void)dismiss
 {
   self.level = kCGNormalWindowLevel;
-  [self orderOut:nil];
-}
-
-- (void)windowDidResignKey:(__unused NSNotification *)notification
-{
   [self orderOut:nil];
 }
 
