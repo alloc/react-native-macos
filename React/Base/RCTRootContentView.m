@@ -82,8 +82,10 @@ RCT_NOT_IMPLEMENTED(-(instancetype)initWithCoder:(nonnull NSCoder *)aDecoder)
       if (_sizeFlexibility & RCTRootViewSizeFlexibilityHeight) {
         size.height = subview.frame.size.height;
       }
-      self.frameSize = size;
-      [self.window setContentSize:size];
+      if (!CGSizeEqualToSize(size, self.frame.size)) {
+        self.frameSize = size;
+        [self.window setContentSize:size];
+      }
     }
   }
 }
