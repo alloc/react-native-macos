@@ -236,7 +236,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
 
 - (void)updateCursorImage
 {
-  NSView *view = _hoverTarget;
+  NSView *view = _hoverTarget ?: self.rootView;
   while (view) {
     if (view.cursor != RCTCursorInherit) {
       self.cursorProvider = view;
