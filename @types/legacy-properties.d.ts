@@ -51,7 +51,6 @@ import {
     VirtualizedListProps,
     SectionListProps,
     ListViewProps,
-    MaskedViewIOSProps,
     ModalProps,
     TouchableWithoutFeedbackProps,
     TouchableHighlightProps,
@@ -230,9 +229,6 @@ declare module "react-native-macos" {
 
     /** @deprecated Use ListViewProps */
     export type ListViewProperties = ListViewProps;
-
-    /** @deprecated Use MaskedViewIOSProps */
-    export type MaskedViewIOSProperties = MaskedViewIOSProps;
 
     /** @deprecated Use ModalProps */
     export type ModalProperties = ModalProps;

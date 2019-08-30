@@ -3,7 +3,6 @@ dependencies:
   '@types/prop-types': 15.7.1
   '@types/react': 16.8.23
   absolute-path: 0.0.0
-  art: 0.10.3
   babel-core: 6.26.3
   babel-plugin-syntax-trailing-function-commas: 6.22.0
   babel-plugin-transform-async-to-generator: 6.16.0
@@ -401,10 +400,6 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-iYUI2iIm84DfkEcoRWhJwVAaSw0=
-  /art/0.10.3:
-    dev: false
-    resolution:
-      integrity: sha512-HXwbdofRTiJT6qZX/FnchtldzJjS3vkLJxQilc3Xj+ma2MXjY4UAyQ0ls1XZYVnDvVIBiFZbC6QsvtW86TD6tQ==
   /asap/2.0.6:
     dev: false
     resolution:
@@ -5981,7 +5976,6 @@ specifiers:
   '@types/prop-types': ^15.7.0
   '@types/react': ^16.8.23
   absolute-path: ^0.0.0
-  art: ^0.10.0
   babel-core: ^6.24.1
   babel-eslint: ^7.2.3
   babel-plugin-syntax-trailing-function-commas: ^6.20.0

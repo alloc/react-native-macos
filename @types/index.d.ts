@@ -4722,17 +4722,6 @@ export class ListView extends ListViewBase {
     scrollTo: (y?: number | { x?: number; y?: number; animated?: boolean }, x?: number, animated?: boolean) => void;
 }
 
-interface MaskedViewIOSProps extends ViewProps {
-    maskElement: React.ReactElement;
-}
-
-/**
- * @see https://facebook.github.io/react-native/docs/maskedviewios.html
- */
-declare class MaskedViewComponent extends React.Component<MaskedViewIOSProps> {}
-declare const MaskedViewBase: Constructor<NativeMethodsMixin> & typeof MaskedViewComponent;
-export class MaskedViewIOS extends MaskedViewBase {}
-
 export interface ModalBaseProps {
     // Only `animated` is documented. The JS code says `animated` is
     // deprecated and `animationType` is preferred.
