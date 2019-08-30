@@ -698,7 +698,7 @@ for (NSObject<UIScrollViewDelegate> *scrollViewListener in _scrollListeners) { \
 - (NSView *)hitTest:(NSPoint)point
 {
   // Note: This assumes "contentView.clipsToBounds" is YES.
-  if (!CGRectContainsPoint(self.frame, point)) {
+  if (!CGRectContainsPoint(self.bounds, point)) {
     return nil;
   }
   NSPoint contentOffset = self.contentView.bounds.origin;
