@@ -722,11 +722,11 @@ interface ScaleYTransform {
 }
 
 interface TranslateXTransform {
-    translateX: number | string;
+    translateX: number;
 }
 
 interface TranslateYTransform {
-    translateY: number | string;
+    translateY: number;
 }
 
 interface SkewXTransform {
