@@ -267,7 +267,9 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
 - (void)scrollViewDidScroll
 {
   // TODO: Find the new hover target.
-  [self _setHoverTarget:nil];
+  if (_clickTarget == nil) {
+    [self _setHoverTarget:nil];
+  }
 }
 
 #pragma mark - Private methods
