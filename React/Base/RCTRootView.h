@@ -150,6 +150,8 @@ extern NSString *const RCTContentDidAppearNotification;
 @property (nonatomic, assign) NSTimeInterval loadingViewFadeDelay;
 @property (nonatomic, assign) NSTimeInterval loadingViewFadeDuration;
 
+@property (nonatomic, assign) CGFloat scaleFactor;
+
 @end
 
 @interface RCTRootView (Deprecated)

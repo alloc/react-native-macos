@@ -82,6 +82,11 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
     super.contentView = nil;
 
     [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(windowDidChangeScreen:)
+                                                 name:NSWindowDidChangeScreenNotification
+                                               object:self];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(_javaScriptDidLoad:)
                                                  name:RCTJavaScriptDidLoadNotification
                                                object:bridge];
@@ -408,6 +413,19 @@ static NSCursor *NSCursorForRCTCursor(RCTCursor cursor)
   }
 
   [_bridge.eventDispatcher sendEvent:event];
+}
+
+- (void)windowDidChangeScreen:(__unused NSNotification *)notification
+{
+  self.contentView.scaleFactor = self.screen.backingScaleFactor;
+}
+
+- (void)setContentView:(RCTRootView *)contentView
+{
+  [super setContentView:contentView];
+  if (self.screen && [contentView respondsToSelector:@selector(setScaleFactor:)]) {
+    contentView.scaleFactor = self.screen.backingScaleFactor;
+  }
 }
 
 - (void)_javaScriptDidLoad:(__unused NSNotification *)notification

@@ -938,6 +938,15 @@ bool YGNodeLayoutGetDidLegacyStretchFlagAffectLayout(const YGNodeRef node) {
   return node->getLayout().doesLegacyStretchFlagAffectsLayout;
 }
 
+float YGNodeLayoutGetPointScaleFactor(const YGNodeRef node) {
+  return node->getConfig()->pointScaleFactor;
+}
+
+void YGNodeLayoutSetPointScaleFactor(const YGNodeRef node, float pixelsInPoint) {
+  YGConfigSetPointScaleFactor(node->getConfig(), pixelsInPoint);
+  YGNodeMarkDirtyAndPropogateToDescendants(node);
+}
+
 uint32_t gCurrentGenerationCount = 0;
 
 bool YGLayoutNodeInternal(

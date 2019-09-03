@@ -280,50 +280,38 @@ static void RCTUnsafeExecuteOnMainQueueOnceSync(dispatch_once_t *onceToken, disp
   }
 }
 
+static __weak NSScreen *currentScreen = nil;
+
+void RCTSetScreen(NSScreen *screen)
+{
+  RCTAssertMainQueue();
+  currentScreen = screen;
+}
+
 CGFloat RCTScreenScale()
 {
-  static dispatch_once_t onceToken;
-  static CGFloat scale;
-
-  RCTUnsafeExecuteOnMainQueueOnceSync(&onceToken, ^{
-      scale = [NSScreen mainScreen].backingScaleFactor; // TODO:
-  });
-
-  return scale;
+  RCTAssertMainQueue();
+  return currentScreen.backingScaleFactor;
 }
 
 CGSize RCTScreenSize()
 {
-  // FIXME: this caches the bounds at app start, whatever those were, and then
-  // doesn't update when the device is rotated. We need to find another thread-
-  // safe way to get the screen size.
-
-  static CGSize size;
-  static dispatch_once_t onceToken;
-  dispatch_once(&onceToken, ^{
-    RCTUnsafeExecuteOnMainQueueSync(^{
-      size = [NSScreen mainScreen].frame.size;
-    });
-  });
-
-  return size;
+  RCTAssertMainQueue();
+  return currentScreen.frame.size;
 }
 
-CGFloat RCTRoundPixelValue(CGFloat value)
+CGFloat RCTRoundPixelValue(CGFloat value, CGFloat scale)
 {
-  CGFloat scale = RCTScreenScale();
   return round(value * scale) / scale;
 }
 
-CGFloat RCTCeilPixelValue(CGFloat value)
+CGFloat RCTCeilPixelValue(CGFloat value, CGFloat scale)
 {
-  CGFloat scale = RCTScreenScale();
   return ceil(value * scale) / scale;
 }
 
-CGFloat RCTFloorPixelValue(CGFloat value)
+CGFloat RCTFloorPixelValue(CGFloat value, CGFloat scale)
 {
-  CGFloat scale = RCTScreenScale();
   return floor(value * scale) / scale;
 }
 

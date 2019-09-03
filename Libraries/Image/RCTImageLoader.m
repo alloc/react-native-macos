@@ -671,16 +671,16 @@ completionBlock:(void (^)(NSError *error, id imageOrData, NSString *fetchDate))c
                     // Decompress the image data (this may be CPU and memory intensive)
                     NSImage *image = RCTDecodeImageWithData(data, size, scale, resizeMode);
 
-#if RCT_DEV
-                    CGSize imagePixelSize = RCTSizeInPixels(image.size, 1.0f);
-                    CGSize screenPixelSize = RCTSizeInPixels(RCTScreenSize(), RCTScreenScale());
-                    if (imagePixelSize.width * imagePixelSize.height >
-                        screenPixelSize.width * screenPixelSize.height) {
-                      RCTLogInfo(@"[PERF ASSETS] Loading image at size %@, which is larger "
-                                   "than the screen size %@", NSStringFromSize(imagePixelSize),
-                                   NSStringFromSize(screenPixelSize));
-                    }
-#endif
+//#if RCT_DEV
+//                    CGSize imagePixelSize = RCTSizeInPixels(image.size, 1.0f);
+//                    CGSize screenPixelSize = RCTSizeInPixels(RCTScreenSize(), RCTScreenScale());
+//                    if (imagePixelSize.width * imagePixelSize.height >
+//                        screenPixelSize.width * screenPixelSize.height) {
+//                      RCTLogInfo(@"[PERF ASSETS] Loading image at size %@, which is larger "
+//                                   "than the screen size %@", NSStringFromSize(imagePixelSize),
+//                                   NSStringFromSize(screenPixelSize));
+//                    }
+//#endif
 
                     if (image) {
                         completionHandler(nil, image);

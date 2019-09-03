@@ -51,7 +51,7 @@ typedef NS_ENUM(unsigned int, meta_prop_t) {
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
     yogaConfig = YGConfigNew();
-    YGConfigSetPointScaleFactor(yogaConfig, RCTScreenScale());
+    YGConfigSetPointScaleFactor(yogaConfig, 0.0f);
     YGConfigSetUseLegacyStretchBehaviour(yogaConfig, true);
   });
   return yogaConfig;

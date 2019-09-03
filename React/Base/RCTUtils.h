@@ -44,13 +44,14 @@ RCT_EXTERN void RCTExecuteOnMainQueue(dispatch_block_t block);
 RCT_EXTERN void RCTUnsafeExecuteOnMainQueueSync(dispatch_block_t block);
 
 // Get screen metrics in a thread-safe way
+RCT_EXTERN void RCTSetScreen(NSScreen *);
 RCT_EXTERN CGFloat RCTScreenScale(void);
 RCT_EXTERN CGSize RCTScreenSize(void);
 
 // Round float coordinates to nearest whole screen pixel (not point)
-RCT_EXTERN CGFloat RCTRoundPixelValue(CGFloat value);
-RCT_EXTERN CGFloat RCTCeilPixelValue(CGFloat value);
-RCT_EXTERN CGFloat RCTFloorPixelValue(CGFloat value);
+RCT_EXTERN CGFloat RCTRoundPixelValue(CGFloat value, CGFloat scale);
+RCT_EXTERN CGFloat RCTCeilPixelValue(CGFloat value, CGFloat scale);
+RCT_EXTERN CGFloat RCTFloorPixelValue(CGFloat value, CGFloat scale);
 
 // Convert a size in points to pixels, rounded up to the nearest integral size
 RCT_EXTERN CGSize RCTSizeInPixels(CGSize pointSize, CGFloat scale);

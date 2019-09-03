@@ -280,6 +280,9 @@ WIN_EXPORT YGDirection YGNodeLayoutGetDirection(YGNodeRef node);
 WIN_EXPORT bool YGNodeLayoutGetHadOverflow(YGNodeRef node);
 bool YGNodeLayoutGetDidLegacyStretchFlagAffectLayout(YGNodeRef node);
 
+float YGNodeLayoutGetPointScaleFactor(YGNodeRef node);
+void YGNodeLayoutSetPointScaleFactor(YGNodeRef node, float pixelsInPoint);
+
 // Get the computed values for these nodes after performing layout. If they were
 // set using point values then the returned value will be the same as
 // YGNodeStyleGetXXX. However if they were set using a percentage value then the

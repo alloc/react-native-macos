@@ -11,6 +11,7 @@
 
 #import <React/RCTBridge.h>
 #import <React/RCTShadowView+Layout.h>
+#import <React/RCTRootShadowView.h>
 #import <React/RCTUIManager.h>
 #import <yoga/Yoga.h>
 
@@ -284,12 +285,13 @@
 
       NSFont *font = [textStorage attribute:NSFontAttributeName atIndex:range.location effectiveRange:nil];
 
+      CGFloat scale = YGNodeLayoutGetPointScaleFactor(shadowView.rootView.yogaNode);
       CGRect frame = {{
-        RCTRoundPixelValue(glyphRect.origin.x),
-        RCTRoundPixelValue(glyphRect.origin.y + glyphRect.size.height - attachmentSize.height + font.descender)
+        RCTRoundPixelValue(glyphRect.origin.x, scale),
+        RCTRoundPixelValue(glyphRect.origin.y + glyphRect.size.height - attachmentSize.height + font.descender, scale)
       }, {
-        RCTRoundPixelValue(attachmentSize.width),
-        RCTRoundPixelValue(attachmentSize.height)
+        RCTRoundPixelValue(attachmentSize.width, scale),
+        RCTRoundPixelValue(attachmentSize.height, scale)
       }};
 
       RCTLayoutContext localLayoutContext = layoutContext;
@@ -327,9 +329,10 @@ static YGSize RCTTextShadowViewMeasure(YGNodeRef node, float width, YGMeasureMod
     size.width -= letterSpacing;
   }
 
+  CGFloat scale = YGNodeLayoutGetPointScaleFactor(shadowTextView.rootView.yogaNode);
   size = (CGSize){
-    MIN(RCTCeilPixelValue(size.width), maximumSize.width),
-    MIN(RCTCeilPixelValue(size.height), maximumSize.height)
+    MIN(RCTCeilPixelValue(size.width, scale), maximumSize.width),
+    MIN(RCTCeilPixelValue(size.height, scale), maximumSize.height)
   };
 
   return (YGSize){

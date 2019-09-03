@@ -173,6 +173,8 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:unused)
 {
     [super displayLayer:layer];
 
+    RCTSetScreen(self.window.screen);
+
     const CGSize size = self.bounds.size;
     UIGraphicsBeginImageContextWithOptions(size, self.isOpaque, 0.0);
 

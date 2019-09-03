@@ -244,7 +244,7 @@ static inline BOOL UIEdgeInsetsEqualToEdgeInsets(NSEdgeInsets insets1, NSEdgeIns
     return nil;
   }
 
-  const CGFloat scale = RCTScreenScale();
+  const CGFloat scale = self.window.screen.backingScaleFactor;
   const CGFloat targetImagePixels = size.width * size.height * scale * scale;
 
   RCTImageSource *bestSource = nil;
@@ -307,7 +307,7 @@ static inline BOOL UIEdgeInsetsEqualToEdgeInsets(NSEdgeInsets insets1, NSEdgeIns
     };
 
     CGSize imageSize = self.bounds.size;
-    CGFloat imageScale = RCTScreenScale();
+    CGFloat imageScale = self.window.screen.backingScaleFactor;
     if (!UIEdgeInsetsEqualToEdgeInsets(_capInsets, NSEdgeInsetsZero)) {
       // Don't resize images that use capInsets
       imageSize = CGSizeZero;
@@ -378,8 +378,10 @@ static inline BOOL UIEdgeInsetsEqualToEdgeInsets(NSEdgeInsets insets1, NSEdgeIns
   };
 
   if (_blurRadius > __FLT_EPSILON__) {
+    NSScreen *screen = self.window.screen;
     // Blur on a background thread to avoid blocking interaction
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+      RCTSetScreen(screen);
       NSImage *blurredImage = RCTBlurredImageWithRadius(loadedImage, self->_blurRadius);
       RCTExecuteOnMainQueue(^{
         setImageBlock(blurredImage);
@@ -407,8 +409,9 @@ static inline BOOL UIEdgeInsetsEqualToEdgeInsets(NSEdgeInsets insets1, NSEdgeIns
     [self reloadImage];
   } else if ([self shouldReloadImageSourceAfterResize]) {
     CGSize imageSize = self.image.size;
-    CGFloat imageScale = RCTScreenScale();
-    CGSize idealSize = RCTTargetSize(imageSize, imageScale, frame.size, RCTScreenScale(),
+    CGFloat imageScale = 1.0;
+    CGFloat screenScale = self.window.screen.backingScaleFactor;
+    CGSize idealSize = RCTTargetSize(imageSize, imageScale, frame.size, screenScale,
                                      self.resizeMode, YES);
 
     // Don't reload if the current image or target image size is close enough

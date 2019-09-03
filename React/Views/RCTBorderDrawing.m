@@ -61,10 +61,11 @@ RCTCornerInsets RCTGetCornerInsets(RCTCornerRadii cornerRadii,
 }
 
 static NSEdgeInsets RCTRoundInsetsToPixel(NSEdgeInsets edgeInsets) {
-    edgeInsets.top = RCTRoundPixelValue(edgeInsets.top);
-    edgeInsets.bottom = RCTRoundPixelValue(edgeInsets.bottom);
-    edgeInsets.left = RCTRoundPixelValue(edgeInsets.left);
-    edgeInsets.right = RCTRoundPixelValue(edgeInsets.right);
+    CGFloat scale = RCTScreenScale();
+    edgeInsets.top = RCTRoundPixelValue(edgeInsets.top, scale);
+    edgeInsets.bottom = RCTRoundPixelValue(edgeInsets.bottom, scale);
+    edgeInsets.left = RCTRoundPixelValue(edgeInsets.left, scale);
+    edgeInsets.right = RCTRoundPixelValue(edgeInsets.right, scale);
 
     return edgeInsets;
 }
@@ -402,7 +403,13 @@ static NSImage *RCTGetSolidBorderImage(RCTCornerRadii cornerRadii,
   UIGraphicsEndImageContext();
 
   if (makeStretchable) {
-    image.capInsets = edgeInsets;
+    CGFloat scale = RCTScreenScale();
+    image.capInsets = NSEdgeInsetsMake(
+      edgeInsets.top * scale,
+      edgeInsets.left * scale,
+      edgeInsets.bottom * scale,
+      edgeInsets.right * scale
+    );
   }
 
   return image;

@@ -70,20 +70,20 @@ static NSDictionary *RCTExportedDimensions(__unused RCTBridge *bridge)
   );
 
   // Don't use RCTScreenSize since it the interface orientation doesn't apply to it
-  CGRect screenSize = [[NSScreen mainScreen] frame];
+  CGSize screenSize = screen.frame.size;
   NSDictionary *dims = @{
                          @"dpi": @(screenPixelSize.width / (screenPhysicalSize.width / 25.4)),
-                         @"width": @(screenSize.size.width),
-                         @"height": @(screenSize.size.height),
-                         @"scale": @(RCTScreenScale()),
+                         @"width": @(screenSize.width),
+                         @"height": @(screenSize.height),
+                         @"scale": @(screen.backingScaleFactor),
                          @"fontScale": @(1) // TODO: fix accessibility bridge.accessibilityManager.multiplier)
                          };
-  
-  CGRect windowSize = RCTKeyWindow().frame;
+
+  CGSize windowSize = RCTKeyWindow().frame.size;
   NSDictionary *windowDims = @{
-                         @"width": @(windowSize.size.width),
-                         @"height": @(windowSize.size.height),
-                         @"scale": @(RCTScreenScale()),
+                         @"width": @(windowSize.width),
+                         @"height": @(windowSize.height),
+                         @"scale": @(screen.backingScaleFactor),
                          @"fontScale": @(1) // TODO: fix accessibility bridge.accessibilityManager.multiplier)
                          };
   return @{

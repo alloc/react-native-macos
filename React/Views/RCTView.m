@@ -605,6 +605,13 @@ static CGFloat RCTDefaultIfNegativeTo(CGFloat defaultValue, CGFloat x) {
   }
 }
 
+- (void)viewDidChangeBackingProperties
+{
+  if (self.layer.shouldRasterize) {
+    self.layer.rasterizationScale = self.window.screen.backingScaleFactor;
+  }
+}
+
 - (void)displayLayer:(CALayer *)layer
 {
   // Applying the transform here ensures it's not overridden by AppKit internals.
@@ -650,6 +657,7 @@ static CGFloat RCTDefaultIfNegativeTo(CGFloat defaultValue, CGFloat x) {
     return;
   }
 
+  RCTSetScreen(self.window.screen);
   NSImage *image = RCTGetBorderImage(_borderStyle,
                                      layer.bounds.size,
                                      cornerRadii,
@@ -666,14 +674,15 @@ static CGFloat RCTDefaultIfNegativeTo(CGFloat defaultValue, CGFloat x) {
     return;
   }
 
+  CGFloat scale = RCTScreenScale();
   CGRect contentsCenter = ({
     CGSize size = image.size;
     NSEdgeInsets insets = image.capInsets;
     CGRectMake(
       insets.left / size.width,
       insets.top / size.height,
-      1.0 / size.width,
-      1.0 / size.height
+      scale / size.width,
+      scale / size.height
     );
   });
 
@@ -683,14 +692,15 @@ static CGFloat RCTDefaultIfNegativeTo(CGFloat defaultValue, CGFloat x) {
     [image drawInRect:(CGRect){CGPointZero, size}];
     image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    contentsCenter = CGRectMake(0, 0, 1, 1);
   }
 
-  layer.contents = (id)image;
-  layer.contentsScale = [image recommendedLayerContentsScale:0.0];
-  layer.contentsCenter = contentsCenter;
-  layer.magnificationFilter = kCAFilterNearest;
+  float contentsScale = [image recommendedLayerContentsScale:scale];
+  layer.contents = scale == contentsScale ? image : [image layerContentsForContentsScale:contentsScale];
   layer.needsDisplayOnBoundsChange = YES;
+  layer.magnificationFilter = kCAFilterNearest;
+
+  BOOL isResizable = !NSEdgeInsetsEqual(image.capInsets, NSEdgeInsetsZero);
+  layer.contentsCenter = isResizable ? contentsCenter : CGRectMake(0, 0, 1, 1);
 
   [self updateClippingForLayer:layer];
 }

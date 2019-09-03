@@ -227,8 +227,8 @@
   CGSize size = [_layoutManager usedRectForTextContainer:_textContainer].size;
 
   return (CGSize){
-    MAX(minimumSize.width, MIN(RCTCeilPixelValue(size.width), maximumSize.width)),
-    MAX(minimumSize.height, MIN(RCTCeilPixelValue(size.height), maximumSize.height))
+    MAX(minimumSize.width, MIN(RCTCeilPixelValue(size.width, 1.0), maximumSize.width)),
+    MAX(minimumSize.height, MIN(RCTCeilPixelValue(size.height, 1.0), maximumSize.height))
   };
 }
 

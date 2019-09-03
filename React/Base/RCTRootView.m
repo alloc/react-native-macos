@@ -27,6 +27,7 @@
 #import "RCTUIManagerUtils.h"
 #import "RCTUtils.h"
 #import "RCTView.h"
+#import "RCTShadowView.h"
 #import "NSView+React.h"
 
 #if TARGET_OS_TV
@@ -213,6 +214,22 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 - (BOOL)isFlipped
 {
   return NO;
+}
+
+- (void)setScaleFactor:(CGFloat)scaleFactor
+{
+  if (scaleFactor != _scaleFactor) {
+    _scaleFactor = scaleFactor;
+    if (scaleFactor > 0.0) {
+      NSNumber *reactTag = self.reactTag;
+      RCTUIManager *uiManager = _bridge.uiManager;
+      RCTExecuteOnUIManagerQueue(^{
+        RCTShadowView *shadowView = [uiManager shadowViewForReactTag:reactTag];
+        YGNodeLayoutSetPointScaleFactor(shadowView.yogaNode, scaleFactor);
+        [uiManager setNeedsLayout];
+      });
+    }
+  }
 }
 
 - (void)setLoadingView:(NSView *)loadingView

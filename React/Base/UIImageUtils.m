@@ -5,9 +5,11 @@
 //  Copyright © 2015 Facebook. All rights reserved.
 //
 
-#import "UIImageUtils.h"
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
+
+#import "RCTUtils.h"
+#import "UIImageUtils.h"
 
 NSData *UIImagePNGRepresentation(NSImage *image)
 {
@@ -57,7 +59,7 @@ void UIGraphicsPushContext(CGContextRef ctx)
 void UIGraphicsBeginImageContextWithOptions(CGSize size, BOOL opaque, CGFloat scale)
 {
   if (scale == 0.f) {
-    scale = [NSScreen mainScreen].backingScaleFactor ?: 1;
+    scale = RCTScreenScale();
   }
 
   const size_t width = size.width * scale;
