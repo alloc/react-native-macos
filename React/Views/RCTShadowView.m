@@ -352,7 +352,7 @@ static void RCTProcessMetaPropsBorder(const YGValue metaProps[META_PROP_COUNT], 
     constraintYogaNode,
     YGUndefined,
     YGUndefined,
-    self.layoutMetrics.layoutDirection
+    RCTYogaLayoutDirectionFromUIKitLayoutDirection(self.layoutMetrics.layoutDirection)
   );
 
   CGSize measuredSize = (CGSize){
