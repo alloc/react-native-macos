@@ -189,7 +189,8 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:unused)
 - (void)setTransform:(CATransform3D)transform
 {
   _transform = transform;
-  [self setNeedsDisplay:YES];
+  [self ensureLayerExists];
+  [self.layer setNeedsDisplay];
 }
 
 - (NSView *)hitTest:(CGPoint)point
@@ -816,6 +817,7 @@ static void RCTUpdateShadowPathForView(RCTView *view)
     }                                                       \
     CGColorRelease(_border##side##Color);                   \
     _border##side##Color = CGColorRetain(color);            \
+    [self ensureLayerExists];                               \
     [self.layer setNeedsDisplay];                           \
   }
 
@@ -836,6 +838,7 @@ setBorderColor(End)
       return;                                   \
     }                                           \
     _border##side##Width = width;               \
+    [self ensureLayerExists];                   \
     [self.layer setNeedsDisplay];               \
   }
 
@@ -856,6 +859,7 @@ setBorderWidth(End)
       return;                                     \
     }                                             \
     _border##side##Radius = radius;               \
+    [self ensureLayerExists];                     \
     [self.layer setNeedsDisplay];                 \
   }
 
@@ -878,6 +882,7 @@ setBorderRadius(BottomEnd)
       return;                                          \
     }                                                  \
     _border##side##Style = style;                      \
+    [self ensureLayerExists];                          \
     [self.layer setNeedsDisplay];                      \
   }
 
