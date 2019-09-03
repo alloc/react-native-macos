@@ -173,7 +173,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:unused)
   return YES;
 }
 
--(void) drawRect:(__unused NSRect)dirtyRect {}
+- (void)drawRect:(__unused NSRect)dirtyRect {}
 
 - (BOOL)wantsDefaultClipping
 {

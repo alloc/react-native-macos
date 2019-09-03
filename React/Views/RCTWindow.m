@@ -16,6 +16,8 @@
 #import "RCTFieldEditor.h"
 #import "NSView+React.h"
 
+#pragma mark - NSView+RCTCursor
+
 @implementation NSView (RCTCursor)
 
 - (RCTCursor)cursor
@@ -40,6 +42,8 @@
 }
 
 @end
+
+#pragma mark - RCTWindow
 
 @implementation RCTWindow
 {
@@ -87,12 +91,12 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
                                                object:self];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(_javaScriptDidLoad:)
+                                             selector:@selector(javaScriptDidLoad:)
                                                  name:RCTJavaScriptDidLoadNotification
                                                object:bridge];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(_bridgeWillReload:)
+                                             selector:@selector(bridgeWillReload:)
                                                  name:RCTBridgeWillReloadNotification
                                                object:bridge];
   }
@@ -428,12 +432,12 @@ static NSCursor *NSCursorForRCTCursor(RCTCursor cursor)
   }
 }
 
-- (void)_javaScriptDidLoad:(__unused NSNotification *)notification
+- (void)javaScriptDidLoad:(__unused NSNotification *)notification
 {
   _enabled = YES;
 }
 
-- (void)_bridgeWillReload:(__unused NSNotification *)notification
+- (void)bridgeWillReload:(__unused NSNotification *)notification
 {
   _enabled = NO;
 }
