@@ -166,6 +166,15 @@ defineLazyTimer('cancelAnimationFrame');
 defineLazyTimer('requestIdleCallback');
 defineLazyTimer('cancelIdleCallback');
 
+polyfillGlobal('performance', () => {
+  const loadTime = Date.now();
+  return {
+    now: typeof performance !== 'undefined'
+      ? () => performance.now()
+      : () => Date.now() - loadTime,
+  }
+})
+
 // Set up XHR
 // The native XMLHttpRequest in Chrome dev tools is CORS aware and won't
 // let you fetch anything from the internet
