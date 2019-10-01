@@ -127,6 +127,7 @@
     "test": "jest",
     "flow": "flow",
     "lint": "eslint .",
+    "postinstall": "sh scripts/postinstall.sh",
     "prettier": "find . -name node_modules -prune -or -name '*.js' -print | xargs prettier --write",
     "start": "/usr/bin/env bash -c './scripts/packager.sh \"$@\" || true' --",
     "test-android-setup": "docker pull hramos/android-base:latest",
