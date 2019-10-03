@@ -52,7 +52,11 @@ async function runServer(args: Args, config: ConfigT) {
 
   middlewareManager.getConnectInstance().use(morgan('combined'));
 
-  args.watchFolders.forEach(middlewareManager.serveStatic);
+  function compact(array) {
+    return Array.from(new Set(array.filter(Boolean)));
+  }
+
+  compact(args.watchFolders).forEach(middlewareManager.serveStatic);
 
   config.maxWorkers = args.maxWorkers;
   config.server.port = args.port;
