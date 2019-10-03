@@ -433,11 +433,11 @@ const Text = createReactClass({
     if (this.props.onStartShouldSetResponder || this._hasPressHandler()) {
       if (!this._handlers) {
         this._handlers = {
-          onStartShouldSetResponder: (): boolean => {
+          onStartShouldSetResponder: (event): boolean => {
             const shouldSetFromProps =
               this.props.onStartShouldSetResponder &&
               // $FlowFixMe(>=0.41.0)
-              this.props.onStartShouldSetResponder();
+              this.props.onStartShouldSetResponder(event);
             const setResponder = shouldSetFromProps || this._hasPressHandler();
             if (setResponder && !this.touchableHandleActivePressIn) {
               // Attach and bind all the other handlers only the first time a touch
