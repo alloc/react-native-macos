@@ -56,25 +56,25 @@ if (__DEV__) {
       JSInspector.registerAgent(require('NetworkAgent'));
     }
 
-    if (!Platform.isTesting) {
-      const HMRClient = require('HMRClient');
-      [
-        'trace',
-        'info',
-        'warn',
-        'log',
-        'group',
-        'groupCollapsed',
-        'groupEnd',
-        'debug',
-      ].forEach(level => {
-        const originalFunction = console[level];
-        // $FlowFixMe Overwrite console methods
-        console[level] = function(...args) {
-          HMRClient.log(level, args);
-          originalFunction.apply(console, args);
-        };
-      });
-    }
+    // if (!Platform.isTesting) {
+    //   const HMRClient = require('HMRClient');
+    //   [
+    //     'trace',
+    //     'info',
+    //     'warn',
+    //     'log',
+    //     'group',
+    //     'groupCollapsed',
+    //     'groupEnd',
+    //     'debug',
+    //   ].forEach(level => {
+    //     const originalFunction = console[level];
+    //     // $FlowFixMe Overwrite console methods
+    //     console[level] = function(...args) {
+    //       HMRClient.log(level, args);
+    //       originalFunction.apply(console, args);
+    //     };
+    //   });
+    // }
   }
 }
