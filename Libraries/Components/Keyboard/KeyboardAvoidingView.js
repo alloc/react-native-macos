@@ -138,7 +138,9 @@ const KeyboardAvoidingView = createReactClass({
   },
 
   componentWillMount() {
-    if (Platform.OS === 'ios') {
+    if (Platform.OS === 'macos') {
+      this.subscriptions = [];
+    } else if (Platform.OS === 'ios') {
       this.subscriptions = [
         Keyboard.addListener('keyboardWillChangeFrame', this._onKeyboardChange),
       ];
