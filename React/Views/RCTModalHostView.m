@@ -56,7 +56,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:coder)
       modal.delegate = weakSelf;
     };
     _modalViewController.closeCompletionHandler = ^{
-      [self dismissModalViewController];
+      [weakSelf dismissModalViewController];
     };
   }
 
