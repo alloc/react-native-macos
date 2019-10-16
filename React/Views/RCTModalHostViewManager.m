@@ -25,7 +25,7 @@
 {
   [super insertReactSubview:subview atIndex:atIndex];
   if ([subview isKindOfClass:[RCTShadowView class]]) {
-    ((RCTShadowView *)subview).size = RCTScreenSize();
+    ((RCTShadowView *)subview).size = [NSApp mainWindow].frame.size;
   }
 }
 
