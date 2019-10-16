@@ -86,17 +86,17 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
     super.contentView = nil;
 
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(windowDidChangeScreen:)
+                                             selector:@selector(RCT_windowDidChangeScreen:)
                                                  name:NSWindowDidChangeScreenNotification
                                                object:self];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(javaScriptDidLoad:)
+                                             selector:@selector(RCT_javaScriptDidLoad:)
                                                  name:RCTJavaScriptDidLoadNotification
                                                object:bridge];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(bridgeWillReload:)
+                                             selector:@selector(RCT_bridgeWillReload:)
                                                  name:RCTBridgeWillReloadNotification
                                                object:bridge];
   }
@@ -419,11 +419,6 @@ static NSCursor *NSCursorForRCTCursor(RCTCursor cursor)
   [_bridge.eventDispatcher sendEvent:event];
 }
 
-- (void)windowDidChangeScreen:(__unused NSNotification *)notification
-{
-  self.contentView.scaleFactor = self.screen.backingScaleFactor;
-}
-
 - (void)setContentView:(RCTRootView *)contentView
 {
   [super setContentView:contentView];
@@ -432,12 +427,17 @@ static NSCursor *NSCursorForRCTCursor(RCTCursor cursor)
   }
 }
 
-- (void)javaScriptDidLoad:(__unused NSNotification *)notification
+- (void)RCT_windowDidChangeScreen:(__unused NSNotification *)notification
+{
+  self.contentView.scaleFactor = self.screen.backingScaleFactor;
+}
+
+- (void)RCT_javaScriptDidLoad:(__unused NSNotification *)notification
 {
   _enabled = YES;
 }
 
-- (void)bridgeWillReload:(__unused NSNotification *)notification
+- (void)RCT_bridgeWillReload:(__unused NSNotification *)notification
 {
   _enabled = NO;
 }

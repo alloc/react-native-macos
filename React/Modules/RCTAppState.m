@@ -12,7 +12,9 @@
 #import "RCTAssert.h"
 #import "RCTBridge.h"
 #import "RCTEventDispatcher.h"
+#import "RCTWindow.h"
 #import "RCTUtils.h"
+#import "NSView+React.h"
 
 static NSString *RCTCurrentAppBackgroundState()
 {
@@ -43,29 +45,47 @@ RCT_EXPORT_MODULE()
 
 - (NSDictionary *)constantsToExport
 {
-  return @{@"initialAppState": RCTCurrentAppBackgroundState()};
+  return @{
+    @"initialAppState": RCTCurrentAppBackgroundState(),
+    @"windows": [self serializeWindows:NSApp.windows],
+  };
 }
 
 #pragma mark - Lifecycle
 
 - (NSArray<NSString *> *)supportedEvents
 {
-  return @[@"appStateDidChange", @"memoryWarning"];
+  return @[@"appStateDidChange",
+           @"memoryWarning",
+           @"rootViewWillAppear",
+           @"windowDidChangeScreen"];
 }
 
 - (void)startObserving
 {
   _lastKnownState = RCTCurrentAppBackgroundState();
 
+  NSNotificationCenter *notifs = [NSNotificationCenter defaultCenter];
+
   for (NSString *name in @[NSApplicationDidBecomeActiveNotification,
                            NSApplicationDidResignActiveNotification,
                            NSApplicationDidFinishLaunchingNotification]) {
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(handleAppStateDidChange)
-                                                 name:name
-                                               object:nil];
+    [notifs addObserver:self
+               selector:@selector(handleAppStateDidChange)
+                   name:name
+                 object:nil];
   }
+
+  [notifs addObserver:self
+             selector:@selector(contentWillAppear:)
+                 name:RCTContentWillAppearNotification
+               object:nil];
+
+  [notifs addObserver:self
+             selector:@selector(windowDidChangeScreen:)
+                 name:NSWindowDidChangeScreenNotification
+               object:nil];
 }
 
 - (void)stopObserving
@@ -83,6 +103,55 @@ RCT_EXPORT_MODULE()
     [self sendEventWithName:@"appStateDidChange"
                        body:@{@"app_state": _lastKnownState}];
   }
+}
+
+- (void)contentWillAppear:(NSNotification *)notification
+{
+  // Note: Brownfield apps are not supported yet.
+  RCTRootView *rootView = notification.object;
+  if ([rootView.window isKindOfClass:[RCTWindow class]]) {
+    [self sendEventWithName:@"rootViewWillAppear"
+                       body:[self serializeWindow:rootView.window]];
+  }
+}
+
+- (void)windowDidChangeScreen:(NSNotification *)notification
+{
+  NSWindow *window = notification.object;
+  if ([window isKindOfClass:[RCTWindow class]]) {
+    [self sendEventWithName:@"windowDidChangeScreen"
+                       body:[self serializeWindow:window]];
+  }
+}
+
+#pragma mark - Serialization
+
+- (NSArray *)serializeWindows:(NSArray<NSWindow *> *)windows
+{
+  NSMutableArray *json = [NSMutableArray new];
+  for (NSWindow *window in windows) {
+    if ([window isKindOfClass:[RCTWindow class]]) {
+      [json addObject:[self serializeWindow:window]];
+    }
+  }
+  return json;
+}
+
+- (NSDictionary *)serializeWindow:(NSWindow *)window
+{
+  return @{@"rootTag": window.contentView.reactTag,
+           @"screen": [self serializeScreen:window.screen]};
+}
+
+- (NSDictionary *)serializeScreen:(NSScreen *)screen
+{
+  NSRect frame = screen.frame;
+  return @{@"id": screen.deviceDescription[@"NSScreenNumber"],
+           @"scale": @(screen.backingScaleFactor),
+           @"layout": @{@"x":@(frame.origin.x),
+                        @"y":@(frame.origin.y),
+                        @"width":@(frame.size.width),
+                        @"height":@(frame.size.height)}};
 }
 
 #pragma mark - Public API

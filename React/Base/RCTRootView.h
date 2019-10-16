@@ -35,6 +35,13 @@ typedef NS_ENUM(NSInteger, RCTRootViewSizeFlexibility) {
 extern NSString *const RCTContentDidAppearNotification;
 
 /**
+ * This notification is sent before a RCTRootView is rendered for the first time.
+ * It's listened to by RCTAppState to ensure the React application has access to
+ * information about its window and screen on first render.
+ */
+extern NSString *const RCTContentWillAppearNotification;
+
+/**
  * Native view used to host React-managed views within the app. Can be used just
  * like any ordinary UIView. You can have multiple RCTRootViews on screen at
  * once, all controlled by the same JavaScript application.

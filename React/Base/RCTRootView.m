@@ -36,6 +36,7 @@
 #endif
 
 NSString *const RCTContentDidAppearNotification = @"RCTContentDidAppearNotification";
+NSString *const RCTContentWillAppearNotification = @"RCTContentWillAppearNotification";
 
 @interface RCTUIManager (RCTRootView)
 
@@ -90,10 +91,6 @@ NSString *const RCTContentDidAppearNotification = @"RCTContentDidAppearNotificat
 #endif
 
     [self showLoadingView];
-
-    // Immediately schedule the application to be started.
-    // (Sometimes actual `_bridge` is already batched bridge here.)
-    [self bundleFinishedLoading:([_bridge batchedBridge] ?: _bridge)];
   }
 
   RCT_PROFILE_END_EVENT(RCTProfileTagAlways, @"");
@@ -131,6 +128,14 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
   [super viewDidMoveToWindow];
 
   if (self.window) {
+    [[NSNotificationCenter defaultCenter] postNotificationName:RCTContentWillAppearNotification
+                                                        object:self];
+
+    // Immediately schedule the application to be started.
+    // (Sometimes actual `_bridge` is already batched bridge here.)
+    [self bundleFinishedLoading:([_bridge batchedBridge] ?: _bridge)];
+
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(bridgeDidReload)
                                                  name:RCTJavaScriptWillStartLoadingNotification
