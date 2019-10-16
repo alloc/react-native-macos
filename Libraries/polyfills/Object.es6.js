@@ -30,7 +30,7 @@ Object.assign = function(target, sources) {
 
   for (var nextIndex = 1; nextIndex < arguments.length; nextIndex++) {
     var nextSource = arguments[nextIndex];
-    if (nextSource == null) {
+    if (nextSource == null || nextSource === false) {
       continue;
     }
 
