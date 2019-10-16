@@ -19,6 +19,16 @@ const RCTAppState = NativeModules.AppState;
 const logError = require('logError');
 const invariant = require('fbjs/lib/invariant');
 
+import type {Layout} from 'CoreEventTypes';
+
+type Screen = {|
+  +rootTag: number,
+  +bounds: Layout,
+  +scale: number,
+|};
+
+const eventTypes = ['change', 'memoryWarning', 'rootViewWillAppear', 'windowDidChangeScreen'];
+
 /**
  * `AppState` can tell you if the app is in the foreground or background,
  * and notify you when the state changes.
@@ -30,15 +40,16 @@ class AppState extends NativeEventEmitter {
   _eventHandlers: Object;
   currentState: ?string;
   isAvailable: boolean = true;
+  windows: { [rootTag: number]: Screen };
 
   constructor() {
     super(RCTAppState);
 
     this.isAvailable = true;
-    this._eventHandlers = {
-      change: new Map(),
-      memoryWarning: new Map(),
-    };
+    this._eventHandlers = eventTypes.reduce((out, type) => {
+      out[type] = new Map();
+      return out;
+    }, {});
 
     // TODO: Remove the 'active' fallback after `initialAppState` is exported by
     // the Android implementation.
@@ -57,6 +68,18 @@ class AppState extends NativeEventEmitter {
         this.currentState = appStateData.app_state;
       }
     );
+
+    this.windows = RCTAppState.windows.reduce((acc, state) => {
+      acc[state.rootTag] = state;
+      return acc;
+    }, {});
+
+    const onWindowChange = state => {
+      this.windows[state.rootTag] = state;
+    }
+
+    this.addListener('rootViewWillAppear', onWindowChange);
+    this.addListener('windowDidChangeScreen', onWindowChange);
 
     // TODO: see above - this request just populates the value of `currentState`
     // when the module is first initialized. Would be better to get rid of the
@@ -87,7 +110,7 @@ class AppState extends NativeEventEmitter {
     handler: Function
   ) {
     invariant(
-      ['change', 'memoryWarning'].indexOf(type) !== -1,
+      eventTypes.indexOf(type) !== -1,
       'Trying to subscribe to unknown event: "%s"', type
     );
     if (type === 'change') {
@@ -97,11 +120,8 @@ class AppState extends NativeEventEmitter {
           handler(appStateData.app_state);
         }
       ));
-    } else if (type === 'memoryWarning') {
-      this._eventHandlers[type].set(handler, this.addListener(
-        'memoryWarning',
-        handler
-      ));
+    } else {
+      this._eventHandlers[type].set(handler, this.addListener(type, handler));
     }
   }
 
@@ -115,7 +135,7 @@ class AppState extends NativeEventEmitter {
     handler: Function
   ) {
     invariant(
-      ['change', 'memoryWarning'].indexOf(type) !== -1,
+      eventTypes.indexOf(type) !== -1,
       'Trying to remove listener for unknown event: "%s"', type
     );
     if (!this._eventHandlers[type].has(handler)) {
