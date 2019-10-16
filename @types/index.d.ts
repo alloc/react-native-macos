@@ -1756,7 +1756,12 @@ export interface GestureResponderHandlers {
     onMoveShouldSetResponderCapture?: (event: GestureResponderEvent) => boolean;
 }
 
-export interface MouseEvent extends NativeSyntheticEvent<NativeMouseEvent> {}
+export interface MouseEvent extends NativeSyntheticEvent<NativeMouseEvent> {
+    isPersistent(): boolean
+    constructor: Function & {
+        release(event: MouseEvent): void
+    }
+}
 
 export interface NativeMouseEvent {
     /**
