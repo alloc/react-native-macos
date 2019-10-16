@@ -178,11 +178,6 @@ class Button extends React.Component<{
       ? title.toUpperCase()
       : title;
 
-    if (Platform.OS === 'macos') {
-      return (
-        <RCTButton {...this.props} style={[styles.button, this.props.style]} />
-      );
-    }
     return (
       <Touchable
         accessibilityComponentType="button"
@@ -206,11 +201,6 @@ if (Platform.OS === 'ios') {
   // Measured default tintColor from iOS 10
   defaultBlue = '#0C42FD';
 }
-
-const RCTButton = requireNativeComponent('RCTButton', Button, {
-  nativeOnly: {},
-});
-
 
 const styles = StyleSheet.create({
   button: Platform.select({
