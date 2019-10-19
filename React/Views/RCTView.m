@@ -695,8 +695,7 @@ static CGFloat RCTDefaultIfNegativeTo(CGFloat defaultValue, CGFloat x) {
     UIGraphicsEndImageContext();
   }
 
-  float contentsScale = [image recommendedLayerContentsScale:scale];
-  layer.contents = scale == contentsScale ? image : [image layerContentsForContentsScale:contentsScale];
+  layer.contents = image;
   layer.needsDisplayOnBoundsChange = YES;
   layer.magnificationFilter = kCAFilterNearest;
 

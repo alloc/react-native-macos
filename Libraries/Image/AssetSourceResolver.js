@@ -21,7 +21,6 @@ export type ResolvedAssetSource = {
 
 import type { PackagerAsset } from 'AssetRegistry';
 
-const PixelRatio = require('PixelRatio');
 const Platform = require('Platform');
 
 const assetPathUtils = require('../../local-cli/bundle/assetPathUtils');
@@ -30,8 +29,8 @@ const invariant = require('fbjs/lib/invariant');
 /**
  * Returns a path like 'assets/AwesomeModule/icon@2x.png'
  */
-function getScaledAssetPath(asset): string {
-  var scale = AssetSourceResolver.pickScale(asset.scales, PixelRatio.get());
+function getScaledAssetPath(asset: PackagerAsset, scale: number): string {
+  scale = AssetSourceResolver.pickScale(asset.scales, scale);
   var scaleSuffix = scale === 1 ? '' : '@' + scale + 'x';
   var assetDir = assetPathUtils.getBasePath(asset);
   return assetDir + '/' + asset.name + scaleSuffix + '.' + asset.type;
@@ -40,8 +39,8 @@ function getScaledAssetPath(asset): string {
 /**
  * Returns a path like 'drawable-mdpi/icon.png'
  */
-function getAssetPathInDrawableFolder(asset): string {
-  var scale = AssetSourceResolver.pickScale(asset.scales, PixelRatio.get());
+function getAssetPathInDrawableFolder(asset: PackagerAsset, scale: number): string {
+  scale = AssetSourceResolver.pickScale(asset.scales, scale);
   var drawbleFolder = assetPathUtils.getAndroidResourceFolderName(asset, scale);
   var fileName =  assetPathUtils.getAndroidResourceIdentifier(asset);
   return drawbleFolder + '/' + fileName + '.' + asset.type;
@@ -54,14 +53,18 @@ class AssetSourceResolver {
   jsbundleUrl: ?string;
   // the asset to resolve
   asset: PackagerAsset;
+  // current screen scale
+  scale: number;
 
   constructor(serverUrl: ?string,
     jsbundleUrl: ?string,
-    asset: PackagerAsset
+    asset: PackagerAsset,
+    scale: number
   ) {
     this.serverUrl = serverUrl;
     this.jsbundleUrl = jsbundleUrl;
     this.asset = asset;
+    this.scale = scale;
   }
 
   isLoadedFromServer(): boolean {
@@ -93,7 +96,7 @@ class AssetSourceResolver {
   assetServerURL(): ResolvedAssetSource {
     invariant(!!this.serverUrl, 'need server to load from');
     return this.fromSource(
-      this.serverUrl + getScaledAssetPath(this.asset) +
+      this.serverUrl + getScaledAssetPath(this.asset, this.scale) +
       '?platform=' + Platform.OS + '&hash=' + this.asset.hash
     );
   }
@@ -103,7 +106,7 @@ class AssetSourceResolver {
    * E.g. 'assets/AwesomeModule/icon@2x.png'
    */
   scaledAssetPath(): ResolvedAssetSource {
-    return this.fromSource(getScaledAssetPath(this.asset));
+    return this.fromSource(getScaledAssetPath(this.asset, this.scale));
   }
 
   /**
@@ -112,7 +115,7 @@ class AssetSourceResolver {
    */
   scaledAssetURLNearBundle(): ResolvedAssetSource {
     const path = this.jsbundleUrl || 'file://';
-    return this.fromSource(path + getScaledAssetPath(this.asset));
+    return this.fromSource(path + getScaledAssetPath(this.asset, this.scale));
   }
 
   /**
@@ -134,7 +137,7 @@ class AssetSourceResolver {
   drawableFolderInBundle(): ResolvedAssetSource {
     const path = this.jsbundleUrl || 'file://';
     return this.fromSource(
-      path + getAssetPathInDrawableFolder(this.asset)
+      path + getAssetPathInDrawableFolder(this.asset, this.scale)
     );
   }
 
@@ -144,7 +147,7 @@ class AssetSourceResolver {
       width: this.asset.width,
       height: this.asset.height,
       uri: source,
-      scale: AssetSourceResolver.pickScale(this.asset.scales, PixelRatio.get()),
+      scale: AssetSourceResolver.pickScale(this.asset.scales, this.scale),
     };
   }
 
