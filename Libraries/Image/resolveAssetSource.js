@@ -14,6 +14,7 @@
 const AssetRegistry = require('AssetRegistry');
 const AssetSourceResolver = require('AssetSourceResolver');
 const NativeModules = require('NativeModules');
+const PixelRatio = require('PixelRatio');
 
 import type { ResolvedAssetSource } from 'AssetSourceResolver';
 
@@ -68,7 +69,7 @@ function setCustomSourceTransformer(
  * `source` is either a number (opaque type returned by require('./foo.png'))
  * or an `ImageSource` like { uri: '<http location || file path>' }
  */
-function resolveAssetSource(source: any): ?ResolvedAssetSource {
+function resolveAssetSource(source: any, scale?: number): ?ResolvedAssetSource {
   if (typeof source === 'object') {
     return source;
   }
@@ -82,6 +83,7 @@ function resolveAssetSource(source: any): ?ResolvedAssetSource {
     getDevServerURL(),
     getScriptURL(),
     asset,
+    scale || PixelRatio.get(),
   );
   if (_customSourceTransformer) {
     return _customSourceTransformer(resolver);

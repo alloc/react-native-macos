@@ -14,6 +14,7 @@ const ImageProps = require('ImageProps');
 const NativeModules = require('NativeModules');
 const React = require('React');
 const ReactNative = require('ReactNative');
+const RootTagContext = require('../ReactNative/RootTagContext');
 const StyleSheet = require('StyleSheet');
 
 const flattenStyle = require('flattenStyle');
@@ -45,9 +46,7 @@ function prefetch(url: string) {
   return ImageViewManager.prefetchImage(url);
 }
 
-declare class ImageComponentType extends ReactNative.NativeComponent<
-  ImagePropsType,
-> {
+declare class ImageComponentType extends ReactNative.NativeComponent<ImagePropsType> {
   static getSize: typeof getSize;
   static prefetch: typeof prefetch;
   static resolveAssetSource: typeof resolveAssetSource;
@@ -65,6 +64,8 @@ let Image = (
   props: ImagePropsType,
   forwardedRef: ?React.Ref<'RCTImageView'>,
 ) => {
+  const rootTag = React.useContext(RootTagContext);
+  const {scale} = AppState.windows[rootTag].screen;
   const source = resolveAssetSource(props.source) || {
     uri: undefined,
     width: undefined,
