@@ -27,7 +27,7 @@ type Screen = {|
   +scale: number,
 |};
 
-const eventTypes = ['change', 'memoryWarning', 'rootViewWillAppear', 'windowDidChangeScreen'];
+const eventTypes = ['change', 'memoryWarning', 'rootViewWillAppear', 'windowDidChangeScreen', 'windowWillClose'];
 
 /**
  * `AppState` can tell you if the app is in the foreground or background,
@@ -80,6 +80,10 @@ class AppState extends NativeEventEmitter {
 
     this.addListener('rootViewWillAppear', onWindowChange);
     this.addListener('windowDidChangeScreen', onWindowChange);
+
+    this.addListener('windowWillClose', rootTag => {
+      delete this.windows[rootTag];
+    });
 
     // TODO: see above - this request just populates the value of `currentState`
     // when the module is first initialized. Would be better to get rid of the

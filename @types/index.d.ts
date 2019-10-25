@@ -6863,7 +6863,7 @@ export interface AlertIOSStatic {
  *
  * @see https://facebook.github.io/react-native/docs/appstateios.html#content
  */
-export type AppStateEvent = "change" | "memoryWarning" | "rootViewWillAppear" | "windowDidChangeScreen";
+export type AppStateEvent = "change" | "memoryWarning" | "rootViewWillAppear" | "windowDidChangeScreen" | "windowWillClose";
 export type AppStateStatus = "active" | "background" | "inactive";
 
 export interface AppStateStatic {
@@ -6878,6 +6878,7 @@ export interface AppStateStatic {
     addEventListener(type: 'memoryWarning', listener: () => void): void;
     addEventListener(type: 'rootViewWillAppear', listener: (state: WindowState) => void): void;
     addEventListener(type: 'windowDidChangeScreen', listener: (state: WindowState) => void): void;
+    addEventListener(type: 'windowWillClose', listener: (rootTag: number) => void): void;
 
     /**
      * Remove a handler by passing the change event type and the handler

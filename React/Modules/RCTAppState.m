@@ -58,7 +58,8 @@ RCT_EXPORT_MODULE()
   return @[@"appStateDidChange",
            @"memoryWarning",
            @"rootViewWillAppear",
-           @"windowDidChangeScreen"];
+           @"windowDidChangeScreen",
+           @"windowWillClose"];
 }
 
 - (void)startObserving
@@ -85,6 +86,11 @@ RCT_EXPORT_MODULE()
   [notifs addObserver:self
              selector:@selector(windowDidChangeScreen:)
                  name:NSWindowDidChangeScreenNotification
+               object:nil];
+
+  [notifs addObserver:self
+             selector:@selector(windowWillClose:)
+                 name:NSWindowWillCloseNotification
                object:nil];
 }
 
@@ -121,6 +127,15 @@ RCT_EXPORT_MODULE()
   if ([window isKindOfClass:[RCTWindow class]]) {
     [self sendEventWithName:@"windowDidChangeScreen"
                        body:[self serializeWindow:window]];
+  }
+}
+
+- (void)windowWillClose:(NSNotification *)notification
+{
+  NSWindow *window = notification.object;
+  if ([window isKindOfClass:[RCTWindow class]]) {
+    [self sendEventWithName:@"windowWillClose"
+                       body:window.contentView.reactTag];
   }
 }
 
