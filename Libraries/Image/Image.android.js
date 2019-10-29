@@ -231,13 +231,13 @@ var Image = createReactClass({
       });
 
       if (this.context.isInAParentText) {
-        return <RCTTextInlineImage {...nativeProps}/>;
+        return <RCTTextInlineImage {...nativeProps} />;
       } else {
-        return <RKImage {...nativeProps}/>;
+        return <RKImage {...nativeProps} />;
       }
     }
     return null;
-  }
+  },
 });
 
 var styles = StyleSheet.create({

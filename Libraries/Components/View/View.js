@@ -51,7 +51,8 @@ class View extends ReactNative.NativeComponent<Props> {
   render() {
     invariant(
       !this.context.isInAParentText,
-      'Nesting of <View> within <Text> is not currently supported.');
+      'Nesting of <View> within <Text> is not currently supported.',
+    );
 
     // WARNING: This method will not be used in production mode as in that mode we
     // replace wrapper component View with generated native wrapper RCTView. Avoid
