@@ -65,7 +65,7 @@ var Image = createReactClass({
   propTypes: {
     ...ViewPropTypes,
     style: StyleSheetPropType(ImageStylePropTypes),
-   /**
+    /**
      * `uri` is a string representing the resource identifier for the image, which
      * could be an http address, a local file path, or a static image
      * resource (which should be wrapped in the `require('./path/to/image.png')` function).
@@ -94,8 +94,8 @@ var Image = createReactClass({
         }))
     ]),
     /**
-    * blurRadius: the blur radius of the blur filter added to the image
-    */
+     * blurRadius: the blur radius of the blur filter added to the image
+     */
     blurRadius: PropTypes.number,
     /**
      * similarly to `source`, this property represents the resource used to render
