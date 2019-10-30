@@ -1,12 +1,9 @@
 {
-  "name": "react-native-macos",
+  "name": "@alloc/react-native-macos",
   "version": "0.19.2",
   "description": "A framework for building native macOS apps using React",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:ptmt/react-native-macos.git"
-  },
+  "repository": "alloc/react-native-macos",
   "engines": {
     "node": ">=4"
   },
