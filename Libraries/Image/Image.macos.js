@@ -5,6 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  * @providesModule Image
+ * @format
  * @flow
  */
 'use strict';
@@ -47,9 +48,14 @@ const Image = createReactClass({
       success: (width: number, height: number) => void,
       failure?: (error: any) => void,
     ) {
-      ImageViewManager.getSize(uri, success, failure || function() {
-        console.warn('Failed to get size for image: ' + uri);
-      });
+      ImageViewManager.getSize(
+        uri,
+        success,
+        failure ||
+          function() {
+            console.warn('Failed to get size for image: ' + uri);
+          },
+      );
     },
     /**
      * Prefetches a remote image for later use by downloading it to the disk
@@ -76,11 +82,15 @@ const Image = createReactClass({
    */
   viewConfig: {
     uiViewClassName: 'UIView',
-    validAttributes: ReactNativeViewAttributes.UIView
+    validAttributes: ReactNativeViewAttributes.UIView,
   },
 
   render: function() {
-    const source = resolveAssetSource(this.props.source) || { uri: undefined, width: undefined, height: undefined };
+    const source = resolveAssetSource(this.props.source) || {
+      uri: undefined,
+      width: undefined,
+      height: undefined,
+    };
 
     let sources;
     let style;
@@ -89,7 +99,8 @@ const Image = createReactClass({
       sources = source;
     } else {
       const {width, height, uri} = source;
-      style = flattenStyle([{width, height}, styles.base, this.props.style]) || {};
+      style =
+        flattenStyle([{width, height}, styles.base, this.props.style]) || {};
       sources = [source];
 
       if (uri === '') {
@@ -97,15 +108,20 @@ const Image = createReactClass({
       }
     }
 
-    const resizeMode = this.props.resizeMode || (style || {}).resizeMode || 'cover'; // Workaround for flow bug t7737108
+    const resizeMode =
+      this.props.resizeMode || (style || {}).resizeMode || 'cover'; // Workaround for flow bug t7737108
     const tintColor = (style || {}).tintColor; // Workaround for flow bug t7737108
 
     if (this.props.src) {
-      console.warn('The <Image> component requires a `source` property rather than `src`.');
+      console.warn(
+        'The <Image> component requires a `source` property rather than `src`.',
+      );
     }
 
     if (this.props.children) {
-      throw new Error('The <Image> component cannot contain children. If you want to render content on top of the image, consider using the <ImageBackground> component or absolute positioning.');
+      throw new Error(
+        'The <Image> component cannot contain children. If you want to render content on top of the image, consider using the <ImageBackground> component or absolute positioning.',
+      );
     }
 
     return (
