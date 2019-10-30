@@ -11,7 +11,6 @@
  */
 'use strict';
 
-const AppState = require('AppState');
 const EdgeInsetsPropType = require('EdgeInsetsPropType');
 const ImageResizeMode = require('ImageResizeMode');
 const ImageSourcePropType = require('ImageSourcePropType');
@@ -151,10 +150,6 @@ const Image = createReactClass({
     onLoadEnd: PropTypes.func,
   },
 
-  contextTypes: {
-    rootTag: PropTypes.number,
-  },
-
   statics: {
     resizeMode: ImageResizeMode,
     /**
@@ -200,9 +195,7 @@ const Image = createReactClass({
   },
 
   render: function() {
-    const {scale} = AppState.windows[this.context.rootTag].screen;
-    const source = resolveAssetSource(this.props.source, scale) ||
-      { uri: undefined, width: undefined, height: undefined };
+    const source = resolveAssetSource(this.props.source) || { uri: undefined, width: undefined, height: undefined };
 
     let sources;
     let style;
@@ -239,21 +232,6 @@ const Image = createReactClass({
         source={sources}
       />
     );
-  },
-
-  componentDidMount: function() {
-    this._scaleListener = AppState.addListener(
-      'windowDidChangeScreen',
-      ({rootTag}) => {
-        if (rootTag === this.context.rootTag) {
-          this.forceUpdate()
-        }
-      }
-    );
-  },
-
-  componentWillUnmount: function() {
-    this._scaleListener.remove();
   },
 });
 
