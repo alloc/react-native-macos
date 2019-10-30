@@ -16,6 +16,7 @@ const UIManager = require('UIManager');
 
 const createReactNativeComponentClass = require('createReactNativeComponentClass');
 const insetsDiffer = require('insetsDiffer');
+const matricesDiffer = require('matricesDiffer');
 const pointsDiffer = require('pointsDiffer');
 const processColor = require('processColor');
 const processTransform = require('processTransform');
