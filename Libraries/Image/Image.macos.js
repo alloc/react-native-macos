@@ -10,6 +10,7 @@
  */
 'use strict';
 
+const AppState = require('AppState');
 const ImageProps = require('ImageProps');
 const NativeModules = require('NativeModules');
 const React = require('React');
