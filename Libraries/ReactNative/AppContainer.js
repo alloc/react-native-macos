@@ -101,8 +101,10 @@ class AppContainer extends React.Component<Props, State> {
       }
     }
 
+    const {Provider} = AppContainer.Context;
+
     let innerView = (
-      <RootContext value={this.getChildContext()}>
+      <Provider value={this.getChildContext()}>
         <View
           collapsable={!this.state.inspector}
           key={this.state.mainKey}
@@ -116,7 +118,7 @@ class AppContainer extends React.Component<Props, State> {
           }}>
           {this.props.children}
         </View>
-      </RootContext>
+      </Provider>
     );
 
     const Wrapper = this.props.WrapperComponent;
@@ -140,11 +142,5 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
 });
-
-const RootContext = props => {
-  const {Provider} = AppContainer.Context;
-  const value = React.useMemo(() => props.value, []);
-  return <Provider value={value}>{props.children}</Provider>;
-};
 
 module.exports = AppContainer;
