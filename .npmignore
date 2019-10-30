@@ -1,3 +1,39 @@
+.*
+!.flowconfig
+
+# dev only
+*.gradle
+__tests__
+BUCK
+DerivedData
+/ContainerShip
+/IntegrationTests
+/Jenkinsfile
+/RNTester
+/babel-preset
+/blog
+/bots
+/danger
+/gradle*
+/keystores
+/runXcodeTests.sh
+/third-party
+/xcuserdata
+
+# scripts
+*.js
+scripts/*
+!rn-get-polyfills.js
+!setupBabel.js
+!scripts/macos*
+!scripts/launch*
+!scripts/packager.sh
+!scripts/react-native-xcode.sh
+
+# android
+ReactAndroid
+android
+
 # rnpm
 /local-cli/rnpm
 /local-cli/server/middleware/heapCapture/bundle.js
