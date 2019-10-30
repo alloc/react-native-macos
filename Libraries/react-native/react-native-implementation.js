@@ -15,9 +15,6 @@ const invariant = require('fbjs/lib/invariant');
 
 // Export React, plus some native additions.
 const ReactNative = {
-  // Hooks
-  get useRootTag() { return require('useRootTag'); },
-
   // Components
   get Appearance() { return require('Appearance'); },
   get AccessibilityInfo() { return require('AccessibilityInfo'); },

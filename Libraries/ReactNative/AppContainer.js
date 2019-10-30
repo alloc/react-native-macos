@@ -13,7 +13,6 @@
 
 'use strict';
 
-const AppState = require('AppState');
 const EmitterSubscription = require('EmitterSubscription');
 const PropTypes = require('prop-types');
 const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
@@ -45,8 +44,6 @@ class AppContainer extends React.Component<Props, State> {
   };
   _mainRef: ?React.Element<any>;
   _subscription: ?EmitterSubscription = null;
-
-  static Context = React.createContext(null);
 
   static childContextTypes = {
     rootTag: PropTypes.number,
@@ -101,24 +98,20 @@ class AppContainer extends React.Component<Props, State> {
       }
     }
 
-    const {Provider} = AppContainer.Context;
-
     let innerView = (
-      <Provider value={this.getChildContext()}>
-        <View
-          collapsable={!this.state.inspector}
-          key={this.state.mainKey}
-          pointerEvents="box-none"
-          style={styles.appContainer}
-          ref={ref => {
-            /* $FlowFixMe(>=0.53.0 site=react_native_fb,react_native_oss) This
-             * comment suppresses an error when upgrading Flow's support for
-             * React. To see the error delete this comment and run Flow. */
-            this._mainRef = ref;
-          }}>
-          {this.props.children}
-        </View>
-      </Provider>
+      <View
+        collapsable={!this.state.inspector}
+        key={this.state.mainKey}
+        pointerEvents="box-none"
+        style={styles.appContainer}
+        ref={ref => {
+          /* $FlowFixMe(>=0.53.0 site=react_native_fb,react_native_oss) This
+           * comment suppresses an error when upgrading Flow's support for
+           * React. To see the error delete this comment and run Flow. */
+          this._mainRef = ref;
+        }}>
+        {this.props.children}
+      </View>
     );
 
     const Wrapper = this.props.WrapperComponent;

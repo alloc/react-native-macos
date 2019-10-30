@@ -40,8 +40,6 @@
 import * as PropTypes from "prop-types";
 import * as React from "react";
 
-export function useRootTag(): number;
-
 type Constructor<T> = new (...args: any[]) => T;
 
 export type MeasureOnSuccessCallback = (
