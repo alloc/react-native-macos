@@ -6,6 +6,9 @@
 __tests__
 BUCK
 DerivedData
+pnpm-lock.yaml
+node_modules
+xcuserdata
 /ContainerShip
 /IntegrationTests
 /Jenkinsfile
@@ -20,6 +23,9 @@ DerivedData
 /third-party
 /xcuserdata
 
+# docs
+*.md
+
 # scripts
 *.js
 scripts/*
@@ -31,6 +37,7 @@ scripts/*
 !scripts/react-native-xcode.sh
 
 # android
+Android.mk
 ReactAndroid
 android
 
