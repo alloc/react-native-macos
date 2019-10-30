@@ -7,6 +7,7 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  *
  * @providesModule ActivityIndicator
+ * @format
  * @flow
  */
 'use strict';
@@ -34,7 +35,7 @@ type DefaultProps = {
   color: any,
   hidesWhenStopped: boolean,
   size: IndicatorSize,
-}
+};
 
 /**
  * Displays a circular loading indicator.
@@ -66,7 +67,7 @@ const ActivityIndicator = createReactClass({
      * See http://facebook.github.io/react-native/docs/activityindicator.html#size
      */
     size: PropTypes.oneOfType([
-      PropTypes.oneOf([ 'small', 'large', 'huge' ]),
+      PropTypes.oneOf(['small', 'large', 'huge']),
       PropTypes.number,
     ]),
     /**
@@ -82,7 +83,8 @@ const ActivityIndicator = createReactClass({
   getDefaultProps(): DefaultProps {
     return {
       animating: true,
-      color: Platform.OS === 'ios' || Platform.OS === 'macos' ? GRAY : undefined,
+      color:
+        Platform.OS === 'ios' || Platform.OS === 'macos' ? GRAY : undefined,
       hidesWhenStopped: true,
       size: 'small',
     };
@@ -116,21 +118,21 @@ const ActivityIndicator = createReactClass({
 
     return (
       <View onLayout={onLayout} style={[styles.container, style]}>
-        {(Platform.OS === 'ios' || Platform.OS === 'macos') ? (
+        {Platform.OS === 'ios' || Platform.OS === 'macos' ? (
           <RCTActivityIndicator {...nativeProps} />
         ) : (
           <ProgressBarAndroid {...nativeProps} />
         )}
       </View>
     );
-  }
+  },
 });
 
 if (Platform.OS === 'ios' || Platform.OS === 'macos') {
   RCTActivityIndicator = requireNativeComponent(
     'RCTActivityIndicatorView',
     ActivityIndicator,
-    { nativeOnly: { activityIndicatorViewStyle: true } }
+    {nativeOnly: {activityIndicatorViewStyle: true}},
   );
 }
 
