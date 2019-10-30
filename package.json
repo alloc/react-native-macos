@@ -1,6 +1,6 @@
 {
   "name": "@alloc/react-native-macos",
-  "version": "0.19.2",
+  "version": "0.20.0",
   "description": "A framework for building native macOS apps using React",
   "license": "MIT",
   "repository": "alloc/react-native-macos",
