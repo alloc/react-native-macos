@@ -53,6 +53,9 @@ node_modules
 .DS_Store
 *.tgz
 
+# Indo
+/vendor
+
 # Test generated files
 /ReactAndroid/src/androidTest/assets/AndroidTestBundle.js
 *.js.meta

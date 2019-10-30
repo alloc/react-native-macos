@@ -193,6 +193,7 @@
     "eslint-plugin-prettier": "2.1.1",
     "eslint-plugin-react": "^7.2.1",
     "flow-bin": "^0.66.0",
+    "indo": "^0.3.1",
     "jest": "22.0.0",
     "mkdirp": "^0.5.1",
     "polished": "^1.9.3",
