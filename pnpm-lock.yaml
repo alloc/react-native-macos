@@ -50,9 +50,11 @@ dependencies:
   prop-types: 15.7.2
   react-clone-referenced-element: 1.1.0
   react-devtools-core: 4.2.0
+  react-refresh: 0.4.2
   react-timer-mixin: 0.13.4
-  regenerator-runtime: 0.11.1
+  regenerator-runtime: 0.13.3
   rimraf: 2.7.1
+  scheduler: 0.15.0
   semver: 5.7.1
   serve-static: 1.14.1
   shell-quote: 1.6.1
@@ -71,15 +73,15 @@ devDependencies:
   eslint-plugin-eslint-comments: 2.0.2_eslint@4.19.1
   eslint-plugin-flowtype: 2.50.3_eslint@4.19.1
   eslint-plugin-jest: 21.27.2_eslint@4.19.1
-  eslint-plugin-prettier: 2.1.1_eslint@4.19.1+prettier@1.16.4
+  eslint-plugin-prettier: 2.1.1_eslint@4.19.1+prettier@1.17.0
   eslint-plugin-react: 7.16.0_eslint@4.19.1
   flow-bin: 0.66.0
-  indo: 0.3.1
+  indo: 0.3.4
   jest: 22.0.0
   polished: 1.9.3
-  prettier: 1.16.4
-  react: 16.8.6
-  react-test-renderer: 16.8.6_react@16.8.6
+  prettier: 1.17.0
+  react: 16.9.0
+  react-test-renderer: 16.9.0_react@16.9.0
   shelljs: 0.7.8
   sinon: 2.4.1
 lockfileVersion: 5.1
@@ -2621,12 +2623,12 @@ packages:
       eslint: '>=3.6'
     resolution:
       integrity: sha512-0E4OIgBJVlAmf1KfYFtZ3gYxgUzC5Eb3Jzmrc9ikI1OY+/cM8Kh72Ti7KfpeHNeD3HJNf9SmEfmvQLIz44Hrhw==
-  /eslint-plugin-prettier/2.1.1_eslint@4.19.1+prettier@1.16.4:
+  /eslint-plugin-prettier/2.1.1_eslint@4.19.1+prettier@1.17.0:
     dependencies:
       eslint: 4.19.1
       fast-diff: 1.2.0
       jest-docblock: 20.0.3
-      prettier: 1.16.4
+      prettier: 1.17.0
     dev: true
     engines:
       node: '>=4.0.0'
@@ -3304,7 +3306,7 @@ packages:
       node: '>=0.4.7'
     hasBin: true
     optionalDependencies:
-      uglify-js: 3.6.5
+      uglify-js: 3.6.7
     resolution:
       integrity: sha512-C29UoFzHe9yM61lOsIlCE5/mQVGrnIOrOq7maQl76L7tYPCgC1og0Ajt6uWnX4ZTxBPnjw+CUvawphwCfJgUnA==
   /har-schema/2.0.0:
@@ -3491,7 +3493,7 @@ packages:
       node: '>=0.8.19'
     resolution:
       integrity: sha1-khi5srkoojixPcT7a21XbyMUU+o=
-  /indo/0.3.1:
+  /indo/0.3.4:
     dependencies:
       '@cush/exec': 1.5.2
       async-task-group: 1.3.2
@@ -3508,7 +3510,7 @@ packages:
     dev: true
     hasBin: true
     resolution:
-      integrity: sha512-gCGy3Pv9YNPsVVn2+thNsiRiCOxDIohBa8YlnSaQ/BYM+HtcoYYwJeGeHTFxss09P3p8Ua5yVBMELgRaN3xg0A==
+      integrity: sha512-6bmXJAVJ0nACyvAPrDvdUudqpb3u5F7lyZ3boOA/F1rpod4+zsviCB2KecO7cFvODhsg3D0EGiOtYCZNHYRoEQ==
   /inflight/1.0.6:
     dependencies:
       once: 1.4.0
@@ -5489,13 +5491,13 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-gV7R9uvGWSb4ZbMQwHE7yzMVzks=
-  /prettier/1.16.4:
+  /prettier/1.17.0:
     dev: true
     engines:
       node: '>=4'
     hasBin: true
     resolution:
-      integrity: sha512-ZzWuos7TI5CKUeQAtFd6Zhm2s6EpAD/ZLApIhsF9pRvRtM1RFo61dM/4MSRUA0SuLugA/zgrZD8m0BaY46Og7g==
+      integrity: sha512-sXe5lSt2WQlCbydGETgfm1YBShgOX4HxQkFPvbxkcwgDvGDeqVau8h+12+lmSVlP3rHPz0oavfddSZg/q+Szjw==
   /pretty-format/22.4.3:
     dependencies:
       ansi-regex: 3.0.0
@@ -5630,18 +5632,24 @@ packages:
     dev: false
     resolution:
       integrity: sha1-nb/Z2SdSjDqp9ETkVYw3gwq4wmo=
-  /react-test-renderer/16.8.6_react@16.8.6:
+  /react-refresh/0.4.2:
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha512-kv5QlFFSZWo7OlJFNYbxRtY66JImuP2LcrFgyJfQaf85gSP+byzG21UbDQEYjU7f//ny8rwiEkO6py2Y+fEgAQ==
+  /react-test-renderer/16.9.0_react@16.9.0:
     dependencies:
       object-assign: 4.1.1
       prop-types: 15.7.2
-      react: 16.8.6
+      react: 16.9.0
       react-is: 16.11.0
-      scheduler: 0.13.6
+      scheduler: 0.15.0
     dev: true
     peerDependencies:
       react: ^16.0.0
     resolution:
-      integrity: sha512-H2srzU5IWYT6cZXof6AhUcx/wEyJddQ8l7cLM/F7gDXYyPr4oq+vCIxJYXVGhId1J706sqziAjuOEjyNkfgoEw==
+      integrity: sha512-R62stB73qZyhrJo7wmCW9jgl/07ai+YzvouvCXIJLBkRlRqLx4j9RqcLEAfNfU3OxTGucqR2Whmn3/Aad6L3hQ==
   /react-timer-mixin/0.13.4:
     dev: false
     resolution:
@@ -5653,17 +5661,16 @@ packages:
     dev: false
     resolution:
       integrity: sha1-4aQL0Krvxy6N/Xp82gmvhQZjl7s=
-  /react/16.8.6:
+  /react/16.9.0:
     dependencies:
       loose-envify: 1.4.0
       object-assign: 4.1.1
       prop-types: 15.7.2
-      scheduler: 0.13.6
     dev: true
     engines:
       node: '>=0.10.0'
     resolution:
-      integrity: sha512-pC0uMkhLaHm11ZSJULfOBqV4tIZkx87ZLvbbQYunNixAAvjnC+snJCg0XQXn9VIsttVsbZP/H/ewzgsd5fxKXw==
+      integrity: sha512-+7LQnFBwkiw+BobzOF6N//BdoNw0ouwmSJTEm9cglOOmsg/TMiFHZLe2sEoN5M7LgJTj9oHH0gxklfnQe66S1w==
   /read-pkg-up/1.0.1:
     dependencies:
       find-up: 1.1.2
@@ -6059,13 +6066,12 @@ packages:
     dev: true
     resolution:
       integrity: sha512-zvq2W0f8VVgTF/SGLcucGbI8uHbrqMsSbsn4shtMXZNpRH1C/CrJ4HOEamoExzrGm2vvx3ERDsfe0lFCkCjEyA==
-  /scheduler/0.13.6:
+  /scheduler/0.15.0:
     dependencies:
       loose-envify: 1.4.0
       object-assign: 4.1.1
-    dev: true
     resolution:
-      integrity: sha512-IWnObHt413ucAYKsD9J1QShUKkbKLQQHdxRyw73sw4FN26iWr3DY/H34xGPe4nmL1DwXyWmSWmMrA9TfQbE/XQ==
+      integrity: sha512-xAefmSfN6jqAa7Kuq7LIJY0bwAPG3xlCj0HMEBQk1lxYiDKZscY2xJ5U/61ZTrYbmNQbXa+gc7czPkVo11tnCg==
   /semver/5.7.1:
     hasBin: true
     resolution:
@@ -6769,7 +6775,7 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-r+MU0rfv4L/0eeW3xZrd16t4NZfK8Ld4SWVglYBb7ez5uXFWHuVRs6xCTrf1yirs9a4j4Y27nn7SRfO6v67XsQ==
-  /uglify-js/3.6.5:
+  /uglify-js/3.6.7:
     dependencies:
       commander: 2.20.3
       source-map: 0.6.1
@@ -6779,7 +6785,7 @@ packages:
     hasBin: true
     optional: true
     resolution:
-      integrity: sha512-7L3W+Npia1OCr5Blp4/Vw83tK1mu5gnoIURtT1fUVfQ3Kf8WStWV6NJz0fdoBJZls0KlweruRTLVe6XLafmy5g==
+      integrity: sha512-4sXQDzmdnoXiO+xvmTzQsfIiwrjUCSA95rSP4SEd8tDb51W2TiDOlL76Hl+Kw0Ie42PSItCW8/t6pBNCF2R48A==
   /uid-safe/2.0.0:
     dependencies:
       base64-url: 1.2.1
@@ -7232,17 +7238,19 @@ specifiers:
   optimist: ^0.6.1
   plist: ^1.2.0
   polished: ^1.9.3
-  prettier: 1.16.4
+  prettier: 1.17.0
   pretty-format: ^4.2.1
   promise: ^7.1.1
-  prop-types: ^15.5.8
-  react: 16.8.6
+  prop-types: ^15.7.2
+  react: 16.9.0
   react-clone-referenced-element: ^1.0.1
-  react-devtools-core: ^4.1.3
-  react-test-renderer: 16.8.6
+  react-devtools-core: ^4.2.0
+  react-refresh: ^0.4.0
+  react-test-renderer: 16.9.0
   react-timer-mixin: ^0.13.2
-  regenerator-runtime: ^0.11.0
+  regenerator-runtime: ^0.13.2
   rimraf: ^2.5.4
+  scheduler: 0.15.0
   semver: ^5.0.3
   serve-static: ^1.13.2
   shell-quote: 1.6.1
