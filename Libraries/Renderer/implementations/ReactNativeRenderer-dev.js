@@ -1216,6 +1216,45 @@ function traverseTwoPhase(inst, fn, arg) {
  * Does not invoke the callback on the nearest common ancestor because nothing
  * "entered" or "left" that element.
  */
+function traverseEnterLeave(from, to, fn, argFrom, argTo) {
+  var common = from && to ? getLowestCommonAncestor(from, to) : null;
+  var pathFrom = [];
+  while (true) {
+    if (!from) {
+      break;
+    }
+    if (from === common) {
+      break;
+    }
+    var alternate = from.alternate;
+    if (alternate !== null && alternate === common) {
+      break;
+    }
+    pathFrom.push(from);
+    from = getParent(from);
+  }
+  var pathTo = [];
+  while (true) {
+    if (!to) {
+      break;
+    }
+    if (to === common) {
+      break;
+    }
+    var _alternate = to.alternate;
+    if (_alternate !== null && _alternate === common) {
+      break;
+    }
+    pathTo.push(to);
+    to = getParent(to);
+  }
+  for (var i = 0; i < pathFrom.length; i++) {
+    fn(pathFrom[i], "bubbled", argFrom);
+  }
+  for (var _i = pathTo.length; _i-- > 0; ) {
+    fn(pathTo[_i], "captured", argTo);
+  }
+}
 
 /**
  * Some event types have a notion of different registration names for different
@@ -1319,6 +1358,10 @@ function accumulateTwoPhaseDispatches(events) {
 
 function accumulateTwoPhaseDispatchesSkipTarget(events) {
   forEachAccumulated(events, accumulateTwoPhaseDispatchesSingleSkipTarget);
+}
+
+function accumulateEnterLeaveDispatches(leave, enter, from, to) {
+  traverseEnterLeave(from, to, accumulateDispatches, leave, enter);
 }
 
 function accumulateDirectDispatches(events) {
@@ -2482,6 +2525,132 @@ var ResponderEventPlugin = {
   }
 };
 
+var instanceCache = new Map();
+var instanceProps = new Map();
+
+function precacheFiberNode(hostInst, tag) {
+  instanceCache.set(tag, hostInst);
+}
+
+function uncacheFiberNode(tag) {
+  instanceCache.delete(tag);
+  instanceProps.delete(tag);
+}
+
+function getInstanceFromTag(tag) {
+  return instanceCache.get(tag) || null;
+}
+
+function getTagFromInstance(inst) {
+  var tag = inst.stateNode._nativeTag;
+  if (tag === undefined) {
+    tag = inst.stateNode.canonical._nativeTag;
+  }
+  (function() {
+    if (!tag) {
+      throw ReactError(Error("All native instances should have a tag."));
+    }
+  })();
+  return tag;
+}
+
+function getFiberCurrentPropsFromNode$1(stateNode) {
+  return instanceProps.get(stateNode._nativeTag) || null;
+}
+
+function updateFiberProps(tag, props) {
+  instanceProps.set(tag, props);
+}
+
+var TOP_MOUSE_OUT = "topMouseOut";
+var TOP_MOUSE_OVER = "topMouseOver";
+
+var eventTypes$1 = {
+  mouseEnter: {
+    registrationName: "onMouseEnter",
+    dependencies: [TOP_MOUSE_OUT, TOP_MOUSE_OVER]
+  },
+  mouseLeave: {
+    registrationName: "onMouseLeave",
+    dependencies: [TOP_MOUSE_OUT, TOP_MOUSE_OVER]
+  }
+};
+
+var EnterLeaveEvent = SyntheticEvent.extend({
+  relatedTarget: null
+});
+
+var EnterLeaveEventPlugin = {
+  eventTypes: eventTypes$1,
+
+  /**
+   * For almost every interaction we care about, there will be both a top-level
+   * `mouseover` and `mouseout` event that occurs. Only use `mouseout` so that
+   * we do not extract duplicate events. However, moving the mouse into the
+   * browser from outside will not fire a `mouseout` event. In this case, we use
+   * the `mouseover` top-level event.
+   */
+  extractEvents: function(
+    topLevelType,
+    targetInst,
+    nativeEvent,
+    nativeEventTarget
+  ) {
+    var isOverEvent = topLevelType === TOP_MOUSE_OVER;
+    var isOutEvent = topLevelType === TOP_MOUSE_OUT;
+
+    if (isOverEvent && nativeEvent.relatedTarget) {
+      return null;
+    }
+
+    if (!isOutEvent && !isOverEvent) {
+      return null;
+    }
+
+    var from = void 0;
+    var to = void 0;
+    if (isOutEvent) {
+      from = targetInst;
+      var related = nativeEvent.relatedTarget;
+      to = related ? getInstanceFromTag(related) : null;
+    } else {
+      // Moving to a node from outside the window.
+      from = null;
+      to = targetInst;
+    }
+
+    if (from === to) {
+      // Nothing pertains to our managed components.
+      return null;
+    }
+
+    var fromNode = from && getTagFromInstance(from);
+    var toNode = to && getTagFromInstance(to);
+
+    var leave = EnterLeaveEvent.getPooled(
+      eventTypes$1.mouseLeave,
+      from,
+      nativeEvent,
+      nativeEventTarget
+    );
+    leave.target = fromNode;
+    leave.relatedTarget = toNode;
+
+    var enter = EnterLeaveEvent.getPooled(
+      eventTypes$1.mouseEnter,
+      to,
+      nativeEvent,
+      nativeEventTarget
+    );
+    enter.target = toNode;
+    enter.relatedTarget = fromNode;
+
+    accumulateEnterLeaveDispatches(leave, enter, from, to);
+
+    return [leave, enter];
+  }
+};
+
 // Module provided by RN:
 var customBubblingEventTypes =
   ReactNativePrivateInterface.ReactNativeViewConfigRegistry
@@ -2536,7 +2705,8 @@ var ReactNativeBridgeEventPlugin = {
 
 var ReactNativeEventPluginOrder = [
   "ResponderEventPlugin",
-  "ReactNativeBridgeEventPlugin"
+  "ReactNativeBridgeEventPlugin",
+  "EnterLeaveEventPlugin"
 ];
 
 /**
@@ -2557,45 +2727,9 @@ injection.injectEventPluginOrder(ReactNativeEventPluginOrder);
  */
 injection.injectEventPluginsByName({
   ResponderEventPlugin: ResponderEventPlugin,
-  ReactNativeBridgeEventPlugin: ReactNativeBridgeEventPlugin
+  ReactNativeBridgeEventPlugin: ReactNativeBridgeEventPlugin,
+  EnterLeaveEventPlugin: EnterLeaveEventPlugin
 });
-
-var instanceCache = new Map();
-var instanceProps = new Map();
-
-function precacheFiberNode(hostInst, tag) {
-  instanceCache.set(tag, hostInst);
-}
-
-function uncacheFiberNode(tag) {
-  instanceCache.delete(tag);
-  instanceProps.delete(tag);
-}
-
-function getInstanceFromTag(tag) {
-  return instanceCache.get(tag) || null;
-}
-
-function getTagFromInstance(inst) {
-  var tag = inst.stateNode._nativeTag;
-  if (tag === undefined) {
-    tag = inst.stateNode.canonical._nativeTag;
-  }
-  (function() {
-    if (!tag) {
-      throw ReactError(Error("All native instances should have a tag."));
-    }
-  })();
-  return tag;
-}
-
-function getFiberCurrentPropsFromNode$1(stateNode) {
-  return instanceProps.get(stateNode._nativeTag) || null;
-}
-
-function updateFiberProps(tag, props) {
-  instanceProps.set(tag, props);
-}
 
 // Use to restore controlled state after a change event has fired.
 
