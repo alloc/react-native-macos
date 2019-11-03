@@ -1,1 +1,8 @@
-{}
+{
+  "repos": {
+    "vendor/metro": {
+      "url": "https://github.com/aleclarson/metro.git",
+      "head": "v0.45"
+    }
+  }
+}
