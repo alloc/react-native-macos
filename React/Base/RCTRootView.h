@@ -156,6 +156,7 @@ extern NSString *const RCTContentWillAppearNotification;
 @property (nonatomic, assign) NSTimeInterval loadingViewFadeDuration;
 
 @property (nonatomic, assign) CGFloat scaleFactor;
+@property (nonatomic, readonly) NSNumber *reactTag;
 
 @end
 
