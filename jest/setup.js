@@ -84,6 +84,7 @@ const mockNativeModules = {
     alertWithArgs: jest.fn(),
   },
   AppState: {
+    windows: [],
     addEventListener: jest.fn(),
   },
   AsyncLocalStorage: {
