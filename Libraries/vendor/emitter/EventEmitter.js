@@ -90,9 +90,10 @@ class EventEmitter {
    *
    * @param {?string} eventType - Optional name of the event whose registered
    *   listeners to remove
+   * @returns {number} The number of removed subscriptions.
    */
   removeAllListeners(eventType: ?string) {
-    this._subscriber.removeAllSubscriptions(eventType);
+    return this._subscriber.removeAllSubscriptions(eventType);
   }
 
   /**

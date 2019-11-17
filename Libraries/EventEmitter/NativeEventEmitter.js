@@ -48,13 +48,11 @@ class NativeEventEmitter extends EventEmitter {
     return super.addListener(eventType, listener, context);
   }
 
-  removeAllListeners(eventType: string) {
-    invariant(eventType, 'eventType argument is required.');
-    const count = this.listeners(eventType).length;
+  removeAllListeners(eventType: ?string) {
+    const count = super.removeAllListeners(eventType);
     if (this._nativeModule != null) {
       this._nativeModule.removeListeners(count);
     }
-    super.removeAllListeners(eventType);
   }
 
   removeSubscription(subscription: EmitterSubscription) {

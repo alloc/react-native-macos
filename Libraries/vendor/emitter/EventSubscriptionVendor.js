@@ -53,13 +53,20 @@ class EventSubscriptionVendor {
    *
    * @param {?string} eventType - Optional name of the event type whose
    *   registered supscriptions to remove, if null remove all subscriptions.
+   * @returns {number} The number of removed subscriptions.
    */
   removeAllSubscriptions(eventType: ?string) {
+    let count: number;
     if (eventType === undefined) {
+      for (const eventType in this._subscriptionsForType) {
+        count += this._subscriptionsForType[eventType].length;
+      }
       this._subscriptionsForType = {};
     } else {
+      count = this._subscriptionsForType[eventType].length;
       delete this._subscriptionsForType[eventType];
     }
+    return count;
   }
 
   /**
