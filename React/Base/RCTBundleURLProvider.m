@@ -214,7 +214,7 @@ static NSURL *serverRootWithHostPort(NSString *hostPort)
 
 - (NSString *)jsLocation
 {
-  return [[NSUserDefaults standardUserDefaults] stringForKey:kRCTJsLocationKey];
+  return [[NSUserDefaults standardUserDefaults] stringForKey:kRCTJsLocationKey] ?: [self guessPackagerHost];
 }
 
 - (void)setEnableDev:(BOOL)enableDev

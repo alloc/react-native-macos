@@ -78,20 +78,23 @@ struct Registration {
   return self;
 }
 
-static RCTReconnectingWebSocket *socketForLocation(NSString *const jsLocation)
+static RCTReconnectingWebSocket *socketForLocation(NSString *const hostPort)
 {
-  NSURLComponents *const components = [NSURLComponents new];
-  components.host = jsLocation ?: @"localhost";
-  components.scheme = @"http";
-  components.port = @(kRCTBundleURLProviderDefaultPort);
-  components.path = @"/message";
-  components.queryItems = @[[NSURLQueryItem queryItemWithName:@"role" value:@"ios"]];
+  NSURL *const socketURL =
+    [hostPort rangeOfString:@":"].location != NSNotFound
+    ? [NSURL URLWithString:
+       [NSString stringWithFormat:@"http://%@/message?role=ios",
+        hostPort]]
+    : [NSURL URLWithString:
+       [NSString stringWithFormat:@"http://%@:%lu/message?role=ios",
+        hostPort, (unsigned long)kRCTBundleURLProviderDefaultPort]];
+
   static dispatch_queue_t queue;
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
     queue = dispatch_queue_create("com.facebook.RCTPackagerConnectionQueue", DISPATCH_QUEUE_SERIAL);
   });
-  return [[RCTReconnectingWebSocket alloc] initWithURL:components.URL queue:queue];
+  return [[RCTReconnectingWebSocket alloc] initWithURL:socketURL queue:queue];
 }
 
 - (void)stop
