@@ -93,6 +93,8 @@ async function runServer(args: Args, config: ConfigT) {
   //
   // $FlowFixMe (site=react_native_fb)
   serverInstance.keepAliveTimeout = 30000;
+
+  return serverInstance;
 }
 
 function getReporterImpl(customLogReporterPath: ?string) {
