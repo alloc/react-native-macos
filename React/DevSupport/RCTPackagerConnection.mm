@@ -38,7 +38,7 @@ struct Registration {
   std::mutex _mutex; // protects all ivars
   RCTReconnectingWebSocket *_socket;
   BOOL _socketConnected;
-  NSString *_jsLocationForSocket;
+  NSString *_socketHost;
   id _bundleURLChangeObserver;
   uint32_t _nextToken;
   std::vector<Registration<RCTNotificationHandler>> _notificationRegistrations;
@@ -60,8 +60,8 @@ struct Registration {
 {
   if (self = [super init]) {
     _nextToken = 1; // Prevent randomly erasing a handler if you pass a bogus 0 token
-    _jsLocationForSocket = [RCTBundleURLProvider sharedSettings].jsLocation;
-    _socket = socketForLocation(_jsLocationForSocket);
+    _socketHost = [RCTBundleURLProvider sharedSettings].packagerServerHost;
+    _socket = socketForLocation(_socketHost);
     _socket.delegate = self;
     [_socket start];
 
@@ -120,15 +120,15 @@ static RCTReconnectingWebSocket *socketForLocation(NSString *const hostPort)
     return; // already stopped
   }
 
-  NSString *const jsLocation = [RCTBundleURLProvider sharedSettings].jsLocation;
-  if ([jsLocation isEqual:_jsLocationForSocket]) {
+  NSString *const socketHost = [RCTBundleURLProvider sharedSettings].packagerServerHost;
+  if ([socketHost isEqual:_socketHost]) {
     return; // unchanged
   }
 
   _socket.delegate = nil;
   [_socket stop];
-  _jsLocationForSocket = jsLocation;
-  _socket = socketForLocation(jsLocation);
+  _socketHost = socketHost;
+  _socket = socketForLocation(socketHost);
   _socket.delegate = self;
   [_socket start];
 }

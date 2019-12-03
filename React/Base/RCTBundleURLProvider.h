@@ -60,6 +60,7 @@ extern const NSUInteger kRCTBundleURLProviderDefaultPort;
 /**
  * The IP address or hostname of the packager.
  */
+@property (nonatomic, copy) NSString *packagerServerHost;
 @property (nonatomic, copy) NSString *jsLocation;
 
 @property (nonatomic, assign) BOOL enableLiveReload;
