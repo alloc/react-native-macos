@@ -695,12 +695,20 @@ for (NSObject<UIScrollViewDelegate> *scrollViewListener in _scrollListeners) { \
 
 - (NSView *)hitTest:(NSPoint)point
 {
+  // Convert to our coordinates.
+  CGPoint convertedPoint = self.layer
+    ? [self.layer convertPoint:point fromLayer:self.layer.superlayer]
+    : [self convertPoint:point fromView:self.superview];
+
   // Note: This assumes "contentView.clipsToBounds" is YES.
-  if (!CGRectContainsPoint(self.bounds, point)) {
+  if (!CGRectContainsPoint(self.bounds, convertedPoint)) {
     return nil;
   }
   NSPoint contentOffset = self.contentView.bounds.origin;
-  return [self.documentView hitTest:(NSPoint){point.x + contentOffset.x, point.y + contentOffset.y}];
+  return [self.documentView hitTest:(NSPoint){
+    convertedPoint.x + contentOffset.x,
+    convertedPoint.y + contentOffset.y,
+  }];
 }
 
 @end

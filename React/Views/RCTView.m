@@ -197,10 +197,15 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:unused)
     return nil;
   }
 
+  // Convert to our coordinates.
+  CGPoint convertedPoint = self.layer
+    ? [self.layer convertPoint:point fromLayer:self.layer.superlayer]
+    : [self convertPoint:point fromView:self.superview];
+
   // `hitSubview` is the topmost subview which was hit. The hit point can
   // be outside the bounds of `view` (e.g., if -clipsToBounds is NO).
   NSView *hitSubview = nil;
-  BOOL isPointInside = [self pointInside:point];
+  BOOL isPointInside = [self pointInside:convertedPoint];
   BOOL needsHitSubview = _pointerEvents != RCTPointerEventsBoxOnly;
   if (needsHitSubview && (![self clipsToBounds] || isPointInside)) {
     // Take z-index into account when calculating the touch target.
@@ -213,10 +218,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:unused)
     // of the hit view will return YES from -pointInside:withEvent:). See:
     //  - https://developer.apple.com/library/ios/qa/qa2013/qa1812.html
     for (NSView *subview in [sortedSubviews reverseObjectEnumerator]) {
-      CGPoint convertedPoint = subview.layer
-        ? [subview.layer convertPoint:point fromLayer:subview.layer.superlayer]
-        : [subview convertPoint:point fromView:self];
-
       hitSubview = [subview hitTest:convertedPoint];
       if (hitSubview != nil) {
         break;

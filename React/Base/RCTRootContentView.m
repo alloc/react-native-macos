@@ -116,10 +116,7 @@ RCT_NOT_IMPLEMENTED(-(instancetype)initWithCoder:(nonnull NSCoder *)aDecoder)
 
 - (NSView *)hitTest:(CGPoint)point
 {
-  // Flip the coordinate system to top-left origin.
-  NSPoint convertedPoint = [self convertPoint:point fromView:nil];
-
-  NSView *hitView = [super hitTest:convertedPoint];
+  NSView *hitView = [super hitTest:point];
   return _passThroughTouches && hitView == self ? nil : hitView;
 }
 
