@@ -299,18 +299,11 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 
 - (void)setBackgroundColor:(NSColor *)backgroundColor
 {
-  if ([_backgroundColor isEqual:backgroundColor] || backgroundColor == NULL) {
+  if ([super.backgroundColor isEqual:backgroundColor]) {
     return;
   }
-  _backgroundColor = backgroundColor;
-
-  if (![self wantsLayer]) {
-    [self setWantsLayer:YES];
-    [self.layer setBackgroundColor:[backgroundColor CGColor]];
-  } else {
-    [self.layer setBackgroundColor:[backgroundColor CGColor]];
-  }
-  [self setNeedsDisplay:YES];
+  self.drawsBackground = backgroundColor != NULL;
+  super.backgroundColor = backgroundColor;
 }
 
 - (void)updateClippedSubviews
