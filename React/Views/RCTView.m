@@ -444,8 +444,6 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
 
 }
 
-#pragma mark - Borders
-
 - (NSColor *)backgroundColor
 {
   return _backgroundColor;
@@ -460,123 +458,7 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   [self.layer setNeedsDisplay];
 }
 
-static CGFloat RCTDefaultIfNegativeTo(CGFloat defaultValue, CGFloat x) {
-  return x >= 0 ? x : defaultValue;
-};
-
-- (NSEdgeInsets)bordersAsInsets
-{
-  const CGFloat borderWidth = MAX(0, _borderWidth);
-  const BOOL isRTL = _reactLayoutDirection == NSUserInterfaceLayoutDirectionRightToLeft;
-
-  if ([[RCTI18nUtil sharedInstance] doLeftAndRightSwapInRTL]) {
-    const CGFloat borderStartWidth = RCTDefaultIfNegativeTo(_borderLeftWidth, _borderStartWidth);
-    const CGFloat borderEndWidth = RCTDefaultIfNegativeTo(_borderRightWidth, _borderEndWidth);
-
-    const CGFloat directionAwareBorderLeftWidth = isRTL ? borderEndWidth : borderStartWidth;
-    const CGFloat directionAwareBorderRightWidth = isRTL ? borderStartWidth : borderEndWidth;
-
-    return (NSEdgeInsets) {
-      RCTDefaultIfNegativeTo(borderWidth, _borderTopWidth),
-      RCTDefaultIfNegativeTo(borderWidth, directionAwareBorderLeftWidth),
-      RCTDefaultIfNegativeTo(borderWidth, _borderBottomWidth),
-      RCTDefaultIfNegativeTo(borderWidth, directionAwareBorderRightWidth),
-    };
-  }
-
-  const CGFloat directionAwareBorderLeftWidth = isRTL ? _borderEndWidth : _borderStartWidth;
-  const CGFloat directionAwareBorderRightWidth = isRTL ? _borderStartWidth : _borderEndWidth;
-
-  return (NSEdgeInsets) {
-    RCTDefaultIfNegativeTo(borderWidth, _borderTopWidth),
-    RCTDefaultIfNegativeTo(borderWidth, RCTDefaultIfNegativeTo(_borderLeftWidth, directionAwareBorderLeftWidth)),
-    RCTDefaultIfNegativeTo(borderWidth, _borderBottomWidth),
-    RCTDefaultIfNegativeTo(borderWidth, RCTDefaultIfNegativeTo(_borderRightWidth, directionAwareBorderRightWidth)),
-  };
-}
-
-- (RCTCornerRadii)cornerRadii
-{
-  const BOOL isRTL = _reactLayoutDirection == NSUserInterfaceLayoutDirectionRightToLeft;
-  const CGFloat radius = MAX(0, _borderRadius);
-
-  CGFloat topLeftRadius;
-  CGFloat topRightRadius;
-  CGFloat bottomLeftRadius;
-  CGFloat bottomRightRadius;
-
-  if ([[RCTI18nUtil sharedInstance] doLeftAndRightSwapInRTL]) {
-    const CGFloat topStartRadius = RCTDefaultIfNegativeTo(_borderTopLeftRadius, _borderTopStartRadius);
-    const CGFloat topEndRadius = RCTDefaultIfNegativeTo(_borderTopRightRadius, _borderTopEndRadius);
-    const CGFloat bottomStartRadius = RCTDefaultIfNegativeTo(_borderBottomLeftRadius, _borderBottomStartRadius);
-    const CGFloat bottomEndRadius = RCTDefaultIfNegativeTo(_borderBottomRightRadius, _borderBottomEndRadius);
-
-    const CGFloat directionAwareTopLeftRadius = isRTL ? topEndRadius : topStartRadius;
-    const CGFloat directionAwareTopRightRadius = isRTL ? topStartRadius : topEndRadius;
-    const CGFloat directionAwareBottomLeftRadius = isRTL ? bottomEndRadius : bottomStartRadius;
-    const CGFloat directionAwareBottomRightRadius = isRTL ? bottomStartRadius : bottomEndRadius;
-
-    topLeftRadius = RCTDefaultIfNegativeTo(radius, directionAwareTopLeftRadius);
-    topRightRadius = RCTDefaultIfNegativeTo(radius, directionAwareTopRightRadius);
-    bottomLeftRadius = RCTDefaultIfNegativeTo(radius, directionAwareBottomLeftRadius);
-    bottomRightRadius = RCTDefaultIfNegativeTo(radius, directionAwareBottomRightRadius);
-  } else {
-    const CGFloat directionAwareTopLeftRadius = isRTL ? _borderTopEndRadius : _borderTopStartRadius;
-    const CGFloat directionAwareTopRightRadius = isRTL ? _borderTopStartRadius : _borderTopEndRadius;
-    const CGFloat directionAwareBottomLeftRadius = isRTL ? _borderBottomEndRadius : _borderBottomStartRadius;
-    const CGFloat directionAwareBottomRightRadius = isRTL ? _borderBottomStartRadius : _borderBottomEndRadius;
-
-    topLeftRadius = RCTDefaultIfNegativeTo(radius, RCTDefaultIfNegativeTo(_borderTopLeftRadius, directionAwareTopLeftRadius));
-    topRightRadius = RCTDefaultIfNegativeTo(radius, RCTDefaultIfNegativeTo(_borderTopRightRadius, directionAwareTopRightRadius));
-    bottomLeftRadius = RCTDefaultIfNegativeTo(radius, RCTDefaultIfNegativeTo(_borderBottomLeftRadius, directionAwareBottomLeftRadius));
-    bottomRightRadius = RCTDefaultIfNegativeTo(radius, RCTDefaultIfNegativeTo(_borderBottomRightRadius, directionAwareBottomRightRadius));
-  }
-
-  // Get scale factors required to prevent radii from overlapping
-  const CGSize size = self.bounds.size;
-  const CGFloat topScaleFactor = RCTZeroIfNaN(MIN(1, size.width / (topLeftRadius + topRightRadius)));
-  const CGFloat bottomScaleFactor = RCTZeroIfNaN(MIN(1, size.width / (bottomLeftRadius + bottomRightRadius)));
-  const CGFloat rightScaleFactor = RCTZeroIfNaN(MIN(1, size.height / (topRightRadius + bottomRightRadius)));
-  const CGFloat leftScaleFactor = RCTZeroIfNaN(MIN(1, size.height / (topLeftRadius + bottomLeftRadius)));
-
-  // Return scaled radii
-  return (RCTCornerRadii){
-    topLeftRadius * MIN(topScaleFactor, leftScaleFactor),
-    topRightRadius * MIN(topScaleFactor, rightScaleFactor),
-    bottomLeftRadius * MIN(bottomScaleFactor, leftScaleFactor),
-    bottomRightRadius * MIN(bottomScaleFactor, rightScaleFactor),
-  };
-}
-
-- (RCTBorderColors)borderColors
-{
-  const BOOL isRTL = _reactLayoutDirection == NSUserInterfaceLayoutDirectionRightToLeft;
-
-  if ([[RCTI18nUtil sharedInstance] doLeftAndRightSwapInRTL]) {
-    const CGColorRef borderStartColor = _borderStartColor ?: _borderLeftColor;
-    const CGColorRef borderEndColor = _borderEndColor ?: _borderRightColor;
-
-    const CGColorRef directionAwareBorderLeftColor = isRTL ? borderEndColor : borderStartColor;
-    const CGColorRef directionAwareBorderRightColor = isRTL ? borderStartColor : borderEndColor;
-
-    return (RCTBorderColors){
-      _borderTopColor ?: _borderColor,
-      directionAwareBorderLeftColor ?: _borderColor,
-      _borderBottomColor ?: _borderColor,
-      directionAwareBorderRightColor ?: _borderColor,
-    };
-  }
-
-  const CGColorRef directionAwareBorderLeftColor = isRTL ? _borderEndColor : _borderStartColor;
-  const CGColorRef directionAwareBorderRightColor = isRTL ? _borderStartColor : _borderEndColor;
-
-  return (RCTBorderColors){
-    _borderTopColor ?: _borderColor,
-    directionAwareBorderLeftColor ?: _borderLeftColor ?: _borderColor,
-    _borderBottomColor ?: _borderColor,
-    directionAwareBorderRightColor ?: _borderRightColor ?: _borderColor,
-  };
-}
+#pragma mark - Rendering
 
 - (void)reactSetFrame:(CGRect)frame
 {
@@ -704,6 +586,8 @@ static CGFloat RCTDefaultIfNegativeTo(CGFloat defaultValue, CGFloat x) {
   [self updateClippingForLayer:layer];
 }
 
+#pragma mark - Shadows
+
 static BOOL RCTLayerHasShadow(CALayer *layer)
 {
   return layer.shadowOpacity * CGColorGetAlpha(layer.shadowColor) > 0;
@@ -734,6 +618,8 @@ static void RCTUpdateShadowPathForView(RCTView *view)
   }
 }
 
+#pragma mark - Clipping
+
 - (void)updateClippingForLayer:(CALayer *)layer
 {
   CALayer *mask = nil;
@@ -755,6 +641,8 @@ static void RCTUpdateShadowPathForView(RCTView *view)
   layer.mask = mask;
 }
 
+#pragma mark - Context Menu
+
 - (void)contextMenuItemClicked:(NSMenuItem *)sender
 {
   NSDictionary *menuItem = (NSDictionary *)sender.representedObject;
@@ -764,6 +652,8 @@ static void RCTUpdateShadowPathForView(RCTView *view)
     RCTLogWarn(@"Set onContextMenuItemClick to handle this event");
   }
 }
+
+#pragma mark - Dragging
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {
@@ -795,7 +685,8 @@ static void RCTUpdateShadowPathForView(RCTView *view)
   _onDragLeave(@{@"sourceDragMask": @([sender draggingSourceOperationMask])});
 }
 
-- (BOOL)performDragOperation:(id <NSDraggingInfo>)sender {
+- (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
+{
   NSPasteboard *pboard = [sender draggingPasteboard];
 
   if ( [[pboard types] containsObject:NSFilenamesPboardType] ) {
@@ -805,7 +696,127 @@ static void RCTUpdateShadowPathForView(RCTView *view)
   return YES;
 }
 
-#pragma mark Border Color
+#pragma mark - Borders
+
+static CGFloat RCTDefaultIfNegativeTo(CGFloat defaultValue, CGFloat x) {
+  return x >= 0 ? x : defaultValue;
+};
+
+- (NSEdgeInsets)bordersAsInsets
+{
+  const CGFloat borderWidth = MAX(0, _borderWidth);
+  const BOOL isRTL = _reactLayoutDirection == NSUserInterfaceLayoutDirectionRightToLeft;
+
+  if ([[RCTI18nUtil sharedInstance] doLeftAndRightSwapInRTL]) {
+    const CGFloat borderStartWidth = RCTDefaultIfNegativeTo(_borderLeftWidth, _borderStartWidth);
+    const CGFloat borderEndWidth = RCTDefaultIfNegativeTo(_borderRightWidth, _borderEndWidth);
+
+    const CGFloat directionAwareBorderLeftWidth = isRTL ? borderEndWidth : borderStartWidth;
+    const CGFloat directionAwareBorderRightWidth = isRTL ? borderStartWidth : borderEndWidth;
+
+    return (NSEdgeInsets) {
+      RCTDefaultIfNegativeTo(borderWidth, _borderTopWidth),
+      RCTDefaultIfNegativeTo(borderWidth, directionAwareBorderLeftWidth),
+      RCTDefaultIfNegativeTo(borderWidth, _borderBottomWidth),
+      RCTDefaultIfNegativeTo(borderWidth, directionAwareBorderRightWidth),
+    };
+  }
+
+  const CGFloat directionAwareBorderLeftWidth = isRTL ? _borderEndWidth : _borderStartWidth;
+  const CGFloat directionAwareBorderRightWidth = isRTL ? _borderStartWidth : _borderEndWidth;
+
+  return (NSEdgeInsets) {
+    RCTDefaultIfNegativeTo(borderWidth, _borderTopWidth),
+    RCTDefaultIfNegativeTo(borderWidth, RCTDefaultIfNegativeTo(_borderLeftWidth, directionAwareBorderLeftWidth)),
+    RCTDefaultIfNegativeTo(borderWidth, _borderBottomWidth),
+    RCTDefaultIfNegativeTo(borderWidth, RCTDefaultIfNegativeTo(_borderRightWidth, directionAwareBorderRightWidth)),
+  };
+}
+
+- (RCTCornerRadii)cornerRadii
+{
+  const BOOL isRTL = _reactLayoutDirection == NSUserInterfaceLayoutDirectionRightToLeft;
+  const CGFloat radius = MAX(0, _borderRadius);
+
+  CGFloat topLeftRadius;
+  CGFloat topRightRadius;
+  CGFloat bottomLeftRadius;
+  CGFloat bottomRightRadius;
+
+  if ([[RCTI18nUtil sharedInstance] doLeftAndRightSwapInRTL]) {
+    const CGFloat topStartRadius = RCTDefaultIfNegativeTo(_borderTopLeftRadius, _borderTopStartRadius);
+    const CGFloat topEndRadius = RCTDefaultIfNegativeTo(_borderTopRightRadius, _borderTopEndRadius);
+    const CGFloat bottomStartRadius = RCTDefaultIfNegativeTo(_borderBottomLeftRadius, _borderBottomStartRadius);
+    const CGFloat bottomEndRadius = RCTDefaultIfNegativeTo(_borderBottomRightRadius, _borderBottomEndRadius);
+
+    const CGFloat directionAwareTopLeftRadius = isRTL ? topEndRadius : topStartRadius;
+    const CGFloat directionAwareTopRightRadius = isRTL ? topStartRadius : topEndRadius;
+    const CGFloat directionAwareBottomLeftRadius = isRTL ? bottomEndRadius : bottomStartRadius;
+    const CGFloat directionAwareBottomRightRadius = isRTL ? bottomStartRadius : bottomEndRadius;
+
+    topLeftRadius = RCTDefaultIfNegativeTo(radius, directionAwareTopLeftRadius);
+    topRightRadius = RCTDefaultIfNegativeTo(radius, directionAwareTopRightRadius);
+    bottomLeftRadius = RCTDefaultIfNegativeTo(radius, directionAwareBottomLeftRadius);
+    bottomRightRadius = RCTDefaultIfNegativeTo(radius, directionAwareBottomRightRadius);
+  } else {
+    const CGFloat directionAwareTopLeftRadius = isRTL ? _borderTopEndRadius : _borderTopStartRadius;
+    const CGFloat directionAwareTopRightRadius = isRTL ? _borderTopStartRadius : _borderTopEndRadius;
+    const CGFloat directionAwareBottomLeftRadius = isRTL ? _borderBottomEndRadius : _borderBottomStartRadius;
+    const CGFloat directionAwareBottomRightRadius = isRTL ? _borderBottomStartRadius : _borderBottomEndRadius;
+
+    topLeftRadius = RCTDefaultIfNegativeTo(radius, RCTDefaultIfNegativeTo(_borderTopLeftRadius, directionAwareTopLeftRadius));
+    topRightRadius = RCTDefaultIfNegativeTo(radius, RCTDefaultIfNegativeTo(_borderTopRightRadius, directionAwareTopRightRadius));
+    bottomLeftRadius = RCTDefaultIfNegativeTo(radius, RCTDefaultIfNegativeTo(_borderBottomLeftRadius, directionAwareBottomLeftRadius));
+    bottomRightRadius = RCTDefaultIfNegativeTo(radius, RCTDefaultIfNegativeTo(_borderBottomRightRadius, directionAwareBottomRightRadius));
+  }
+
+  // Get scale factors required to prevent radii from overlapping
+  const CGSize size = self.bounds.size;
+  const CGFloat topScaleFactor = RCTZeroIfNaN(MIN(1, size.width / (topLeftRadius + topRightRadius)));
+  const CGFloat bottomScaleFactor = RCTZeroIfNaN(MIN(1, size.width / (bottomLeftRadius + bottomRightRadius)));
+  const CGFloat rightScaleFactor = RCTZeroIfNaN(MIN(1, size.height / (topRightRadius + bottomRightRadius)));
+  const CGFloat leftScaleFactor = RCTZeroIfNaN(MIN(1, size.height / (topLeftRadius + bottomLeftRadius)));
+
+  // Return scaled radii
+  return (RCTCornerRadii){
+    topLeftRadius * MIN(topScaleFactor, leftScaleFactor),
+    topRightRadius * MIN(topScaleFactor, rightScaleFactor),
+    bottomLeftRadius * MIN(bottomScaleFactor, leftScaleFactor),
+    bottomRightRadius * MIN(bottomScaleFactor, rightScaleFactor),
+  };
+}
+
+- (RCTBorderColors)borderColors
+{
+  const BOOL isRTL = _reactLayoutDirection == NSUserInterfaceLayoutDirectionRightToLeft;
+
+  if ([[RCTI18nUtil sharedInstance] doLeftAndRightSwapInRTL]) {
+    const CGColorRef borderStartColor = _borderStartColor ?: _borderLeftColor;
+    const CGColorRef borderEndColor = _borderEndColor ?: _borderRightColor;
+
+    const CGColorRef directionAwareBorderLeftColor = isRTL ? borderEndColor : borderStartColor;
+    const CGColorRef directionAwareBorderRightColor = isRTL ? borderStartColor : borderEndColor;
+
+    return (RCTBorderColors){
+      _borderTopColor ?: _borderColor,
+      directionAwareBorderLeftColor ?: _borderColor,
+      _borderBottomColor ?: _borderColor,
+      directionAwareBorderRightColor ?: _borderColor,
+    };
+  }
+
+  const CGColorRef directionAwareBorderLeftColor = isRTL ? _borderEndColor : _borderStartColor;
+  const CGColorRef directionAwareBorderRightColor = isRTL ? _borderStartColor : _borderEndColor;
+
+  return (RCTBorderColors){
+    _borderTopColor ?: _borderColor,
+    directionAwareBorderLeftColor ?: _borderLeftColor ?: _borderColor,
+    _borderBottomColor ?: _borderColor,
+    directionAwareBorderRightColor ?: _borderRightColor ?: _borderColor,
+  };
+}
+
+#pragma mark - Border Color
 
 #define setBorderColor(side)                                \
   - (void)setBorder##side##Color:(CGColorRef)color          \
