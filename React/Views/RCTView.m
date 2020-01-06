@@ -6,8 +6,10 @@
  */
 
 #import "RCTView.h"
+#import <CoreImage/CIFilterBuiltins.h>
 
 #import "RCTAutoInsetsProtocol.h"
+#import "RCTBlurFilter.h"
 #import "RCTBorderDrawing.h"
 #import "RCTConvert.h"
 #import "RCTLog.h"
@@ -101,6 +103,7 @@ static NSString *RCTRecursiveAccessibilityLabel(NSView *view)
 @implementation RCTView
 {
   NSColor *_backgroundColor;
+  CIFilter *_backgroundBlur;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -281,7 +284,7 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   NSString *superDescription = super.description;
   NSRange semicolonRange = [superDescription rangeOfString:@";"];
   NSString *replacement = [NSString stringWithFormat:@"; reactTag: %@;", self.reactTag];
-  
+
   if ([superDescription length] > 0 && semicolonRange.length > 0) {
     return [superDescription stringByReplacingCharactersInRange:semicolonRange withString:replacement];
   }
@@ -456,6 +459,22 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   [self ensureLayerExists];
   self.layer.backgroundColor = backgroundColor.CGColor;
   [self.layer setNeedsDisplay];
+}
+
+- (void)setBackgroundBlurRadius:(CGFloat)blurRadius
+{
+  _backgroundBlurRadius = blurRadius;
+
+  if (_backgroundBlur == nil) {
+    _backgroundBlur = [RCTBlurFilter new];
+    _backgroundBlur.name = @"blur";
+
+    [self ensureLayerExists];
+    self.backgroundFilters = @[_backgroundBlur];
+  }
+  
+  [self.layer setValue:@(blurRadius)
+            forKeyPath:@"backgroundFilters.blur.inputRadius"];
 }
 
 #pragma mark - Rendering

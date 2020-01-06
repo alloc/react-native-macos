@@ -23,6 +23,7 @@ var ViewStylePropTypes = {
   ...ShadowPropTypesIOS,
   ...TransformPropTypes,
   backfaceVisibility: ReactPropTypes.oneOf(['visible', 'hidden']),
+  backgroundBlurRadius: ReactPropTypes.number,
   backgroundColor: ColorPropType,
   borderColor: ColorPropType,
   borderTopColor: ColorPropType,
