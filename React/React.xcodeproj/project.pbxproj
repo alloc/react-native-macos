@@ -515,6 +515,7 @@
 		657734901EE8354A00A0E9EA /* RCTInspectorPackagerConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 6577348C1EE8354A00A0E9EA /* RCTInspectorPackagerConnection.h */; };
 		657734911EE8354A00A0E9EA /* RCTInspectorPackagerConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6577348D1EE8354A00A0E9EA /* RCTInspectorPackagerConnection.m */; };
 		68EFE4EE1CF6EB3900A1DE13 /* RCTBundleURLProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 68EFE4ED1CF6EB3900A1DE13 /* RCTBundleURLProvider.m */; };
+		7026D49623C26AC1003328A8 /* RCTBlurFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7026D49523C26AC1003328A8 /* RCTBlurFilter.m */; };
 		702B7FF8221C88AF0027174A /* RCTWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 702B7FF6221C88AF0027174A /* RCTWindow.h */; };
 		702B7FF9221C88AF0027174A /* RCTWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 702B7FF7221C88AF0027174A /* RCTWindow.m */; };
 		702B7FFC221C88BB0027174A /* RCTMouseEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 702B7FFA221C88BB0027174A /* RCTMouseEvent.h */; };
@@ -1271,6 +1272,8 @@
 		68EFE4EC1CF6EB3000A1DE13 /* RCTBundleURLProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTBundleURLProvider.h; sourceTree = "<group>"; };
 		68EFE4ED1CF6EB3900A1DE13 /* RCTBundleURLProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTBundleURLProvider.m; sourceTree = "<group>"; };
 		6A15FB0C1BDF663500531DFB /* RCTRootViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTRootViewInternal.h; sourceTree = "<group>"; };
+		7026D49523C26AC1003328A8 /* RCTBlurFilter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTBlurFilter.m; sourceTree = "<group>"; };
+		7026D49723C26AD2003328A8 /* RCTBlurFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTBlurFilter.h; sourceTree = "<group>"; };
 		702B7FF6221C88AF0027174A /* RCTWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTWindow.h; sourceTree = "<group>"; };
 		702B7FF7221C88AF0027174A /* RCTWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTWindow.m; sourceTree = "<group>"; };
 		702B7FFA221C88BB0027174A /* RCTMouseEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMouseEvent.h; sourceTree = "<group>"; };
@@ -1693,6 +1696,8 @@
 				83F15A171B7CC46900F10295 /* NSView+Private.h */,
 				13E067531A70F44B002CDEE1 /* NSView+React.h */,
 				13E067541A70F44B002CDEE1 /* NSView+React.m */,
+				7026D49523C26AC1003328A8 /* RCTBlurFilter.m */,
+				7026D49723C26AD2003328A8 /* RCTBlurFilter.h */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2586,6 +2591,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -2768,6 +2774,7 @@
 				83CBBA511A601E3B00E9B192 /* RCTAssert.m in Sources */,
 				59EB6DBD1EBD6FC90072A5E7 /* RCTUIManagerObserverCoordinator.mm in Sources */,
 				13AF20451AE707F9005F5298 /* RCTSlider.m in Sources */,
+				7026D49623C26AC1003328A8 /* RCTBlurFilter.m in Sources */,
 				130443A21E3FEAA900D93A67 /* RCTFollyConvert.mm in Sources */,
 				58114A501AAE93D500E7D092 /* RCTAsyncLocalStorage.m in Sources */,
 				657734851EE834C900A0E9EA /* RCTInspectorDevServerHelper.mm in Sources */,

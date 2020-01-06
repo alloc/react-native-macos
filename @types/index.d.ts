@@ -1801,6 +1801,7 @@ export interface NativeMouseEvent {
  */
 export interface ViewStyle extends FlexStyle, BorderStyle, ShadowStyleIOS, TransformsStyle {
     backfaceVisibility?: "visible" | "hidden";
+    backgroundBlurRadius?: number;
     backgroundColor?: string;
     opacity?: number;
     testID?: string;

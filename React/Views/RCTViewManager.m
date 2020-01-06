@@ -102,6 +102,7 @@ RCT_EXPORT_VIEW_PROPERTY(nativeID, NSString)
 // RCT_REMAP_VIEW_PROPERTY(onMagicTap, reactAccessibilityElement.onMagicTap, RCTDirectEventBlock)
 RCT_REMAP_VIEW_PROPERTY(testID, reactAccessibilityElement.accessibilityIdentifier, NSString)
 
+RCT_EXPORT_VIEW_PROPERTY(backgroundBlurRadius, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(backgroundColor, NSColor)
 RCT_REMAP_LAYER_PROPERTY(backfaceVisibility, doubleSided, css_backface_visibility_t)
 RCT_EXPORT_LAYER_PROPERTY(opacity, float)
