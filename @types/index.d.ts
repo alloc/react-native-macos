@@ -3892,7 +3892,7 @@ export class Image extends ImageBase {
     /**
      * @see https://facebook.github.io/react-native/docs/image.html#resolveassetsource
      */
-    static resolveAssetSource(source: ImageSourcePropType): ImageResolvedAssetSource;
+    static resolveAssetSource(source: ImageSourcePropType, scale?: number): ImageResolvedAssetSource;
 }
 
 export interface ImageBackgroundProps extends ImagePropsBase {
