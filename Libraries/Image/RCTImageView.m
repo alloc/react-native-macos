@@ -365,6 +365,9 @@ static inline BOOL UIEdgeInsetsEqualToEdgeInsets(NSEdgeInsets insets1, NSEdgeIns
         self->_onPartialLoad(nil);
       }
     } else {
+      if (self->_resizeMode == RCTResizeModeContain) {
+        [super reactSetFrame:(CGRect){ self.frame.origin, self.image.size }];
+      }
       if (self->_onLoad) {
         RCTImageSource *sourceLoaded = [source imageSourceWithSize:image.size scale:source.scale];
         self->_onLoad(onLoadParamsForSource(sourceLoaded));
