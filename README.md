@@ -23,9 +23,9 @@ npm install @alloc/react-native-macos
 - [x] Add `cursor` prop to `<View>` (https://github.com/aleclarson/react-native-macos/commit/d679a7cfe47dbae3c69ed5070b679dc3ccd3eb1c)
 - [x] Fork `@react-native-community/art` and make it work on macOS (https://github.com/aleclarson/react-native-art)
 - [x] Support moving a `RCTWindow` to a screen with a different `backingScaleFactor` (https://github.com/aleclarson/react-native-macos/commit/e289a8d8c3e502527eb43bdfcd6c27651f7f22ae)
+- [x] Fork `@types/react-native` and maintain it here
 - [ ] Add native `Worker` class ([branch](https://github.com/aleclarson/react-native-macos/tree/worker))
 - [ ] Add `<Window>` component ([API draft](https://gist.github.com/aleclarson/1eb38f8a1560a910692b624325d38767))
-- [ ] Fork `@types/react-native` and maintain it here
 - [ ] Recompute the mouse target when its current target's frame changes (relative to window)
 - [ ] Add `preferFocus` prop to `<TextInput>` that prevents blur when clicking outside the input view
 - [ ] Add `<Menu>` component ([API draft](https://gist.github.com/aleclarson/219105fc77658e1da620a17b2e05b1de))
