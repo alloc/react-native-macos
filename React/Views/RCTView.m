@@ -536,31 +536,31 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   const NSEdgeInsets borderInsets = [self bordersAsInsets];
   const RCTBorderColors borderColors = [self borderColors];
 
-  BOOL useIOSBorderRendering =
-  !RCTRunningInTestEnvironment() &&
-  RCTCornerRadiiAreEqual(cornerRadii) &&
-  RCTBorderInsetsAreEqual(borderInsets) &&
-  RCTBorderColorsAreEqual(borderColors) &&
-  _borderStyle == RCTBorderStyleSolid &&
-
-  // iOS draws borders in front of the content whereas CSS draws them behind
-  // the content. For this reason, only use iOS border drawing when clipping
-  // or when the border is hidden.
-
-  (borderInsets.top == 0 || (borderColors.top && CGColorGetAlpha(borderColors.top) == 0) || self.clipsToBounds);
-
-  // iOS clips to the outside of the border, but CSS clips to the inside. To
-  // solve this, we'll need to add a container view inside the main view to
-  // correctly clip the subviews.
-  if (useIOSBorderRendering) {
-    layer.cornerRadius = cornerRadii.topLeft;
-    layer.borderColor = borderColors.left;
-    layer.borderWidth = borderInsets.left;
-    layer.contents = nil;
-    layer.needsDisplayOnBoundsChange = NO;
-    layer.mask = nil;
-    return;
-  }
+//  BOOL useIOSBorderRendering =
+//  !RCTRunningInTestEnvironment() &&
+//  RCTCornerRadiiAreEqual(cornerRadii) &&
+//  RCTBorderInsetsAreEqual(borderInsets) &&
+//  RCTBorderColorsAreEqual(borderColors) &&
+//  _borderStyle == RCTBorderStyleSolid &&
+//
+//  // iOS draws borders in front of the content whereas CSS draws them behind
+//  // the content. For this reason, only use iOS border drawing when clipping
+//  // or when the border is hidden.
+//
+//  (borderInsets.top == 0 || (borderColors.top && CGColorGetAlpha(borderColors.top) == 0) || self.clipsToBounds);
+//
+//  // iOS clips to the outside of the border, but CSS clips to the inside. To
+//  // solve this, we'll need to add a container view inside the main view to
+//  // correctly clip the subviews.
+//  if (useIOSBorderRendering) {
+//    layer.cornerRadius = cornerRadii.topLeft;
+//    layer.borderColor = borderColors.left;
+//    layer.borderWidth = borderInsets.left;
+//    layer.contents = nil;
+//    layer.needsDisplayOnBoundsChange = NO;
+//    layer.mask = nil;
+//    return;
+//  }
 
   RCTSetScreen(self.window.screen);
   NSImage *image = RCTGetBorderImage(_borderStyle,
