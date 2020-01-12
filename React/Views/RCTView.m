@@ -135,6 +135,11 @@ static NSString *RCTRecursiveAccessibilityLabel(NSView *view)
 
 RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:unused)
 
+- (CALayer *)makeBackingLayer
+{
+  return [CALayer layer];
+}
+
 - (void)setReactTag:(NSNumber *)reactTag
 {
   // The default view has no reactTag.
@@ -191,7 +196,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:unused)
 {
   _transform = transform;
   [self ensureLayerExists];
-  [self.layer setNeedsDisplay];
+  [self applyTransform:self.layer];
 }
 
 - (NSView *)hitTest:(CGPoint)point
