@@ -463,7 +463,6 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
 
   [self ensureLayerExists];
   self.layer.backgroundColor = backgroundColor.CGColor;
-  [self.layer setNeedsDisplay];
 }
 
 - (void)setBackgroundBlurRadius:(CGFloat)blurRadius
