@@ -62,8 +62,8 @@ void UIGraphicsBeginImageContextWithOptions(CGSize size, BOOL opaque, CGFloat sc
     scale = RCTScreenScale();
   }
 
-  const size_t width = size.width * scale;
-  const size_t height = size.height * scale;
+  const size_t width = ceil(size.width * scale);
+  const size_t height = ceil(size.height * scale);
 
   if (width > 0 && height > 0) {
     if (!imageContextStack) {
