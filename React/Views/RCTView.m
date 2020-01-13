@@ -607,6 +607,7 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   }
 
   layer.contents = image;
+  layer.contentsScale = scale;
   layer.backgroundColor = NULL;
   layer.needsDisplayOnBoundsChange = YES;
   layer.magnificationFilter = kCAFilterNearest;
