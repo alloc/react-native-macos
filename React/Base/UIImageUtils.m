@@ -58,6 +58,7 @@ void UIGraphicsPushContext(CGContextRef ctx)
 
 void UIGraphicsBeginImageContextWithOptions(CGSize size, BOOL opaque, CGFloat scale)
 {
+  RCTAssertMainQueue();
   if (scale == 0.f) {
     scale = RCTScreenScale();
   }
