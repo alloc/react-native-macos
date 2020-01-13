@@ -561,20 +561,27 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
 //    layer.mask = nil;
 //    return;
 //  }
-
-  RCTSetScreen(self.window.screen);
-  NSImage *image = RCTGetBorderImage(_borderStyle,
-                                     layer.bounds.size,
-                                     cornerRadii,
-                                     borderInsets,
-                                     borderColors,
-                                     _backgroundColor.CGColor,
-                                     self.clipsToBounds);
-
-  layer.backgroundColor = NULL;
-
+  
+  BOOL isRounded = cornerRadii.topLeft > 0 || !RCTCornerRadiiAreEqual(cornerRadii);
+  BOOL isBorderTransparent =
+    (borderInsets.top == 0 && RCTBorderInsetsAreEqual(borderInsets)) ||
+    (CGColorGetAlpha(borderColors.top) == 0 && RCTBorderColorsAreEqual(borderColors));
+  
+  NSImage *image;
+  if (isRounded || !isBorderTransparent) {
+    RCTSetScreen(self.window.screen);
+    image = RCTGetBorderImage(_borderStyle,
+                              layer.bounds.size,
+                              cornerRadii,
+                              borderInsets,
+                              borderColors,
+                              _backgroundColor.CGColor,
+                              self.clipsToBounds);
+  }
+  
   if (image == nil) {
     layer.contents = nil;
+    layer.backgroundColor = _backgroundColor.CGColor;
     layer.needsDisplayOnBoundsChange = NO;
     return;
   }
@@ -600,6 +607,7 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   }
 
   layer.contents = image;
+  layer.backgroundColor = NULL;
   layer.needsDisplayOnBoundsChange = YES;
   layer.magnificationFilter = kCAFilterNearest;
 
