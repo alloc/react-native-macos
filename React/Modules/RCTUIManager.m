@@ -1209,7 +1209,7 @@ RCT_EXPORT_METHOD(measureInWindow:(nonnull NSNumber *)reactTag
     }
 
     // Return frame coordinates in window
-    CGRect windowFrame = [view.window convertRectFromScreen:view.frame];
+    CGRect windowFrame = [view.window.contentView convertRect:view.frame fromView:view.superview];
     callback(@[
       @(windowFrame.origin.x),
       @(windowFrame.origin.y),
