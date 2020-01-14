@@ -104,6 +104,7 @@ static NSString *RCTRecursiveAccessibilityLabel(NSView *view)
 {
   NSColor *_backgroundColor;
   CIFilter *_backgroundBlur;
+  NSImage *_borderImage;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -461,8 +462,12 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
 {
   _backgroundColor = backgroundColor;
 
-  [self ensureLayerExists];
-  self.layer.backgroundColor = backgroundColor.CGColor;
+  if (_borderImage) {
+    [self borderDidUpdate];
+  } else {
+    [self ensureLayerExists];
+    self.layer.backgroundColor = backgroundColor.CGColor;
+  }
 }
 
 - (void)setBackgroundBlurRadius:(CGFloat)blurRadius
@@ -532,95 +537,72 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
 
   RCTUpdateShadowPathForView(self);
 
-  const RCTCornerRadii cornerRadii = [self cornerRadii];
-  const NSEdgeInsets borderInsets = [self bordersAsInsets];
-  const RCTBorderColors borderColors = [self borderColors];
+  if (_borderImage == nil) {
+    const RCTCornerRadii cornerRadii = [self cornerRadii];
+    const NSEdgeInsets borderInsets = [self bordersAsInsets];
+    const RCTBorderColors borderColors = [self borderColors];
 
-//  BOOL useIOSBorderRendering =
-//  !RCTRunningInTestEnvironment() &&
-//  RCTCornerRadiiAreEqual(cornerRadii) &&
-//  RCTBorderInsetsAreEqual(borderInsets) &&
-//  RCTBorderColorsAreEqual(borderColors) &&
-//  _borderStyle == RCTBorderStyleSolid &&
-//
-//  // iOS draws borders in front of the content whereas CSS draws them behind
-//  // the content. For this reason, only use iOS border drawing when clipping
-//  // or when the border is hidden.
-//
-//  (borderInsets.top == 0 || (borderColors.top && CGColorGetAlpha(borderColors.top) == 0) || self.clipsToBounds);
-//
-//  // iOS clips to the outside of the border, but CSS clips to the inside. To
-//  // solve this, we'll need to add a container view inside the main view to
-//  // correctly clip the subviews.
-//  if (useIOSBorderRendering) {
-//    layer.cornerRadius = cornerRadii.topLeft;
-//    layer.borderColor = borderColors.left;
-//    layer.borderWidth = borderInsets.left;
-//    layer.contents = nil;
-//    layer.needsDisplayOnBoundsChange = NO;
-//    layer.mask = nil;
-//    return;
-//  }
-  
-  BOOL isRounded = cornerRadii.topLeft > 0 || !RCTCornerRadiiAreEqual(cornerRadii);
-  BOOL isBorderTransparent =
-    (borderInsets.top == 0 && RCTBorderInsetsAreEqual(borderInsets)) ||
-    (CGColorGetAlpha(borderColors.top) == 0 && RCTBorderColorsAreEqual(borderColors));
-  
-  NSImage *image;
-  if (isRounded || !isBorderTransparent) {
+    const BOOL needsBorderImage =
+      // Does at least one corner need rounding?
+      (cornerRadii.topLeft > 0 || !RCTCornerRadiiAreEqual(cornerRadii)) ||
+      // Does at least one edge have a visible border?
+      ((borderInsets.top > 0 || !RCTBorderInsetsAreEqual(borderInsets)) &&
+       (CGColorGetAlpha(borderColors.top) > 0 || !RCTBorderColorsAreEqual(borderColors)));
+
+    if (!needsBorderImage) {
+      layer.contents = nil;
+      layer.backgroundColor = _backgroundColor.CGColor;
+      layer.needsDisplayOnBoundsChange = NO;
+      layer.cornerRadius = 0;
+      layer.mask = nil;
+      return;
+    }
+
     RCTSetScreen(self.window.screen);
-    image = RCTGetBorderImage(_borderStyle,
-                              layer.bounds.size,
-                              cornerRadii,
-                              borderInsets,
-                              borderColors,
-                              _backgroundColor.CGColor,
-                              self.clipsToBounds);
+    NSImage *image = RCTGetBorderImage(_borderStyle,
+                                       layer.bounds.size,
+                                       cornerRadii,
+                                       borderInsets,
+                                       borderColors,
+                                       _backgroundColor.CGColor,
+                                       self.clipsToBounds);
+
+    if (RCTRunningInTestEnvironment()) {
+      const CGSize size = self.bounds.size;
+      UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+      [image drawInRect:(CGRect){CGPointZero, size}];
+      image = UIGraphicsGetImageFromCurrentImageContext();
+      UIGraphicsEndImageContext();
+    }
+
+    _borderImage = image;
+
+    CGFloat screenScale = RCTScreenScale();
+    NSEdgeInsets capInsets = image.capInsets;
+
+    CGRect contentsCenter;
+    if (NSEdgeInsetsEqual(capInsets, NSEdgeInsetsZero)) {
+      contentsCenter = CGRectMake(0, 0, 1, 1);
+    } else {
+      CGSize size = image.size;
+      contentsCenter = CGRectMake(
+        capInsets.left / size.width,
+        capInsets.top / size.height,
+        screenScale / size.width,
+        screenScale / size.height
+      );
+    }
+
+    layer.backgroundColor = NULL;
+    layer.contents = image;
+    layer.contentsScale = screenScale;
+    layer.contentsCenter = contentsCenter;
+    layer.needsDisplayOnBoundsChange = YES;
+    layer.magnificationFilter = kCAFilterNearest;
+    layer.minificationFilter = kCAFilterNearest;
+
+    [self updateClippingForLayer:layer];
   }
-  
-  if (image == nil) {
-    layer.contents = nil;
-    layer.backgroundColor = _backgroundColor.CGColor;
-    layer.needsDisplayOnBoundsChange = NO;
-    layer.cornerRadius = 0;
-    layer.mask = nil;
-    return;
-  }
-
-  if (RCTRunningInTestEnvironment()) {
-    const CGSize size = self.bounds.size;
-    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
-    [image drawInRect:(CGRect){CGPointZero, size}];
-    image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-  }
-
-  CGFloat screenScale = RCTScreenScale();
-  NSEdgeInsets capInsets = image.capInsets;
-
-  CGRect contentsCenter;
-  if (NSEdgeInsetsEqual(capInsets, NSEdgeInsetsZero)) {
-    contentsCenter = CGRectMake(0, 0, 1, 1);
-  } else {
-    CGSize size = image.size;
-    contentsCenter = CGRectMake(
-      capInsets.left / size.width,
-      capInsets.top / size.height,
-      screenScale / size.width,
-      screenScale / size.height
-    );
-  }
-
-  layer.backgroundColor = NULL;
-  layer.contents = image;
-  layer.contentsScale = screenScale;
-  layer.contentsCenter = contentsCenter;
-  layer.needsDisplayOnBoundsChange = YES;
-  layer.magnificationFilter = kCAFilterNearest;
-  layer.minificationFilter = kCAFilterNearest;
-
-  [self updateClippingForLayer:layer];
 }
 
 #pragma mark - Shadows
@@ -657,12 +639,20 @@ static void RCTUpdateShadowPathForView(RCTView *view)
 
 #pragma mark - Clipping
 
+- (void)setClipsToBounds:(BOOL)clipsToBounds
+{
+  super.clipsToBounds = clipsToBounds;
+
+  if (_borderImage) {
+    [self borderDidUpdate];
+  }
+}
+
 - (void)updateClippingForLayer:(CALayer *)layer
 {
   CALayer *mask = nil;
   CGFloat cornerRadius = 0;
   if (self.clipsToBounds) {
-
     const RCTCornerRadii cornerRadii = [self cornerRadii];
     if (RCTCornerRadiiAreEqual(cornerRadii)) {
       cornerRadius = cornerRadii.topLeft;
@@ -853,6 +843,14 @@ static CGFloat RCTDefaultIfNegativeTo(CGFloat defaultValue, CGFloat x) {
   };
 }
 
+- (void)borderDidUpdate
+{
+  _borderImage = nil;
+
+  [self ensureLayerExists];
+  [self.layer setNeedsDisplay];
+}
+
 #pragma mark - Border Color
 
 #define setBorderColor(side)                                \
@@ -863,8 +861,7 @@ static CGFloat RCTDefaultIfNegativeTo(CGFloat defaultValue, CGFloat x) {
     }                                                       \
     CGColorRelease(_border##side##Color);                   \
     _border##side##Color = CGColorRetain(color);            \
-    [self ensureLayerExists];                               \
-    [self.layer setNeedsDisplay];                           \
+    [self borderDidUpdate];                                 \
   }
 
 setBorderColor()
@@ -884,8 +881,7 @@ setBorderColor(End)
       return;                                   \
     }                                           \
     _border##side##Width = width;               \
-    [self ensureLayerExists];                   \
-    [self.layer setNeedsDisplay];               \
+    [self borderDidUpdate];                     \
   }
 
 setBorderWidth()
@@ -905,8 +901,7 @@ setBorderWidth(End)
       return;                                     \
     }                                             \
     _border##side##Radius = radius;               \
-    [self ensureLayerExists];                     \
-    [self.layer setNeedsDisplay];                 \
+    [self borderDidUpdate];                       \
   }
 
 setBorderRadius()
@@ -928,8 +923,7 @@ setBorderRadius(BottomEnd)
       return;                                          \
     }                                                  \
     _border##side##Style = style;                      \
-    [self ensureLayerExists];                          \
-    [self.layer setNeedsDisplay];                      \
+    [self borderDidUpdate];                            \
   }
 
 setBorderStyle()
