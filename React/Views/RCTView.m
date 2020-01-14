@@ -618,6 +618,7 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   layer.contentsCenter = contentsCenter;
   layer.needsDisplayOnBoundsChange = YES;
   layer.magnificationFilter = kCAFilterNearest;
+  layer.minificationFilter = kCAFilterNearest;
 
   [self updateClippingForLayer:layer];
 }
