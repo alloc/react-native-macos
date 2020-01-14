@@ -182,11 +182,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:unused)
 
 - (void)drawRect:(__unused NSRect)dirtyRect {}
 
-- (BOOL)wantsDefaultClipping
-{
-  return self.clipsToBounds;
-}
-
 - (void)setCursor:(RCTCursor)cursor
 {
   _cursor = cursor;
