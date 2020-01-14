@@ -273,7 +273,7 @@ static NSImage *RCTGetSolidBorderImage(RCTCornerRadii cornerRadii,
     CGContextAddPath(ctx, insetPath);
     CGContextEOFillPath(ctx);
 
-  } else {
+  } else if (!hasEqualColors || CGColorGetAlpha(borderColors.top) > 0) {
     CGPoint topLeft = (CGPoint){borderInsets.left, borderInsets.top};
     if (cornerInsets.topLeft.width > 0 && cornerInsets.topLeft.height > 0) {
       CGPoint points[2];
