@@ -545,6 +545,8 @@ completionBlock:(void (^)(NSError *error, id imageOrData, NSString *fetchDate))c
                                           partialLoadBlock:(RCTImageLoaderPartialLoadBlock)partialLoadBlock
                                            completionBlock:(RCTImageLoaderCompletionBlock)completionBlock
 {
+    RCTAssert(scale > 0.0f, @"Must provide an explicit screen scale, since the image is NOT decoded on the main thread");
+
     __block atomic_bool cancelled = ATOMIC_VAR_INIT(NO);
     // TODO: Protect this variable shared between threads.
     __block dispatch_block_t cancelLoad = nil;
