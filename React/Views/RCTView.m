@@ -588,18 +588,6 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
     return;
   }
 
-  CGFloat scale = RCTScreenScale();
-  CGRect contentsCenter = ({
-    CGSize size = image.size;
-    NSEdgeInsets insets = image.capInsets;
-    CGRectMake(
-      insets.left / size.width,
-      insets.top / size.height,
-      scale / size.width,
-      scale / size.height
-    );
-  });
-
   if (RCTRunningInTestEnvironment()) {
     const CGSize size = self.bounds.size;
     UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
@@ -608,14 +596,28 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
     UIGraphicsEndImageContext();
   }
 
-  layer.contents = image;
-  layer.contentsScale = scale;
+  CGFloat screenScale = RCTScreenScale();
+  NSEdgeInsets capInsets = image.capInsets;
+
+  CGRect contentsCenter;
+  if (NSEdgeInsetsEqual(capInsets, NSEdgeInsetsZero)) {
+    contentsCenter = CGRectMake(0, 0, 1, 1);
+  } else {
+    CGSize size = image.size;
+    contentsCenter = CGRectMake(
+      capInsets.left / size.width,
+      capInsets.top / size.height,
+      screenScale / size.width,
+      screenScale / size.height
+    );
+  }
+
   layer.backgroundColor = NULL;
+  layer.contents = image;
+  layer.contentsScale = screenScale;
+  layer.contentsCenter = contentsCenter;
   layer.needsDisplayOnBoundsChange = YES;
   layer.magnificationFilter = kCAFilterNearest;
-
-  BOOL isResizable = !NSEdgeInsetsEqual(image.capInsets, NSEdgeInsetsZero);
-  layer.contentsCenter = isResizable ? contentsCenter : CGRectMake(0, 0, 1, 1);
 
   [self updateClippingForLayer:layer];
 }
