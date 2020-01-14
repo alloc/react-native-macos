@@ -1,101 +1,89 @@
-/**
- * Copyright (c) 2015-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
 #import "RCTKeyCommands.h"
-
-#import <AppKit/AppKit.h>
-
 #import "RCTDefines.h"
 #import "RCTUtils.h"
 
-@interface RCTKeyCommand : NSObject <NSCopying>
-
-@property (nonatomic, strong) NSString *keyCommand;
-@property (nonatomic) NSEventModifierFlags modifierFlags;
-@property (nonatomic, copy) void (^block)(NSEvent *);
-
-@end
-
 @implementation RCTKeyCommand
+{
+  BOOL _preventDefault;
+}
 
-- (instancetype)initWithKeyCommand:(NSString *)keyCommand
-                     modifierFlags:(NSEventModifierFlags)modifierFlags
-                             block:(void (^)(NSEvent *))block
+- (instancetype)initWithEvent:(NSEvent *)event
 {
   if ((self = [super init])) {
-    _keyCommand = keyCommand;
-    _modifierFlags = modifierFlags;
-    _block = block;
+    _event = event;
   }
   return self;
 }
 
 RCT_NOT_IMPLEMENTED(- (instancetype)init)
 
-- (id)copyWithZone:(__unused NSZone *)zone
+- (NSString *)input
 {
-  return self;
+  return _event.characters;
 }
 
-- (NSUInteger)hash
+- (unsigned short)keyCode
 {
-  return _keyCommand.hash ^ _modifierFlags;
+  return _event.keyCode;
 }
 
-- (BOOL)isEqual:(RCTKeyCommand *)object
+- (BOOL)isDown
 {
-  if (![object isKindOfClass:[RCTKeyCommand class]]) {
-    return NO;
-  }
-  return [self matchesInput:object.keyCommand
-                      flags:object.modifierFlags];
+  return _event.type == NSEventTypeKeyDown;
 }
 
-- (BOOL)matchesInput:(NSString*)keyCommand flags:(int)flags
+- (NSEventModifierFlags)flags
 {
-  return [_keyCommand isEqual:keyCommand] && _modifierFlags == flags;
+  return _event.modifierFlags & NSEventModifierFlagDeviceIndependentFlagsMask;
+}
+
+- (NSWindow *)window
+{
+  return _event.window;
 }
 
 - (NSString *)description
 {
-  return [NSString stringWithFormat:@"<%@:%p input=\"%@\" flags=%zd hasBlock=%@>",
-          [self class], self, _keyCommand, _modifierFlags,
-          _block ? @"YES" : @"NO"];
+  return [NSString stringWithFormat:@"<%@:%p input=\"%@\" flags=%zd isDown=%@>",
+          [self class], self, self.input, self.flags, self.isDown ? @"YES" : @"NO"];
 }
 
-@end
-
-@interface RCTKeyCommands ()
-
-@property (nonatomic, strong) NSMutableSet<RCTKeyCommand *> *commands;
-
-@end
-
-
-@implementation NSWindow (RCTKeyCommands)
-
-- (void)keyDown:(NSEvent *)theEvent
+- (BOOL)matchesInput:(NSString *)input
 {
-  for (RCTKeyCommand *command in [RCTKeyCommands sharedInstance].commands) {
-    if ([command.keyCommand isEqualToString:theEvent.characters] &&
-        command.modifierFlags == (theEvent.modifierFlags & NSDeviceIndependentModifierFlagsMask)) {
-      if (command.block) {
-        command.block(theEvent);
-      }
-      return;
-    }
-  }
+  return [self matchesInput:input flags:0];
+}
 
-  [super keyDown:theEvent];
+- (BOOL)matchesInput:(NSString *)input flags:(NSEventModifierFlags)flags
+{
+  return [self.input isEqualToString:input] && self.flags == flags;
+}
+
+- (BOOL)matchesKeyCode:(RCTKeyCode)keyCode
+{
+  return [self matchesKeyCode:keyCode flags:0];
+}
+
+- (BOOL)matchesKeyCode:(RCTKeyCode)keyCode flags:(NSEventModifierFlags)flags
+{
+  return self.keyCode == keyCode && self.flags == flags;
+}
+
+- (void)preventDefault
+{
+  _preventDefault = YES;
+}
+
+- (BOOL)isDefaultPrevented
+{
+  return _preventDefault;
 }
 
 @end
 
 @implementation RCTKeyCommands
+{
+  NSHashTable<id<RCTKeyCommandObserver>> *_observers;
+}
 
 + (instancetype)sharedInstance
 {
@@ -111,46 +99,52 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
 - (instancetype)init
 {
   if ((self = [super init])) {
-    _commands = [NSMutableSet new];
+    _observers = [NSHashTable weakObjectsHashTable];
   }
   return self;
 }
 
-- (void)registerKeyCommandWithInput:(NSString *)input
-                      modifierFlags:(NSEventModifierFlags)flags
-                             action:(void (^)(NSEvent *))block
+- (void)addObserver:(NSObject<RCTKeyCommandObserver> *)observer
 {
   RCTAssertMainQueue();
-
-  RCTKeyCommand *keyCommand = [[RCTKeyCommand alloc] initWithKeyCommand:input modifierFlags:flags block:block];
-  [_commands removeObject:keyCommand];
-  [_commands addObject:keyCommand];
+  [_observers addObject:observer];
 }
 
-- (void)unregisterKeyCommandWithInput:(NSString *)input
-                        modifierFlags:(NSEventModifierFlags)flags
+- (void)removeObserver:(NSObject<RCTKeyCommandObserver> *)observer
 {
   RCTAssertMainQueue();
-
-  for (RCTKeyCommand *command in _commands.allObjects) {
-    if ([command matchesInput:input flags:flags]) {
-      [_commands removeObject:command];
-      break;
-    }
-  }
+  [_observers removeObject:observer];
 }
 
-- (BOOL)isKeyCommandRegisteredForInput:(NSString *)input
-                         modifierFlags:(NSEventModifierFlags)flags
+- (BOOL)observeEvent:(NSEvent *)event
 {
   RCTAssertMainQueue();
-
-  for (RCTKeyCommand *command in _commands) {
-    if ([command matchesInput:input flags:flags]) {
-      return YES;
-    }
+  RCTKeyCommand *command = [[RCTKeyCommand alloc] initWithEvent:event];
+  for (id<RCTKeyCommandObserver> observer in _observers) {
+    [observer observeKeyCommand:command];
   }
-  return NO;
+  return command.isDefaultPrevented;
 }
 
 @end
+
+@implementation NSWindow (RCTKeyCommands)
+
+- (void)keyDown:(NSEvent *)event
+{
+  BOOL isDefaultPrevented = [[RCTKeyCommands sharedInstance] observeEvent:event];
+  if (!isDefaultPrevented) {
+    [super keyDown:event];
+  }
+}
+
+- (void)keyUp:(NSEvent *)event
+{
+  BOOL isDefaultPrevented = [[RCTKeyCommands sharedInstance] observeEvent:event];
+  if (!isDefaultPrevented) {
+    [super keyUp:event];
+  }
+}
+
+@end
+

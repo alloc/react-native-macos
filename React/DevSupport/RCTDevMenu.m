@@ -10,7 +10,6 @@
 #import "RCTBridge+Private.h"
 #import "RCTBundleURLProvider.h"
 #import "RCTDevSettings.h"
-#import "RCTKeyCommands.h"
 #import "RCTLog.h"
 #import "RCTUtils.h"
 #import "RCTDefines.h"
@@ -139,42 +138,7 @@ RCT_EXPORT_MODULE()
     _extraMenuItems = [NSMutableArray new];
 
 #if DEBUG
-    RCTKeyCommands *commands = [RCTKeyCommands sharedInstance];
-    __weak __typeof(self) weakSelf = self;
-    // Reload in debug mode
-    [commands registerKeyCommandWithInput:@"d"
-                            modifierFlags:NSEventModifierFlagCommand
-                                   action:^(__unused NSEvent *command) {
-                                     [weakSelf.bridge.devSettings setIsDebuggingRemotely:YES];
-                                   }];
-
-    // Toggle the __DEV__ flag
-    [commands registerKeyCommandWithInput:@"d"
-                            modifierFlags:NSEventModifierFlagCommand|NSEventModifierFlagShift
-                                   action:^(__unused NSEvent *command) {
-                                     RCTBundleURLProvider *settings = [RCTBundleURLProvider sharedSettings];
-                                     settings.enableDev = !settings.enableDev;
-
-                                     // Restart the application in case it cached the JS bundle URL.
-                                     NSString *path = [[NSBundle.mainBundle.resourcePath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
-                                     [NSTask launchedTaskWithLaunchPath:@"/usr/bin/open" arguments:@[path]];
-                                     exit(0);
-                                   }];
-
-    // Toggle element inspector
-    [commands registerKeyCommandWithInput:@"i"
-                            modifierFlags:NSEventModifierFlagCommand
-                                   action:^(__unused NSEvent *command) {
-                                     [weakSelf.bridge.devSettings toggleElementInspector];
-                                   }];
-
-    // Reload in normal mode
-    [commands registerKeyCommandWithInput:@"n"
-                            modifierFlags:NSEventModifierFlagCommand
-                                   action:^(__unused NSEvent *command) {
-                                     [weakSelf.bridge.devSettings setIsDebuggingRemotely:NO];
-                                   }];
-
+    [RCTKeyCommands.sharedInstance addObserver:self];
 #endif
   }
   return self;
@@ -374,7 +338,36 @@ RCT_EXPORT_MODULE()
   }
 }
 
+- (void)observeKeyCommand:(RCTKeyCommand *)command
+{
+  if (!command.isDown || command.isDefaultPrevented) return;
+  
+  // Reload in debug mode
+  if ([command matchesInput:@"d" flags:NSEventModifierFlagCommand]) {
+    [self.bridge.devSettings setIsDebuggingRemotely:YES];
+  }
+  
+  // Toggle the __DEV__ flag
+  else if ([command matchesInput:@"d" flags:NSEventModifierFlagCommand|NSEventModifierFlagShift]) {
+    RCTBundleURLProvider *settings = [RCTBundleURLProvider sharedSettings];
+    settings.enableDev = !settings.enableDev;
 
+    // Restart the application in case it cached the JS bundle URL.
+    NSString *path = [[NSBundle.mainBundle.resourcePath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
+    [NSTask launchedTaskWithLaunchPath:@"/usr/bin/open" arguments:@[path]];
+    exit(0);
+  }
+  
+  // Toggle element inspector
+  else if ([command matchesInput:@"i" flags:NSEventModifierFlagCommand]) {
+    [self.bridge.devSettings toggleElementInspector];
+  }
+
+  // Reload in normal mode
+  else if ([command matchesInput:@"n" flags:NSEventModifierFlagCommand]) {
+    [self.bridge.devSettings setIsDebuggingRemotely:NO];
+  }
+}
 
 RCT_EXPORT_METHOD(show)
 {

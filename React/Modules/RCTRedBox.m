@@ -14,6 +14,7 @@
 #import "RCTDefines.h"
 #import "RCTErrorInfo.h"
 #import "RCTEventDispatcher.h"
+#import "RCTKeyCommands.h"
 #import "RCTJSStackFrame.h"
 // #import "RCTRedBoxExtraDataViewController.h"
 #import "RCTUtils.h"
@@ -56,7 +57,7 @@ const CGFloat buttonMargin = 10;
 
 @end
 
-@interface RCTRedBoxWindow : NSWindow <NSTableViewDelegate, NSTableViewDataSource, NSWindowDelegate>
+@interface RCTRedBoxWindow : NSWindow <NSTableViewDelegate, NSTableViewDataSource, NSWindowDelegate, RCTKeyCommandObserver>
 @property (nonatomic, weak) id<RCTRedBoxWindowActionDelegate> actionDelegate;
 @property (nonatomic, weak) RCTBridge *bridge;
 @end
@@ -414,23 +415,24 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 
 #pragma mark - Key commands
 
-- (void)keyDown:(NSEvent *)theEvent
+- (void)observeKeyCommand:(RCTKeyCommand *)command
 {
-  [super keyDown:theEvent];
+  if (command.window != self) return;
+  if (!command.isDown) return;
 
-  if (theEvent.modifierFlags == (NSCommandKeyMask & NSDeviceIndependentModifierFlagsMask)
-      && [theEvent.characters isEqualToString:@"r"]) {
+  // Reload the bridge on cmd+r.
+  if ([command matchesInput:@"r" flags:NSEventModifierFlagCommand]) {
     [self reload];
   }
 
-  if (theEvent.keyCode == 53) {
+  // The escape key closes the red box.
+  else if ([command matchesKeyCode:53]) {
     [self close];
   }
 
   // Copy = Cmd-Option C since Cmd-C in the simulator copies the pasteboard from
   // the simulator to the desktop pasteboard.
-  if (theEvent.modifierFlags == (NSCommandKeyMask & NSAlternateKeyMask)
-      && [theEvent.characters isEqualToString:@"c"]) {
+  else if ([command matchesInput:@"c" flags:NSEventModifierFlagCommand|NSEventModifierFlagOption]) {
     [self copyStack];
   }
 }

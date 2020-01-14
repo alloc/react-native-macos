@@ -9,6 +9,7 @@
 
 #import <React/RCTBridge.h>
 #import <React/RCTBridgeModule.h>
+#import <React/RCTKeyCommands.h>
 
 #if RCT_DEV
 
@@ -22,7 +23,7 @@ RCT_EXTERN NSString *const RCTShowDevMenuNotification;
 /**
  * Developer menu, useful for exposing extra functionality when debugging.
  */
-@interface RCTDevMenu : NSObject
+@interface RCTDevMenu : NSObject <RCTKeyCommandObserver>
 
 /**
  * Deprecated, use RCTDevSettings instead.
