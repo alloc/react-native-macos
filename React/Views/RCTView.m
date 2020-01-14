@@ -583,6 +583,8 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
     layer.contents = nil;
     layer.backgroundColor = _backgroundColor.CGColor;
     layer.needsDisplayOnBoundsChange = NO;
+    layer.cornerRadius = 0;
+    layer.mask = nil;
     return;
   }
 
