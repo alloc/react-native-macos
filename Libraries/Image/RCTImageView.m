@@ -284,7 +284,7 @@ static inline BOOL UIEdgeInsetsEqualToEdgeInsets(NSEdgeInsets insets1, NSEdgeIns
   RCTImageSource *source = [self imageSourceForSize:self.frame.size];
   _pendingImageSource = source;
 
-  if (source && self.frame.size.width > 0 && self.frame.size.height > 0) {
+  if (source && self.window && !CGRectIsEmpty(self.frame)) {
     if (_onLoadStart) {
       _onLoadStart(nil);
     }
