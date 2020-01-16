@@ -312,6 +312,7 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   if (!self.layer) {
     self.wantsLayer = YES;
     self.layer.delegate = (id<CALayerDelegate>)self;
+    self.layerContentsRedrawPolicy = NSViewLayerContentsRedrawOnSetNeedsDisplay;
   }
 }
 
