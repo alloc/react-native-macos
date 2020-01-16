@@ -184,7 +184,7 @@
       _highlightLayer = nil;
     }
   } else if (_textStorage) {
-    [self.layer setNeedsDisplay];
+    [self setNeedsDisplay:YES];
   }
 }
 
