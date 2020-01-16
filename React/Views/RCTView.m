@@ -513,7 +513,7 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
 - (void)viewDidChangeBackingProperties
 {
   if (self.layer.shouldRasterize) {
-    self.layer.rasterizationScale = self.window.screen.backingScaleFactor;
+    self.layer.rasterizationScale = self.window.backingScaleFactor;
   }
 }
 

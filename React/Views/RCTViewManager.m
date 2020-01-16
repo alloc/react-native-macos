@@ -127,7 +127,7 @@ RCT_CUSTOM_VIEW_PROPERTY(shouldRasterizeIOS, BOOL, RCTView)
   }
   view.layer.shouldRasterize = json ? [RCTConvert BOOL:json] : defaultView.layer.shouldRasterize;
   view.layer.rasterizationScale = view.layer.shouldRasterize
-    ? view.window.screen.backingScaleFactor
+    ? view.window.backingScaleFactor
     : defaultView.layer.rasterizationScale;
 }
 

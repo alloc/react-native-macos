@@ -242,7 +242,7 @@ static inline BOOL UIEdgeInsetsEqualToEdgeInsets(NSEdgeInsets insets1, NSEdgeIns
     return nil;
   }
 
-  const CGFloat scale = self.window.screen.backingScaleFactor;
+  const CGFloat scale = self.window.backingScaleFactor;
   const CGFloat targetImagePixels = size.width * size.height * scale * scale;
 
   RCTImageSource *bestSource = nil;
@@ -305,7 +305,7 @@ static inline BOOL UIEdgeInsetsEqualToEdgeInsets(NSEdgeInsets insets1, NSEdgeIns
     };
 
     CGSize imageSize = self.bounds.size;
-    CGFloat imageScale = self.window.screen.backingScaleFactor;
+    CGFloat imageScale = self.window.backingScaleFactor;
     if (!UIEdgeInsetsEqualToEdgeInsets(_capInsets, NSEdgeInsetsZero)) {
       // Don't resize images that use capInsets
       imageSize = CGSizeZero;
@@ -408,7 +408,7 @@ static inline BOOL UIEdgeInsetsEqualToEdgeInsets(NSEdgeInsets insets1, NSEdgeIns
   } else if ([self shouldReloadImageSourceAfterResize]) {
     CGSize imageSize = self.image.size;
     CGFloat imageScale = 1.0;
-    CGFloat screenScale = self.window.screen.backingScaleFactor;
+    CGFloat screenScale = self.window.backingScaleFactor;
     CGSize idealSize = RCTTargetSize(imageSize, imageScale, frame.size, screenScale,
                                      self.resizeMode, YES);
 

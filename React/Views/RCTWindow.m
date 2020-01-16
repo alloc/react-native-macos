@@ -423,13 +423,13 @@ static NSCursor *NSCursorForRCTCursor(RCTCursor cursor)
 {
   [super setContentView:contentView];
   if (self.screen && [contentView respondsToSelector:@selector(setScaleFactor:)]) {
-    contentView.scaleFactor = self.screen.backingScaleFactor;
+    contentView.scaleFactor = self.backingScaleFactor;
   }
 }
 
 - (void)RCT_windowDidChangeScreen:(__unused NSNotification *)notification
 {
-  self.contentView.scaleFactor = self.screen.backingScaleFactor;
+  self.contentView.scaleFactor = self.backingScaleFactor;
 }
 
 - (void)RCT_javaScriptDidLoad:(__unused NSNotification *)notification
