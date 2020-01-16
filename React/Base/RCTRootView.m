@@ -64,8 +64,6 @@ NSString *const RCTContentWillAppearNotification = @"RCTContentWillAppearNotific
   }
 
   if (self = [super initWithFrame:CGRectZero]) {
-    self.backgroundColor = [NSColor clearColor];
-
     [self setNeedsLayout:NO];
 
     _bridge = bridge;
@@ -155,11 +153,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 - (void)mouseMoved:(NSEvent *)theEvent
 {
   [[_contentView touchHandler] mouseMoved:theEvent];
-}
-
-- (void)setBackgroundColor:(NSColor *)backgroundColor
-{
-  [super.layer setBackgroundColor:[backgroundColor CGColor]];
 }
 
 #pragma mark - passThroughTouches
