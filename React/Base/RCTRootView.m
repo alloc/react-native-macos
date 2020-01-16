@@ -64,8 +64,6 @@ NSString *const RCTContentWillAppearNotification = @"RCTContentWillAppearNotific
   }
 
   if (self = [super initWithFrame:CGRectZero]) {
-    [self setNeedsLayout:NO];
-
     _bridge = bridge;
     _moduleName = moduleName;
     _appProperties = [initialProperties copy];
