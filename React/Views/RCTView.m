@@ -507,8 +507,12 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
 
 - (void)viewDidChangeBackingProperties
 {
+  CGFloat scale = self.window.backingScaleFactor;
+  if (_borderImage) {
+    self.layer.contentsScale = scale;
+  }
   if (self.layer.shouldRasterize) {
-    self.layer.rasterizationScale = self.window.backingScaleFactor;
+    self.layer.rasterizationScale = scale;
   }
 }
 
