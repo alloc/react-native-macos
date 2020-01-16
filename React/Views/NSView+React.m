@@ -326,6 +326,7 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   // Do nothing by default.
   // Native views must synthesize their own "transform" property,
   // override "displayLayer:", and apply the transform there.
+  RCTLogWarn(@"NSView subclass must override setTransform itself");
 }
 
 @end
