@@ -11,6 +11,7 @@
 'use strict';
 
 const React = require('React');
+const Platform = require('Platform');
 const TextAncestor = require('TextAncestor');
 
 const invariant = require('fbjs/lib/invariant');
