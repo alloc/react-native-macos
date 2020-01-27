@@ -322,6 +322,10 @@ static YGSize RCTTextShadowViewMeasure(YGNodeRef node, float width, YGMeasureMod
   [layoutManager ensureLayoutForTextContainer:textContainer];
   CGSize size = [layoutManager usedRectForTextContainer:textContainer].size;
 
+  // Avoid clipping of descenders when aligned to a fractional pixel.
+  CGFloat scaleFactor = YGNodeLayoutGetPointScaleFactor(node);
+  size.height += 1 / scaleFactor;
+
   CGFloat letterSpacing = shadowTextView.textAttributes.letterSpacing;
   if (!isnan(letterSpacing) && letterSpacing < 0) {
     size.width -= letterSpacing;
