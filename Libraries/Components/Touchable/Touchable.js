@@ -447,73 +447,19 @@ var TouchableMixin = {
    * Place as callback for a DOM element's `onResponderMove` event.
    */
   touchableHandleResponderMove: function(e) {
+    var state = this.state.touchable;
+
     // Not responding to a touch event.
-    if (!this.state.touchable.responderID) {
+    if (!state.responderID) {
       return;
     }
 
     // Measurement may not have returned yet.
-    if (!this.state.touchable.positionOnActivate) {
-      return;
-    }
-
-    var positionOnActivate = this.state.touchable.positionOnActivate;
-    var dimensionsOnActivate = this.state.touchable.dimensionsOnActivate;
-    var pressRectOffset = this.touchableGetPressRectOffset ?
-      this.touchableGetPressRectOffset() : {
-        left: PRESS_EXPAND_PX,
-        right: PRESS_EXPAND_PX,
-        top: PRESS_EXPAND_PX,
-        bottom: PRESS_EXPAND_PX
-      };
-
-    var pressExpandLeft = pressRectOffset.left;
-    var pressExpandTop = pressRectOffset.top;
-    var pressExpandRight = pressRectOffset.right;
-    var pressExpandBottom = pressRectOffset.bottom;
-
-    var hitSlop = this.touchableGetHitSlop ?
-      this.touchableGetHitSlop() : null;
-
-    if (hitSlop) {
-      pressExpandLeft += hitSlop.left || 0;
-      pressExpandTop += hitSlop.top || 0;
-      pressExpandRight += hitSlop.right || 0;
-      pressExpandBottom += hitSlop.bottom || 0;
-    }
-
-    var touch = TouchEventUtils.extractSingleTouch(e.nativeEvent);
-    var pageX = touch && touch.pageX;
-    var pageY = touch && touch.pageY;
-
-    if (this.pressInLocation) {
-      var movedDistance = this._getDistanceBetweenPoints(pageX, pageY, this.pressInLocation.pageX, this.pressInLocation.pageY);
-      if (movedDistance > LONG_PRESS_ALLOWED_MOVEMENT) {
-        this._cancelLongPressDelayTimeout();
-      }
-    }
-
-    var isTouchWithinActive =
-        pageX > positionOnActivate.left - pressExpandLeft &&
-        pageY > positionOnActivate.top - pressExpandTop &&
-        pageX <
-          positionOnActivate.left +
-          dimensionsOnActivate.width +
-          pressExpandRight &&
-        pageY <
-          positionOnActivate.top +
-          dimensionsOnActivate.height +
-          pressExpandBottom;
-    if (isTouchWithinActive) {
-      this._receiveSignal(Signals.ENTER_PRESS_RECT, e);
-      var curState = this.state.touchable.touchState;
-      if (curState === States.RESPONDER_INACTIVE_PRESS_IN) {
-        // fix for t7967420
-        this._cancelLongPressDelayTimeout();
-      }
+    if (state.isMeasuring) {
+      state.lastMoveEvent = e;
+      e.persist();
     } else {
-      this._cancelLongPressDelayTimeout();
-      this._receiveSignal(Signals.LEAVE_PRESS_RECT, e);
+      this._handleMovement(e);
     }
   },
 
@@ -596,26 +542,38 @@ var TouchableMixin = {
    * @private
    */
   _remeasureMetricsOnActivation: function() {
-    const tag = this.state.touchable.responderID;
-    if (tag == null) {
+    const state = this.state.touchable;
+    if (state.responderID == null) {
       return;
     }
 
-    UIManager.measure(tag, this._handleQueryLayout);
+    if (!state.isMeasuring) {
+      state.isMeasuring = true;
+      UIManager.measure(state.responderID, this._handleQueryLayout);
+    }
   },
 
   _handleQueryLayout: function(pageX, pageY, width, height) {
     // The measurement may have failed.
     if (arguments.length) {
       const state = this.state.touchable;
+
       if (state.positionOnActivate) {
         Position.release(state.positionOnActivate);
       }
       if (state.dimensionsOnActivate) {
         BoundingDimensions.release(state.dimensionsOnActivate);
       }
+
+      state.isMeasuring = false;
       state.positionOnActivate = Position.getPooled(pageX, pageY);
       state.dimensionsOnActivate = BoundingDimensions.getPooled(width, height);
+
+      const e = state.lastMoveEvent;
+      if (e) {
+        state.lastMoveEvent = null;
+        this._handleMovement(e);
+      }
     }
   },
 
@@ -634,6 +592,68 @@ var TouchableMixin = {
         'most likely due to `Touchable.longPressDelayTimeout` not being cancelled.');
     } else {
       this._receiveSignal(Signals.LONG_PRESS_DETECTED, e);
+    }
+  },
+
+  _handleMovement: function(e) {
+    var state = this.state.touchable;
+    var positionOnActivate = state.positionOnActivate;
+    var dimensionsOnActivate = state.dimensionsOnActivate;
+    var pressRectOffset = this.touchableGetPressRectOffset ?
+      this.touchableGetPressRectOffset() : {
+        left: PRESS_EXPAND_PX,
+        right: PRESS_EXPAND_PX,
+        top: PRESS_EXPAND_PX,
+        bottom: PRESS_EXPAND_PX
+      };
+
+    var pressExpandLeft = pressRectOffset.left;
+    var pressExpandTop = pressRectOffset.top;
+    var pressExpandRight = pressRectOffset.right;
+    var pressExpandBottom = pressRectOffset.bottom;
+
+    var hitSlop = this.touchableGetHitSlop ?
+      this.touchableGetHitSlop() : null;
+
+    if (hitSlop) {
+      pressExpandLeft += hitSlop.left || 0;
+      pressExpandTop += hitSlop.top || 0;
+      pressExpandRight += hitSlop.right || 0;
+      pressExpandBottom += hitSlop.bottom || 0;
+    }
+
+    var touch = TouchEventUtils.extractSingleTouch(e.nativeEvent);
+    var pageX = touch && touch.pageX;
+    var pageY = touch && touch.pageY;
+
+    if (this.pressInLocation) {
+      var movedDistance = this._getDistanceBetweenPoints(pageX, pageY, this.pressInLocation.pageX, this.pressInLocation.pageY);
+      if (movedDistance > LONG_PRESS_ALLOWED_MOVEMENT) {
+        this._cancelLongPressDelayTimeout();
+      }
+    }
+
+    var isTouchWithinActive =
+        pageX > positionOnActivate.left - pressExpandLeft &&
+        pageY > positionOnActivate.top - pressExpandTop &&
+        pageX <
+          positionOnActivate.left +
+          dimensionsOnActivate.width +
+          pressExpandRight &&
+        pageY <
+          positionOnActivate.top +
+          dimensionsOnActivate.height +
+          pressExpandBottom;
+    if (isTouchWithinActive) {
+      this._receiveSignal(Signals.ENTER_PRESS_RECT, e);
+      var curState = state.touchState;
+      if (curState === States.RESPONDER_INACTIVE_PRESS_IN) {
+        // fix for t7967420
+        this._cancelLongPressDelayTimeout();
+      }
+    } else {
+      this._cancelLongPressDelayTimeout();
+      this._receiveSignal(Signals.LEAVE_PRESS_RECT, e);
     }
   },
 
