@@ -38,6 +38,12 @@ BOOL RCTCornerRadiiAreEqual(RCTCornerRadii cornerRadii);
 BOOL RCTBorderColorsAreEqual(RCTBorderColors borderColors);
 
 /**
+ * Determine if the borders need to be drawn.
+ */
+BOOL RCTBorderIsVisible(CGFloat borderWidth, CGColorRef borderColor);
+BOOL RCTBordersAreVisible(NSEdgeInsets borderInsets, RCTBorderColors borderColors);
+
+/**
  * Convert RCTCornerRadii to RCTCornerInsets by applying border insets.
  * Effectively, returns radius - inset, with a lower bound of 0.0.
  */

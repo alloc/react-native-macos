@@ -540,8 +540,7 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
       // Does at least one corner need rounding?
       (cornerRadii.topLeft > 0 || !RCTCornerRadiiAreEqual(cornerRadii)) ||
       // Does at least one edge have a visible border?
-      ((borderInsets.top > 0 || !RCTBorderInsetsAreEqual(borderInsets)) &&
-       (CGColorGetAlpha(borderColors.top) > 0 || !RCTBorderColorsAreEqual(borderColors)));
+      RCTBordersAreVisible(borderInsets, borderColors);
 
     if (!needsBorderImage) {
       layer.contents = nil;

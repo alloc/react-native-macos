@@ -19,6 +19,20 @@ BOOL RCTBorderInsetsAreEqual(NSEdgeInsets borderInsets)
   ABS(borderInsets.left - borderInsets.top) < RCTViewBorderThreshold;
 }
 
+BOOL RCTBorderIsVisible(CGFloat borderWidth, CGColorRef borderColor)
+{
+  return borderWidth > 0 && CGColorGetAlpha(borderColor) > 0;
+}
+
+BOOL RCTBordersAreVisible(NSEdgeInsets borderInsets, RCTBorderColors borderColors)
+{
+  return
+  RCTBorderIsVisible(borderInsets.top, borderColors.top) ||
+  RCTBorderIsVisible(borderInsets.left, borderColors.left) ||
+  RCTBorderIsVisible(borderInsets.right, borderColors.right) ||
+  RCTBorderIsVisible(borderInsets.bottom, borderColors.bottom);
+}
+
 BOOL RCTCornerRadiiAreEqual(RCTCornerRadii cornerRadii)
 {
   return
@@ -265,15 +279,7 @@ static NSImage *RCTGetSolidBorderImage(RCTCornerRadii cornerRadii,
   CGContextAddPath(ctx, insetPath);
   CGContextEOClip(ctx);
 
-  BOOL hasEqualColors = RCTBorderColorsAreEqual(borderColors);
-  if ((drawToEdge || !hasCornerRadii) && hasEqualColors) {
-
-    CGContextSetFillColorWithColor(ctx, borderColors.left);
-    CGContextAddRect(ctx, rect);
-    CGContextAddPath(ctx, insetPath);
-    CGContextEOFillPath(ctx);
-
-  } else if (!hasEqualColors || CGColorGetAlpha(borderColors.top) > 0) {
+  if (RCTBordersAreVisible(borderInsets, borderColors)) {
     CGPoint topLeft = (CGPoint){borderInsets.left, borderInsets.top};
     if (cornerInsets.topLeft.width > 0 && cornerInsets.topLeft.height > 0) {
       CGPoint points[2];
