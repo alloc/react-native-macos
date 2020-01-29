@@ -168,6 +168,8 @@ const CGFloat buttonMargin = 10;
                                              selector:@selector(applicationDidResignActive)
                                                  name:NSApplicationDidResignActiveNotification
                                                object:nil];
+    
+    [[RCTKeyCommands sharedInstance] addObserver:self];
   }
   return self;
 }
