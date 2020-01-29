@@ -38,9 +38,9 @@
 - (NSString *)description
 {
   NSString *superDescription = super.description;
-  NSRange semicolonRange = [superDescription rangeOfString:@";"];
-  NSString *replacement = [NSString stringWithFormat:@"; reactTag: %@; text: %@", self.reactTag, _textStorage.string];
-  return [superDescription stringByReplacingCharactersInRange:semicolonRange withString:replacement];
+  NSRange rightBracketRange = [superDescription rangeOfString:@">"];
+  NSString *replacement = [NSString stringWithFormat:@"; reactTag: %@; text: %@>", self.reactTag, _textStorage.string];
+  return [superDescription stringByReplacingCharactersInRange:rightBracketRange withString:replacement];
 }
 
 
