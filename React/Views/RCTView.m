@@ -516,6 +516,11 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   }
 }
 
+- (CALayer *)makeBackingLayer
+{
+  return [CALayer layer];
+}
+
 - (void)displayLayer:(CALayer *)layer
 {
   // Applying the transform here ensures it's not overridden by AppKit internals.
