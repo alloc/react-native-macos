@@ -185,7 +185,6 @@ const TouchableHighlight = createReactClass({
   getInitialState: function() {
     this._isMounted = false;
     return {
-      ...this.touchableGetInitialState(),
       extraChildStyle: null,
       extraUnderlayStyle: null,
     };

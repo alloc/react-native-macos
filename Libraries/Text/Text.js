@@ -69,9 +69,9 @@ class Text extends ReactNative.NativeComponent<TextProps, State> {
     ellipsizeMode: 'tail',
   };
 
-  state = mergeFast(Touchable.Mixin.touchableGetInitialState(), {
+  state = {
     isHighlighted: false,
-  });
+  };
 
   viewConfig = viewConfig;
 
