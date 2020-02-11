@@ -152,10 +152,6 @@ RCT_EXPORT_MODULE()
 
 - (void)startTimers
 {
-  if (!_bridge || ![self hasPendingTimers]) {
-    return;
-  }
-
   if (_paused) {
     _paused = NO;
     if (_pauseCallback) {
@@ -182,16 +178,14 @@ RCT_EXPORT_MODULE()
     }
   }
 
-  // Call timers that need to be called
-  if (timersToCall.count > 0) {
-    NSArray<NSNumber *> *sortedTimers = [[timersToCall sortedArrayUsingComparator:^(_RCTTimer *a, _RCTTimer *b) {
-      return [a.target compare:b.target];
-    }] valueForKey:@"callbackID"];
-    [_bridge enqueueJSCall:@"JSTimers"
-                    method:@"callTimers"
-                      args:@[sortedTimers]
-                completion:NULL];
-  }
+  NSArray<NSNumber *> *sortedTimers = [[timersToCall sortedArrayUsingComparator:^(_RCTTimer *a, _RCTTimer *b) {
+    return [a.target compare:b.target];
+  }] valueForKey:@"callbackID"];
+
+  [_bridge enqueueJSCall:@"JSTimers"
+                  method:@"callTimers"
+                    args:@[sortedTimers]
+              completion:NULL];
 
   for (_RCTTimer *timer in timersToCall) {
     if (timer.repeats) {
@@ -211,22 +205,6 @@ RCT_EXPORT_MODULE()
                       method:@"callIdleCallbacks"
                         args:@[absoluteFrameStartMS]
                   completion:NULL];
-    }
-  }
-
-  // Switch to a paused state only if we didn't call any timer this frame, so if
-  // in response to this timer another timer is scheduled, we don't pause and unpause
-  // the displaylink frivolously.
-  if (!_sendIdleEvents && timersToCall.count == 0) {
-    // No need to call the pauseCallback as RCTDisplayLink will ask us about our paused
-    // status immediately after completing this call
-    if (_timers.count == 0) {
-      _paused = YES;
-    }
-    // If the next timer is more than 1 second out, pause and schedule an NSTimer;
-    else if ([nextScheduledTarget timeIntervalSinceNow] > kMinimumSleepInterval) {
-      [self scheduleSleepTimer:nextScheduledTarget];
-      _paused = YES;
     }
   }
 }
@@ -299,9 +277,6 @@ RCT_EXPORT_METHOD(createTimer:(nonnull NSNumber *)callbackID
 RCT_EXPORT_METHOD(deleteTimer:(nonnull NSNumber *)timerID)
 {
   [_timers removeObjectForKey:timerID];
-  if (!_sendIdleEvents && ![self hasPendingTimers]) {
-    [self stopTimers];
-  }
 }
 
 RCT_EXPORT_METHOD(setSendIdleEvents:(BOOL)sendIdleEvents)
@@ -309,8 +284,6 @@ RCT_EXPORT_METHOD(setSendIdleEvents:(BOOL)sendIdleEvents)
   _sendIdleEvents = sendIdleEvents;
   if (sendIdleEvents) {
     [self startTimers];
-  } else if (![self hasPendingTimers]) {
-    [self stopTimers];
   }
 }
 

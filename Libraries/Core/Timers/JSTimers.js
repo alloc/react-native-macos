@@ -394,10 +394,11 @@ const JSTimers = {
    * and
    */
   callTimers: function(timersToCall: Array<number>) {
-    invariant(
-      timersToCall.length !== 0,
-      'Cannot call `callTimers` with an empty list of IDs.',
-    );
+    // The "callTimers" method is called every frame to ensure the
+    // "setImmediate" queue is flushed.
+    if (timersToCall.length === 0) {
+      return;
+    }
 
     // $FlowFixMe: optionals do not allow assignment from null
     errors = null;
