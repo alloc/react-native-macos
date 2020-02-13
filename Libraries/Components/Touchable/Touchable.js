@@ -740,13 +740,13 @@ var TouchableMixin = {
           this.touchableHandleLongPress && this.touchableHandleLongPress(e);
         }
       }
+    }
 
-      if (IsHighlight[nextState] !== IsHighlight[curState]) {
-        if (IsHighlight[nextState]) {
-          this._startHighlight(e);
-        } else {
-          this._endHighlight(e);
-        }
+    if (IsHighlight[nextState] !== IsHighlight[curState]) {
+      if (IsHighlight[nextState]) {
+        this._startHighlight(e);
+      } else {
+        this._endHighlight(e);
       }
     }
 
