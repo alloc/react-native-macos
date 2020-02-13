@@ -1354,6 +1354,14 @@ export interface TextInputProps extends ViewProps, TextInputMacOSProps, TextInpu
      */
     onFocus?: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
 
+    onPressIn?: (event: GestureResponderEvent) => void;
+
+    onPressOut?: (event: GestureResponderEvent) => void;
+
+    onMouseEnter?: (event: MouseEvent) => void;
+
+    onMouseLeave?: (event: MouseEvent) => void;
+
     /**
      * Callback that is called when the text input selection is changed.
      */

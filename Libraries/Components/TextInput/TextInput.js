@@ -372,6 +372,10 @@ const TextInput = createReactClass({
      * is not provided for performance reasons.
      */
     onScroll: PropTypes.func,
+    onPressIn: PropTypes.func,
+    onPressOut: PropTypes.func,
+    onMouseEnter: PropTypes.func,
+    onMouseLeave: PropTypes.func,
     /**
      * The string that will be rendered before text input has been entered.
      */
@@ -719,6 +723,10 @@ const TextInput = createReactClass({
       <TouchableWithoutFeedback
         onLayout={props.onLayout}
         onPress={this._onPress}
+        onPressIn={props.onPressIn}
+        onPressOut={props.onPressOut}
+        onMouseEnter={props.onMouseEnter}
+        onMouseLeave={props.onMouseLeave}
         rejectResponderTermination={true}
         accessible={props.accessible}
         accessibilityLabel={props.accessibilityLabel}
