@@ -241,3 +241,70 @@ declare var XMLHttpRequestUpload: {
 };
 
 type XMLHttpRequestResponseType = "" | "arraybuffer" | "blob" | "document" | "json" | "text";
+
+//
+// WebSocket
+//
+
+declare type BinaryType = "blob" | "arraybuffer";
+
+declare class WebSocketEvent {
+    type: WebSocketEventType;
+    [key: string]: any;
+}
+
+declare type WebSocketEventType = "open" | "message" | "close" | "error";
+declare type WebSocketEventListener = (this: WebSocket, event: WebSocketEvent) => any;
+
+/** Provides the API for creating and managing a WebSocket connection to a server, as well as for sending and receiving data on the connection. */
+declare class WebSocket extends EventTarget {
+    constructor(
+        url: string,
+        protocols?: string | string[],
+        options?: {
+            headers?: {
+                origin?: string;
+                [name: string]: any;
+            }
+        }
+    );
+
+    static isAvailable: boolean;
+
+    static readonly CONNECTING: 0;
+    static readonly OPEN: 1;
+    static readonly CLOSING: 2;
+    static readonly CLOSED: 3;
+
+    /**
+     * Returns a string that indicates how binary data from the WebSocket object is exposed to scripts:
+     *
+     * Can be set, to change how binary data is returned. The default is "blob".
+     */
+    binaryType: BinaryType;
+
+    /**
+     * Returns the state of the WebSocket object's connection. It can have the values described below.
+     */
+    readonly readyState: number;
+
+    onclose: WebSocketEventListener | null;
+    onerror: WebSocketEventListener | null;
+    onmessage: WebSocketEventListener | null;
+    onopen: WebSocketEventListener | null;
+
+    ping(): void;
+
+    /**
+     * Transmits data using the WebSocket connection. data can be a string, a Blob, an ArrayBuffer, or an ArrayBufferView.
+     */
+    send(data: string | ArrayBufferLike | Blob | ArrayBufferView): void;
+
+    /**
+     * Closes the WebSocket connection, optionally using code as the the WebSocket connection close code and reason as the the WebSocket connection close reason.
+     */
+    close(code?: number, reason?: string): void;
+
+    addEventListener(type: WebSocketEventType, listener: WebSocketEventListener, capture?: boolean): void;
+    removeEventListener(type: WebSocketEventType, listener: WebSocketEventListener, capture?: boolean): void;
+}
