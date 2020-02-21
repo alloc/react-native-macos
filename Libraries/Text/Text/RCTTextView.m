@@ -77,6 +77,18 @@
           contentFrame:(CGRect)contentFrame
        descendantViews:(NSArray<NSView *> *)descendantViews
 {
+  // On macOS when a large number of flex layouts are being performed, such
+  // as when a window is being resized, AppKit can throw an uncaught exception
+  // (-[NSConcretePointerArray pointerAtIndex:]: attempt to access pointer at index ...)
+  // during the dealloc of NSLayoutManager.  The _textStorage and its
+  // associated NSLayoutManager dealloc later in an autorelease pool.
+  // Manually removing the layout manager from _textStorage prior to release
+  // works around this issue in AppKit.
+  NSArray<NSLayoutManager *> *managers = [_textStorage layoutManagers];
+  for (NSLayoutManager *manager in managers) {
+    [_textStorage removeLayoutManager:manager];
+  }
+
   _textStorage = textStorage;
   _contentFrame = contentFrame;
 
