@@ -496,16 +496,6 @@ static BOOL findMismatch(NSString *first, NSString *second, NSRange *firstRange,
 
 #pragma mark - Placeholder
 
-- (NSLabel *)placeholderView
-{
-  if (_placeholderView == nil) {
-    _placeholderView = [[NSLabel alloc] initWithFrame:NSZeroRect];
-    [self updatePlaceholderStyle];
-    [self addSubview:_placeholderView positioned:NSWindowBelow relativeTo:self.backedTextInputView];
-  }
-  return _placeholderView;
-}
-
 - (NSString *)placeholder
 {
   return _placeholderView.text;
@@ -514,30 +504,29 @@ static BOOL findMismatch(NSString *first, NSString *second, NSRange *firstRange,
 - (void)setPlaceholder:(NSString *)placeholder
 {
   if (placeholder) {
-    // Use "self" to ensure "placeholderView" exists.
-    self.placeholderView.text = placeholder;
+    if (_placeholderView == nil) {
+      _placeholderView = [[NSLabel alloc] initWithFrame:NSZeroRect];
+      [self updatePlaceholderStyle];
+      [self addSubview:_placeholderView positioned:NSWindowBelow relativeTo:self.backedTextInputView];
+    }
+    _placeholderView.text = placeholder;
   } else if (_placeholderView) {
     [_placeholderView removeFromSuperview];
     _placeholderView = nil;
   }
 }
 
-- (NSColor *)placeholderColor
-{
-  return _placeholderView.textColor;
-}
-
 - (void)setPlaceholderColor:(NSColor *)color
 {
-  // Use "self" to ensure "placeholderView" exists.
-  self.placeholderView.textColor = color ?: _textAttributes.effectiveForegroundColor;
+  _placeholderColor = color;
+  _placeholderView.textColor = color ?: _textAttributes.effectiveForegroundColor;
 }
 
 - (void)updatePlaceholderStyle
 {
   if (_placeholderView && _textAttributes) {
     _placeholderView.font = _textAttributes.effectiveFont;
-    _placeholderView.textColor = self.placeholderColor ?: _textAttributes.effectiveForegroundColor;
+    _placeholderView.textColor = _placeholderColor ?: _textAttributes.effectiveForegroundColor;
     _placeholderView.alignment = _textAttributes.alignment;
   }
 }
