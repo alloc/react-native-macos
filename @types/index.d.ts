@@ -924,6 +924,12 @@ declare class TextComponent extends React.Component<TextProps> {}
 declare const TextBase: Constructor<NativeMethodsMixin> & typeof TextComponent;
 export class Text extends TextBase {}
 
+/**
+ * You must wrap nested `<Text>` with `<TextAncestor.Provider value={false}>`
+ * if the `<Text>` does *not* have another `<Text>` as its immediate parent.
+ */
+export const TextAncestor: React.Context<boolean>
+
 type DataDetectorTypes = "phoneNumber" | "link" | "address" | "calendarEvent" | "none" | "all";
 
 /**

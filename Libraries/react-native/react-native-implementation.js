@@ -49,6 +49,7 @@ const ReactNative = {
   get StatusBar() { return require('StatusBar'); },
   get TabBarIOS() { return require('TabBarIOS'); },
   get Text() { return require('Text'); },
+  get TextAncestor() { return require('TextAncestor'); },
   get TextInput() { return require('TextInput'); },
   get Touchable() { return require('Touchable'); },
   get TouchableHighlight() { return require('TouchableHighlight'); },
