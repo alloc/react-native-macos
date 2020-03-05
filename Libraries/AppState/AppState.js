@@ -20,9 +20,14 @@ const invariant = require('fbjs/lib/invariant');
 import type {Layout} from 'CoreEventTypes';
 
 type Screen = {|
-  +rootTag: number,
-  +bounds: Layout,
+  +id: number,
   +scale: number,
+  +layout: Layout,
+|};
+
+type Window = {|
+  +rootTag: number,
+  +screen: Screen,
 |};
 
 const eventTypes = ['change', 'memoryWarning', 'rootViewWillAppear', 'windowDidChangeScreen', 'windowWillClose'];
@@ -38,7 +43,7 @@ class AppState extends NativeEventEmitter {
   _eventHandlers: Object;
   currentState: ?string;
   isAvailable: boolean = true;
-  windows: { [rootTag: number]: Screen };
+  windows: { [rootTag: number]: { rootTag: number, screen: Screen } };
 
   constructor() {
     super(RCTAppState);
