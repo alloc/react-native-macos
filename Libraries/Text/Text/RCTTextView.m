@@ -68,6 +68,22 @@
   }];
 }
 
+- (void)setTransform:(CATransform3D)transform
+{
+  _transform = transform;
+  [self ensureLayerExists];
+  [self applyTransform:self.layer];
+}
+
+- (void)applyTransform:(CALayer *)layer
+{
+  if (!CATransform3DEqualToTransform(_transform, layer.transform)) {
+    layer.transform = _transform;
+    // Enable edge antialiasing in perspective transforms
+    layer.edgeAntialiasingMask = !(_transform.m34 == 0.0f);
+  }
+}
+
 - (void)didUpdateReactSubviews
 {
   // Do nothing, as subviews are managed by `setTextStorage:` method

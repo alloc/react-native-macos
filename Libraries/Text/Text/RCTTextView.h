@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface RCTTextView : NSView
 
 @property (nonatomic, assign) BOOL selectable;
+@property (nonatomic, assign) CATransform3D transform;
 
 - (void)setTextStorage:(NSTextStorage *)textStorage
           contentFrame:(CGRect)contentFrame
