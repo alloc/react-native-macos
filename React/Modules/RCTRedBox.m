@@ -250,6 +250,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 
 - (void)dismiss
 {
+  _lastErrorMessage = nil;
   self.level = kCGNormalWindowLevel;
   [self orderOut:nil];
 }
@@ -593,6 +594,7 @@ RCT_EXPORT_METHOD(dismiss)
 {
   RCTExecuteOnMainQueue(^{
     [self->_window dismiss];
+    self->_window = nil;
   });
 }
 
