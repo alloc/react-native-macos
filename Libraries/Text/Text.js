@@ -209,17 +209,9 @@ class Text extends ReactNative.NativeComponent<TextProps, State> {
       };
     }
     return (
-      <TextAncestor.Consumer>
-        {hasTextAncestor =>
-          hasTextAncestor ? (
-            <RCTVirtualText {...newProps} />
-          ) : (
-            <TextAncestor.Provider value={true}>
-              <RCTText {...newProps} />
-            </TextAncestor.Provider>
-          )
-        }
-      </TextAncestor.Consumer>
+      <TextAncestor.Provider value={true}>
+        <RCTText {...newProps} />
+      </TextAncestor.Provider>
     );
   }
 }
@@ -228,15 +220,5 @@ var RCTText = createReactNativeComponentClass(
   viewConfig.uiViewClassName,
   () => viewConfig,
 );
-var RCTVirtualText = RCTText;
-
-if (UIManager.RCTVirtualText) {
-  RCTVirtualText = createReactNativeComponentClass('RCTVirtualText', () => ({
-    validAttributes: mergeFast(ReactNativeViewAttributes.UIView, {
-      isHighlighted: true,
-    }),
-    uiViewClassName: 'RCTVirtualText',
-  }));
-}
 
 module.exports = Text;
