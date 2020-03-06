@@ -95,4 +95,7 @@
 @property (nonatomic, copy) RCTDirectEventBlock onMomentumScrollEnd;
 @property (nonatomic, copy) RCTDirectEventBlock onScrollAnimationEnd;
 
+/// When the content size changes, the scroll view tries to keep this view where it was in relation to the viewport bounds.
+@property (nonatomic, strong) RCTView *lockView;
+
 @end

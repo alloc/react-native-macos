@@ -6407,6 +6407,13 @@ export class ScrollView extends ScrollViewBase {
     scrollToEnd(options?: { animated: boolean }): void;
 
     /**
+     * When the content resizes, prevent scrolling by keeping the given
+     * view (known as the "lock view") where it was before the resize,
+     * relative to the scrolling viewport.
+     */
+    preventScrollOnContentResize(lockViewRef: React.RefObject<any>): void;
+
+    /**
      * Returns a reference to the underlying scroll responder, which supports
      * operations like `scrollTo`. All ScrollView-like components should
      * implement this method so that they can be composed while providing access

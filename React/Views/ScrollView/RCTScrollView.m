@@ -165,6 +165,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
   uint16_t _coalescingKey;
   NSHashTable *_scrollListeners;
   NSString *_lastEmittedEventName;
+  NSPoint _lockPosition;
 }
 
 RCT_NOT_IMPLEMENTED(- (instancetype)initWithFrame:(CGRect)frame)
@@ -197,12 +198,13 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 - (void)insertReactSubview:(NSView *)view atIndex:(__unused NSInteger)atIndex
 {
   [self setDocumentView:view];
+  
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(documentFrameDidChange:)
+                                               name:NSViewFrameDidChangeNotification
+                                             object:view];
+  
   if (_autoScrollToBottom) {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(documentFrameDidChange:)
-                                                 name:NSViewFrameDidChangeNotification
-                                               object:view];
-
     [self scrollToBottom];
   }
 }
@@ -217,6 +219,12 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
   _autoScrollToBottom = autoScrollToBottom;
   [self setDocumentView:[self documentView]];
   [self setFrame:[self frame]];
+}
+
+- (void)setLockView:(RCTView *)lockView
+{
+  _lockView = lockView;
+  _lockPosition = [lockView convertPoint:lockView.bounds.origin toView:self];
 }
 
 - (void)setFrame:(NSRect)frameRect
@@ -241,6 +249,19 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 //When our document resizes
 - (void)documentFrameDidChange:(__unused NSNotification *)notification
 {
+  if (_lockView) {
+    NSPoint lockPosition = [_lockView convertPoint:_lockView.bounds.origin toView:self];
+    NSRect contentRect = self.contentView.bounds;
+    
+    // TODO: clamp to min/max contentOffset
+    self.contentView.bounds = NSMakeRect(
+      contentRect.origin.x + lockPosition.x - _lockPosition.x,
+      contentRect.origin.y + lockPosition.y - _lockPosition.y,
+      contentRect.size.width,
+      contentRect.size.height
+    );
+  }
+  
   //We guard against a recursive call to this method, which may occur if the user is resizing the view at the same time
   //content is being modified
   if (_autoScrollToBottom && !_inAutoScrollToBottom) {

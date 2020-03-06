@@ -19,6 +19,7 @@ const ReactNative = require('ReactNative');
 const ScrollResponder = require('ScrollResponder');
 const StyleSheet = require('StyleSheet');
 const StyleSheetPropType = require('StyleSheetPropType');
+const UIManager = require('UIManager');
 const View = require('View');
 const ViewPropTypes = require('ViewPropTypes');
 const ViewStylePropTypes = require('ViewStylePropTypes');
@@ -28,6 +29,7 @@ const dismissKeyboard = require('dismissKeyboard');
 const flattenStyle = require('flattenStyle');
 const invariant = require('fbjs/lib/invariant');
 const deprecatedPropType = require('deprecatedPropType');
+const nullthrows = require('fbjs/lib/nullthrows');
 const processDecelerationRate = require('processDecelerationRate');
 const requireNativeComponent = require('requireNativeComponent');
 /* $FlowFixMe(>=0.54.0 site=react_native_oss) This comment suppresses an error
@@ -535,6 +537,14 @@ const ScrollView = createReactClass({
    */
   flashScrollIndicators: function() {
     this.getScrollResponder().scrollResponderFlashScrollIndicators();
+  },
+
+  preventScrollOnContentResize: function(lockViewRef) {
+    UIManager.dispatchViewManagerCommand(
+      nullthrows(this.scrollResponderGetScrollableNode()),
+      UIManager.RCTNativeScrollView.Commands.preventScrollOnContentResize,
+      [ReactNative.findNodeHandle(lockViewRef.current)]
+    );
   },
 
   _getKeyForIndex: function(index, childArray) {

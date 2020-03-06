@@ -179,4 +179,15 @@ RCT_EXPORT_METHOD(flashScrollIndicators:(nonnull NSNumber *)reactTag)
    }];
 }
 
+RCT_EXPORT_METHOD(preventScrollOnContentResize:(nonnull NSNumber *)reactTag
+                  lockTag:(nonnull NSNumber *)lockTag)
+{
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTView *> *viewRegistry) {
+    RCTNativeScrollView *scrollView = (RCTNativeScrollView *)viewRegistry[reactTag];
+    if (scrollView && [scrollView isKindOfClass:[RCTNativeScrollView class]]) {
+      scrollView.lockView = viewRegistry[lockTag];
+    }
+  }];
+}
+
 @end
