@@ -10,7 +10,6 @@
 #import <React/RCTUtils.h>
 #import <React/NSView+React.h>
 #import <React/RCTWindow.h>
-#import <objc/runtime.h>
 
 #import "RCTBackedTextInputDelegateAdapter.h"
 #import "RCTFieldEditor.h"
@@ -35,6 +34,11 @@
   RCTBackedTextFieldDelegateAdapter *_textInputDelegateAdapter;
 }
 
++ (Class)cellClass
+{
+  return [RCTUITextFieldCell class];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
   if (self = [super initWithFrame:frame]) {
@@ -52,7 +56,6 @@
 
     self.cell.scrollable = YES;
     self.cell.usesSingleLineMode = YES;
-    object_setClass(self.cell, RCTUITextFieldCell.class);
 
     _textInputDelegateAdapter = [[RCTBackedTextFieldDelegateAdapter alloc] initWithTextField:self];
   }
