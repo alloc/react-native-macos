@@ -56,7 +56,16 @@ module.exports = class MiddlewareManager {
   }
 
   serveStatic = (folder: string) => {
-    this.app.use(serveStatic(folder));
+    const serve = serveStatic(folder);
+    this.app.use((req, res, next) => {
+      const relativeUrl = path.relative(folder, req.url);
+      if (relativeUrl[0] !== '.') {
+        req.url = relativeUrl;
+        serve(req, res, next);
+      } else {
+        next();
+      }
+    });
   };
 
   getConnectInstance = () => this.app;
