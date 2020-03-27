@@ -7,18 +7,21 @@
 
 #import <AppKit/AppKit.h>
 
+#import "RCTTextAttributes.h"
+
 @protocol RCTBackedTextInputDelegate;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol RCTBackedTextInputViewProtocol
 
-@property (nonatomic, strong, nullable) NSColor *textColor;
-@property (nonatomic, strong, nullable) NSFont *font;
+//@property (nonatomic, strong, nullable) NSColor *textColor;
+//@property (nonatomic, strong, nullable) NSFont *font;
 @property (nonatomic, copy, nullable) NSAttributedString *attributedText;
+@property (nonatomic, strong, nullable) RCTTextAttributes *textAttributes;
 // @property (nonatomic, copy, nullable) NSString *placeholder;
 // @property (nonatomic, strong, nullable) NSColor *placeholderColor;
-@property (nonatomic, assign) NSTextAlignment alignment;
+//@property (nonatomic, assign) NSTextAlignment alignment;
 @property (nonatomic, assign, readonly) BOOL textWasPasted;
 @property (nonatomic, assign) NSEdgeInsets paddingInsets;
 //@property (nonatomic, strong, nullable) NSView *inputAccessoryView;

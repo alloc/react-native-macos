@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign, readonly) BOOL textWasPasted;
 // @property (nonatomic, strong, nullable) NSColor *placeholderColor;
 @property (nonatomic, assign) NSEdgeInsets paddingInsets;
+@property (nonatomic, strong, nullable) RCTTextAttributes *textAttributes;
 @property (nonatomic, assign) BOOL prefersFocus;
 
 @end

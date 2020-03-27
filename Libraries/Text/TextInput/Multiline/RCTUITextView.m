@@ -70,6 +70,15 @@
   [super setSelectedRange:selectedTextRange];
 }
 
+- (void)setTextAttributes:(RCTTextAttributes *)textAttributes
+{
+  _textAttributes = textAttributes;
+
+  self.font = textAttributes.effectiveFont;
+  self.textColor = textAttributes.effectiveForegroundColor;
+  self.alignment = textAttributes.alignment;
+}
+
 #pragma mark - Overrides
 
 - (BOOL)becomeFirstResponder

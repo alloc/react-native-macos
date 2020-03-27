@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 // @property (nonatomic, strong, nullable) NSColor *placeholderColor;
 @property (nonatomic, assign) NSEdgeInsets paddingInsets;
 @property (nonatomic, assign) CGFloat preferredMaxLayoutWidth;
+@property (nonatomic, strong, nullable) RCTTextAttributes *textAttributes;
 @property (nonatomic, assign) BOOL prefersFocus;
 
 @end

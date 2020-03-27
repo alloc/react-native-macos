@@ -22,17 +22,17 @@
 
 @interface RCTUITextFieldCell : NSTextFieldCell
 @property (nullable, assign) RCTUITextField *controlView;
+- (void)setTextAttributes:(RCTTextAttributes *)textAttributes;
 @end
 
 @interface RCTUITextField (RCTFieldEditor) <RCTFieldEditorDelegate>
 - (RCTFieldEditor *)currentEditor;
+- (RCTUITextFieldCell *)cell;
 @end
 
 @implementation RCTUITextField {
   RCTBackedTextFieldDelegateAdapter *_textInputDelegateAdapter;
 }
-
-@dynamic font, alignment; // NSTextField provides these properties
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -70,6 +70,18 @@
 }
 
 #pragma mark - Overrides
+
+- (void)setTextAttributes:(RCTTextAttributes *)textAttributes
+{
+  _textAttributes = textAttributes;
+
+  self.font = textAttributes.effectiveFont;
+  self.textColor = textAttributes.effectiveForegroundColor;
+  self.backgroundColor = nil;
+  self.alignment = textAttributes.alignment;
+  
+  self.cell.textAttributes = textAttributes;
+}
 
 - (NSRange)selectedTextRange
 {
@@ -172,6 +184,7 @@
 @implementation RCTUITextFieldCell
 {
   RCTFieldEditor *_fieldEditor;
+  NSDictionary *_effectiveTextAttributes;
 }
 
 @dynamic controlView;
@@ -198,12 +211,21 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   return _fieldEditor;
 }
 
-- (NSText *)setUpFieldEditorAttributes:(NSTextView *)fieldEditor
+- (void)setTextAttributes:(RCTTextAttributes *)textAttributes
 {
-  fieldEditor.font = self.font;
-  fieldEditor.textColor = self.textColor;
+  _effectiveTextAttributes = textAttributes.effectiveTextAttributes;
+
+  NSTextView *fieldEditor = [self fieldEditorForView:self.controlView];
+
+  fieldEditor.defaultParagraphStyle = _effectiveTextAttributes[NSParagraphStyleAttributeName];
+  fieldEditor.typingAttributes = _effectiveTextAttributes;
   fieldEditor.backgroundColor = NSColor.clearColor;
-  return fieldEditor;
+
+  NSTextStorage *string = fieldEditor.textStorage;
+
+  [string beginEditing];
+  [string addAttributes:_effectiveTextAttributes range:NSMakeRange(0, string.length)];
+  [string endEditing];
 }
 
 @end

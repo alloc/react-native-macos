@@ -66,11 +66,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithFrame:(CGRect)frame)
 {
   _textAttributes = textAttributes;
 
-  id<RCTBackedTextInputViewProtocol> backedTextInputView = self.backedTextInputView;
-  backedTextInputView.font = _textAttributes.effectiveFont;
-  backedTextInputView.textColor = _textAttributes.effectiveForegroundColor;
-  backedTextInputView.alignment = _textAttributes.alignment;
-
+  self.backedTextInputView.textAttributes = textAttributes;
   [self updatePlaceholderStyle];
 }
 
