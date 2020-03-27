@@ -47,6 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
  * macOS only
  */
 @property (nonatomic, assign) BOOL prefersFocus;
+@property (nonatomic, copy, nullable) NSString *textAlignVertical;
 
 @end
 

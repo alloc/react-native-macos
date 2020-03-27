@@ -15,6 +15,7 @@
 #import "RCTBackedTextInputDelegateAdapter.h"
 #import "RCTFieldEditor.h"
 #import "NSText+Editing.h"
+#import "NSFont+LineHeight.h"
 
 // The "field editor" is a NSTextView whose delegate is this NSTextField.
 @interface NSTextField () <NSTextViewDelegate>
@@ -145,6 +146,19 @@
     return YES;
   }
   return NO;
+}
+
+- (void)setFrame:(NSRect)frame
+{
+  if ([self.textAlignVertical isEqualToString:@"center"]) {
+    CGFloat lineHeight = self.font.lineHeight;
+    CGFloat heightDelta = frame.size.height - lineHeight;
+    if (heightDelta > 0) {
+      frame.origin.y += (heightDelta / 2) - (lineHeight / 16);
+    }
+  }
+
+  [super setFrame:frame];
 }
 
 #pragma mark - RCTBackedTextInputViewProtocol

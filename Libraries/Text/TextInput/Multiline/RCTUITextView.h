@@ -29,7 +29,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSEdgeInsets paddingInsets;
 @property (nonatomic, assign) CGFloat preferredMaxLayoutWidth;
 @property (nonatomic, strong, nullable) RCTTextAttributes *textAttributes;
+
+/* macOS only */
 @property (nonatomic, assign) BOOL prefersFocus;
+@property (nonatomic, copy, nullable) NSString *textAlignVertical;
 
 @end
 
