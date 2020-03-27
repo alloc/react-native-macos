@@ -207,6 +207,10 @@
 
 @end
 
+@interface NSTextFieldCell ()
+- (id)_textAttributes;
+@end
+
 @implementation RCTUITextFieldCell
 {
   RCTFieldEditor *_fieldEditor;
@@ -235,6 +239,11 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
     _fieldEditor = [RCTFieldEditor new];
   }
   return _fieldEditor;
+}
+
+- (id)_textAttributes
+{
+  return _effectiveTextAttributes ?: [super _textAttributes];
 }
 
 - (void)setTextAttributes:(RCTTextAttributes *)textAttributes
