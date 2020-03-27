@@ -20,6 +20,7 @@ NSString *const RCTTextAttributesTagAttributeName = @"RCTTextAttributesTagAttrib
 {
   if (self = [super init]) {
     _fontSize = NAN;
+    _lineHeight = NAN;
     _letterSpacing = NAN;
     _textDecorationStyle = NSUnderlineStyleSingle;
     _fontSizeMultiplier = NAN;
