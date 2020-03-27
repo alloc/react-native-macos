@@ -161,6 +161,11 @@
     }
   }
 
+  // The baseline is always 13 pixels from the view's top edge, so that strings with
+  // mixed font sizes are aligned by their baselines. But we want align text so its
+  // ascender is always touching the view's top edge by default.
+  frame.origin.y += self.font.ascender - 13.0;
+
   [super setFrame:frame];
 }
 
