@@ -73,6 +73,9 @@ RCT_NOT_IMPLEMENTED(-(instancetype)initWithCoder:(nonnull NSCoder *)aDecoder)
   if ([object isKindOfClass:[NSView class]]) {
     NSView *subview = (NSView *)object;
     if ([keyPath isEqualToString:@"frame"]) {
+      if (_sizeFlexibility == RCTRootViewSizeFlexibilityNone) {
+        return;
+      }
       CGSize size = self.frame.size;
       if (_sizeFlexibility & RCTRootViewSizeFlexibilityWidth) {
         size.width = subview.frame.size.width;
