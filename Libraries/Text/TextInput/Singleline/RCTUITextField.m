@@ -166,6 +166,10 @@
   // ascender is always touching the view's top edge by default.
   frame.origin.y += self.font.ascender - 13.0;
 
+  // HACK: The text naturally has 2 pixels of left/right padding.
+  frame.origin.x -= 2;
+  frame.size.width += 4;
+
   [super setFrame:frame];
 }
 
