@@ -11,6 +11,8 @@
 #import <React/RCTFont.h>
 #import <React/RCTLog.h>
 
+#import "NSFont+LineHeight.h"
+
 NSString *const RCTTextAttributesIsHighlightedAttributeName = @"RCTTextAttributesIsHighlightedAttributeName";
 NSString *const RCTTextAttributesTagAttributeName = @"RCTTextAttributesTagAttributeName";
 
@@ -124,8 +126,9 @@ NSString *const RCTTextAttributesTagAttributeName = @"RCTTextAttributesTagAttrib
     isParagraphStyleUsed = YES;
   }
 
-  if (!isnan(_lineHeight)) {
-    CGFloat lineHeight = _lineHeight * self.effectiveFontSizeMultiplier;
+  CGFloat lineHeight = isnan(_lineHeight) ? font.lineHeight : _lineHeight;
+  if (!isnan(lineHeight)) {
+    lineHeight *= self.effectiveFontSizeMultiplier;
     paragraphStyle.minimumLineHeight = lineHeight;
     paragraphStyle.maximumLineHeight = lineHeight;
     isParagraphStyleUsed = YES;
