@@ -23,6 +23,10 @@ const statusPageMiddleware = require('./statusPageMiddleware');
 const systraceProfileMiddleware = require('./systraceProfileMiddleware');
 const getDevToolsMiddleware = require('./getDevToolsMiddleware');
 
+serveStatic.mime.define({
+  'application/typescript': ['ts', 'tsx'],
+})
+
 type Options = {
   +watchFolders: $ReadOnlyArray<string>,
   +host?: string,
