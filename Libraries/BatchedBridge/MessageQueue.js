@@ -192,19 +192,6 @@ class MessageQueue {
     }
 
     if (__DEV__) {
-      global.nativeTraceBeginAsyncFlow &&
-        global.nativeTraceBeginAsyncFlow(
-          TRACE_TAG_REACT_APPS,
-          'native',
-          this._callID,
-        );
-    }
-    this._callID++;
-
-    this._queue[MODULE_IDS].push(moduleID);
-    this._queue[METHOD_IDS].push(methodID);
-
-    if (__DEV__) {
       // Validate that parameters passed over the bridge are
       // folly-convertible.  As a special case, if a prop value is a
       // function it is permitted here, and special-cased in the
@@ -270,6 +257,19 @@ class MessageQueue {
       // The params object should not be mutated after being queued
       deepFreezeAndThrowOnMutationInDev((params: any));
     }
+
+    if (__DEV__) {
+      global.nativeTraceBeginAsyncFlow &&
+        global.nativeTraceBeginAsyncFlow(
+          TRACE_TAG_REACT_APPS,
+          'native',
+          this._callID,
+        );
+    }
+
+    this._callID++;
+    this._queue[MODULE_IDS].push(moduleID);
+    this._queue[METHOD_IDS].push(methodID);
     this._queue[PARAMS].push(params);
 
     const now = Date.now();
