@@ -106,7 +106,6 @@
 
 - (void)textViewDidChangeSelection:(NSNotification *)notification
 {
-  [super textViewDidChangeSelection:notification];
   [_textInputDelegateAdapter selectedTextRangeWasSet];
 }
 
