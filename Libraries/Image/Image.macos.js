@@ -67,7 +67,7 @@ let Image = (
 ) => {
   const rootTag = React.useContext(RootTagContext);
   const {scale} = AppState.windows[rootTag].screen;
-  const source = resolveAssetSource(props.source) || {
+  const source = resolveAssetSource(props.source, scale) || {
     uri: undefined,
     width: undefined,
     height: undefined,
