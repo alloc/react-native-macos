@@ -9,6 +9,7 @@
 
 #import "RCTWindow.h"
 
+#import "RCTLog.h"
 #import "RCTUtils.h"
 #import "RCTCursor.h"
 #import "RCTMouseEvent.h"
@@ -257,7 +258,11 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
 
 - (void)setCursorProvider:(NSView *)view
 {
-  RCTAssert(_hoverTarget == nil || [_hoverTarget isDescendantOf:view], @"The 'cursorProvider' must contain the 'hoverTarget'");
+  if (![_hoverTarget isDescendantOf:view]) {
+    RCTLogWarn(@"The 'cursorProvider' must contain the 'hoverTarget'");
+    return;
+  }
+  
   _cursorProvider = view;
   
   RCTCursor cursor = view.cursor;
