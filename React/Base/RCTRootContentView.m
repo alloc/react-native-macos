@@ -68,7 +68,7 @@ RCT_NOT_IMPLEMENTED(-(instancetype)initWithCoder:(nonnull NSCoder *)aDecoder)
   });
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(__unused NSDictionary<NSKeyValueChangeKey,id> *)change context:(__unused void *)context
 {
   if ([object isKindOfClass:[NSView class]]) {
     NSView *subview = (NSView *)object;
