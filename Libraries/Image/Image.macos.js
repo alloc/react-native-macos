@@ -65,8 +65,9 @@ let Image = (
   props: ImagePropsType,
   forwardedRef: ?React.Ref<'RCTImageView'>,
 ) => {
-  const rootTag = React.useContext(RootTagContext);
-  const {scale} = AppState.windows[rootTag].screen;
+  const winTag = React.useContext(RootTagContext);
+  const win = AppState.windows[winTag];
+  const scale = win && win.screen ? win.screen.scale : 1;
   const source = resolveAssetSource(props.source, scale) || {
     uri: undefined,
     width: undefined,
