@@ -208,9 +208,6 @@ const TextInput = createReactClass({
      * default is `true`.
      */
     allowFontScaling: PropTypes.bool,
-    /**
-     * If `false`, text is not editable. The default value is `true`.
-     */
     bezeled: PropTypes.bool,
     /**
      * If false, text is not editable. The default value is true.
