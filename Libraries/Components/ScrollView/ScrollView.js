@@ -539,11 +539,11 @@ const ScrollView = createReactClass({
     this.getScrollResponder().scrollResponderFlashScrollIndicators();
   },
 
-  preventScrollOnContentResize: function(lockViewRef) {
+  setLockView: function(lockViewRef) {
     UIManager.dispatchViewManagerCommand(
       nullthrows(this.scrollResponderGetScrollableNode()),
-      UIManager.RCTNativeScrollView.Commands.preventScrollOnContentResize,
-      [ReactNative.findNodeHandle(lockViewRef.current)]
+      UIManager.RCTNativeScrollView.Commands.setLockView,
+      [lockViewRef ? ReactNative.findNodeHandle(lockViewRef.current) : -1]
     );
   },
 

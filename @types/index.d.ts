@@ -6411,7 +6411,7 @@ export class ScrollView extends ScrollViewBase {
      * view (known as the "lock view") where it was before the resize,
      * relative to the scrolling viewport.
      */
-    preventScrollOnContentResize(lockViewRef: React.RefObject<any>): void;
+    setLockView(lockViewRef: React.RefObject<any> | null): void;
 
     /**
      * Returns a reference to the underlying scroll responder, which supports

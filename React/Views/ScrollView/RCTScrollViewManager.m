@@ -179,7 +179,7 @@ RCT_EXPORT_METHOD(flashScrollIndicators:(nonnull NSNumber *)reactTag)
    }];
 }
 
-RCT_EXPORT_METHOD(preventScrollOnContentResize:(nonnull NSNumber *)reactTag
+RCT_EXPORT_METHOD(setLockView:(nonnull NSNumber *)reactTag
                   lockTag:(nonnull NSNumber *)lockTag)
 {
   [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTView *> *viewRegistry) {
