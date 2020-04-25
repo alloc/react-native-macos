@@ -11,9 +11,9 @@
 
 #import <React/RCTUtils.h>
 #import <React/NSView+React.h>
+#import <React/NSBezierPath+CGPath.h>
 
 #import "RCTTextShadowView.h"
-#import "NSBezierPath+CGPath.h"
 
 @implementation RCTTextView
 {

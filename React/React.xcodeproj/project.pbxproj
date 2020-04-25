@@ -515,6 +515,9 @@
 		657734901EE8354A00A0E9EA /* RCTInspectorPackagerConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 6577348C1EE8354A00A0E9EA /* RCTInspectorPackagerConnection.h */; };
 		657734911EE8354A00A0E9EA /* RCTInspectorPackagerConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6577348D1EE8354A00A0E9EA /* RCTInspectorPackagerConnection.m */; };
 		68EFE4EE1CF6EB3900A1DE13 /* RCTBundleURLProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 68EFE4ED1CF6EB3900A1DE13 /* RCTBundleURLProvider.m */; };
+		70041DF824537DE800231955 /* NSBezierPath+CGPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 70041DF624537DE700231955 /* NSBezierPath+CGPath.m */; };
+		70041DF924537E2200231955 /* NSBezierPath+CGPath.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 70041DF724537DE700231955 /* NSBezierPath+CGPath.h */; };
+		70041DFA24537E3300231955 /* NSBezierPath+CGPath.h in Headers */ = {isa = PBXBuildFile; fileRef = 70041DF724537DE700231955 /* NSBezierPath+CGPath.h */; };
 		7026D49623C26AC1003328A8 /* RCTBlurFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7026D49523C26AC1003328A8 /* RCTBlurFilter.m */; };
 		702B7FF8221C88AF0027174A /* RCTWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 702B7FF6221C88AF0027174A /* RCTWindow.h */; };
 		702B7FF9221C88AF0027174A /* RCTWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 702B7FF7221C88AF0027174A /* RCTWindow.m */; };
@@ -701,6 +704,7 @@
 			dstPath = include/React;
 			dstSubfolderSpec = 16;
 			files = (
+				70041DF924537E2200231955 /* NSBezierPath+CGPath.h in Copy Headers */,
 				7045C323230384FE000AB285 /* RCTCursor.h in Copy Headers */,
 				70CDF31522F9E3BE00ECA452 /* RCTBlendMode.h in Copy Headers */,
 				7095B6D02247C86300BE2245 /* RCTFieldEditor.h in Copy Headers */,
@@ -1272,6 +1276,8 @@
 		68EFE4EC1CF6EB3000A1DE13 /* RCTBundleURLProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTBundleURLProvider.h; sourceTree = "<group>"; };
 		68EFE4ED1CF6EB3900A1DE13 /* RCTBundleURLProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTBundleURLProvider.m; sourceTree = "<group>"; };
 		6A15FB0C1BDF663500531DFB /* RCTRootViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTRootViewInternal.h; sourceTree = "<group>"; };
+		70041DF624537DE700231955 /* NSBezierPath+CGPath.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+CGPath.m"; sourceTree = "<group>"; };
+		70041DF724537DE700231955 /* NSBezierPath+CGPath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+CGPath.h"; sourceTree = "<group>"; };
 		7026D49523C26AC1003328A8 /* RCTBlurFilter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTBlurFilter.m; sourceTree = "<group>"; };
 		7026D49723C26AD2003328A8 /* RCTBlurFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTBlurFilter.h; sourceTree = "<group>"; };
 		702B7FF6221C88AF0027174A /* RCTWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTWindow.h; sourceTree = "<group>"; };
@@ -2052,6 +2058,8 @@
 				83CBBA4F1A601E3B00E9B192 /* RCTUtils.h */,
 				83CBBA501A601E3B00E9B192 /* RCTUtils.m */,
 				199B8A6E1F44DB16005DEF67 /* RCTVersion.h */,
+				70041DF724537DE700231955 /* NSBezierPath+CGPath.h */,
+				70041DF624537DE700231955 /* NSBezierPath+CGPath.m */,
 				599FAA291FB274970058CCF6 /* Surface */,
 			);
 			path = Base;
@@ -2225,6 +2233,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70041DFA24537E3300231955 /* NSBezierPath+CGPath.h in Headers */,
 				3D80DA191DF820620028D040 /* RCTImageLoader.h in Headers */,
 				C654505E1F3BD9280090799B /* RCTManagedPointer.h in Headers */,
 				13134C941E296B2A00B9F3CB /* RCTObjcExecutor.h in Headers */,
@@ -2753,6 +2762,7 @@
 				702B7FF9221C88AF0027174A /* RCTWindow.m in Sources */,
 				594F0A341FD23228007FBE96 /* RCTSurfaceHostingView.mm in Sources */,
 				13134C861E296B2A00B9F3CB /* RCTCxxBridge.mm in Sources */,
+				70041DF824537DE800231955 /* NSBezierPath+CGPath.m in Sources */,
 				13B07FEF1A69327A00A75B9A /* RCTAlertManager.m in Sources */,
 				705EDE2A22107DD0000CAA67 /* Utils.cpp in Sources */,
 				599FAA4C1FB274980058CCF6 /* RCTSurfaceView.mm in Sources */,
