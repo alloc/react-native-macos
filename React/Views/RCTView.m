@@ -540,12 +540,13 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
     const RCTCornerRadii cornerRadii = [self cornerRadii];
     const NSEdgeInsets borderInsets = [self bordersAsInsets];
     const RCTBorderColors borderColors = [self borderColors];
-
-    const BOOL needsBorderImage =
-      // Does at least one corner need rounding?
-      (cornerRadii.topLeft > 0 || !RCTCornerRadiiAreEqual(cornerRadii)) ||
-      // Does at least one edge have a visible border?
-      RCTBordersAreVisible(borderInsets, borderColors);
+    
+    BOOL needsBorderImage =
+      RCTBordersAreVisible(borderInsets, borderColors) ||
+        (!self.clipsToBounds &&
+          _backgroundColor.alphaComponent > 0 &&
+          (cornerRadii.topLeft > 0 ||
+            !RCTCornerRadiiAreEqual(cornerRadii)));
 
     if (!needsBorderImage) {
       layer.contents = nil;
