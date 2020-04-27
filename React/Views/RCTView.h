@@ -45,6 +45,8 @@
  */
 + (NSEdgeInsets)contentInsetsForView:(NSView *)curView;
 
+- (NSEdgeInsets)bordersAsInsets;
+
 /**
  * Layout direction of the view.
  * This is inherited from UIView+React, but we override it here
