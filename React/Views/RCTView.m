@@ -533,9 +533,22 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   if (CGSizeEqualToSize(layer.bounds.size, CGSizeZero)) {
     return;
   }
+  
+  if (RCTLayerHasShadow(self.layer)) {
+    // If view has a solid background color, calculate shadow path from border
+    if (CGColorGetAlpha(self.backgroundColor.CGColor) > 0.999) {
+      [self updateShadowPath];
+    } else {
+      // Can't accurately calculate box shadow, so fall back to pixel-based shadow
+      self.layer.shadowPath = nil;
 
-  RCTUpdateShadowPathForView(self);
-
+      RCTLogAdvice(@"View #%@ of type %@ has a shadow set but cannot calculate "
+        "shadow efficiently. Consider setting a background color to "
+        "fix this, or apply the shadow to a more specific component.",
+        self.reactTag, [self class]);
+    }
+  }
+  
   if (_borderImage == nil) {
     const RCTCornerRadii cornerRadii = [self cornerRadii];
     const NSEdgeInsets borderInsets = [self bordersAsInsets];
@@ -608,29 +621,13 @@ static BOOL RCTLayerHasShadow(CALayer *layer)
   return layer.shadowOpacity * CGColorGetAlpha(layer.shadowColor) > 0;
 }
 
-static void RCTUpdateShadowPathForView(RCTView *view)
+- (void)updateShadowPath
 {
-  if (RCTLayerHasShadow(view.layer)) {
-    if (CGColorGetAlpha(view.backgroundColor.CGColor) > 0.999) {
-
-      // If view has a solid background color, calculate shadow path from border
-      const RCTCornerRadii cornerRadii = [view cornerRadii];
-      const RCTCornerInsets cornerInsets = RCTGetCornerInsets(cornerRadii, NSEdgeInsetsZero);
-      CGPathRef shadowPath = RCTPathCreateWithRoundedRect(view.bounds, cornerInsets, NULL);
-      view.layer.shadowPath = shadowPath;
-      CGPathRelease(shadowPath);
-
-    } else {
-
-      // Can't accurately calculate box shadow, so fall back to pixel-based shadow
-      view.layer.shadowPath = nil;
-
-      RCTLogAdvice(@"View #%@ of type %@ has a shadow set but cannot calculate "
-        "shadow efficiently. Consider setting a background color to "
-        "fix this, or apply the shadow to a more specific component.",
-        view.reactTag, [view class]);
-    }
-  }
+  const RCTCornerRadii cornerRadii = [self cornerRadii];
+  const RCTCornerInsets cornerInsets = RCTGetCornerInsets(cornerRadii, NSEdgeInsetsZero);
+  CGPathRef shadowPath = RCTPathCreateWithRoundedRect(self.bounds, cornerInsets, NULL);
+  self.layer.shadowPath = shadowPath;
+  CGPathRelease(shadowPath);
 }
 
 #pragma mark - Clipping
