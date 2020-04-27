@@ -45,6 +45,11 @@ RCT_NOT_IMPLEMENTED(-(instancetype)initWithCoder:(nonnull NSCoder *)aDecoder)
   [self updateAvailableSize];
 }
 
+- (void)reactSetFrame:(CGRect)frame
+{
+  // React does not control our frame.
+}
+
 @dynamic superview;
 
 - (void)addSubview:(NSView *)subview
