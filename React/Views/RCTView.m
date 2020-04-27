@@ -563,13 +563,10 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
     
     if (needsBorderImage) {
       RCTSetScreen(self.window.screen);
-      NSImage *image = RCTGetBorderImage(_borderStyle,
-                                         layer.bounds.size,
-                                         cornerRadii,
-                                         borderInsets,
-                                         borderColors,
-                                         _backgroundColor.CGColor,
-                                         self.clipsToBounds);
+      NSImage *image = [self createBorderImage:layer.bounds.size
+                                   cornerRadii:cornerRadii
+                                  borderInsets:borderInsets
+                                  borderColors:borderColors];
 
       if (RCTRunningInTestEnvironment()) {
         const CGSize size = self.bounds.size;
@@ -834,6 +831,22 @@ static CGFloat RCTDefaultIfNegativeTo(CGFloat defaultValue, CGFloat x) {
     _borderBottomColor ?: _borderColor,
     directionAwareBorderRightColor ?: _borderRightColor ?: _borderColor,
   };
+}
+
+- (NSImage *)createBorderImage:(NSSize)size
+                   cornerRadii:(RCTCornerRadii)cornerRadii
+                  borderInsets:(NSEdgeInsets)borderInsets
+                  borderColors:(RCTBorderColors)borderColors
+{
+  return RCTGetBorderImage(
+    _borderStyle,
+    size,
+    cornerRadii,
+    borderInsets,
+    borderColors,
+    _backgroundColor.CGColor,
+    self.clipsToBounds
+  );
 }
 
 - (void)borderDidUpdate
