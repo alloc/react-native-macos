@@ -71,3 +71,5 @@ NSImage *RCTGetBorderImage(RCTBorderStyle borderStyle,
                            RCTBorderColors borderColors,
                            CGColorRef backgroundColor,
                            BOOL drawToEdge);
+
+BOOL RCTCornerRadiiAreAboveThreshold(RCTCornerRadii cornerRadii);

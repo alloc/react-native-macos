@@ -199,7 +199,7 @@ static NSMutableArray *contextStack = nil;
 static NSMutableArray *imageContextStack = nil;
 
 
-NS_INLINE BOOL RCTCornerRadiiAreAboveThreshold(RCTCornerRadii cornerRadii) {
+BOOL RCTCornerRadiiAreAboveThreshold(RCTCornerRadii cornerRadii) {
   return (cornerRadii.topLeft > RCTViewBorderThreshold ||
     cornerRadii.topRight > RCTViewBorderThreshold      ||
     cornerRadii.bottomLeft > RCTViewBorderThreshold    ||
