@@ -547,58 +547,55 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
           _backgroundColor.alphaComponent > 0 &&
           (cornerRadii.topLeft > 0 ||
             !RCTCornerRadiiAreEqual(cornerRadii)));
+    
+    if (needsBorderImage) {
+      RCTSetScreen(self.window.screen);
+      NSImage *image = RCTGetBorderImage(_borderStyle,
+                                         layer.bounds.size,
+                                         cornerRadii,
+                                         borderInsets,
+                                         borderColors,
+                                         _backgroundColor.CGColor,
+                                         self.clipsToBounds);
 
-    if (!needsBorderImage) {
-      layer.contents = nil;
-      layer.backgroundColor = _backgroundColor.CGColor;
-      layer.needsDisplayOnBoundsChange = NO;
-      layer.cornerRadius = 0;
-      layer.mask = nil;
-      return;
-    }
+      if (RCTRunningInTestEnvironment()) {
+        const CGSize size = self.bounds.size;
+        UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+        [image drawInRect:(CGRect){CGPointZero, size}];
+        image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+      }
 
-    RCTSetScreen(self.window.screen);
-    NSImage *image = RCTGetBorderImage(_borderStyle,
-                                       layer.bounds.size,
-                                       cornerRadii,
-                                       borderInsets,
-                                       borderColors,
-                                       _backgroundColor.CGColor,
-                                       self.clipsToBounds);
+      _borderImage = image;
 
-    if (RCTRunningInTestEnvironment()) {
-      const CGSize size = self.bounds.size;
-      UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
-      [image drawInRect:(CGRect){CGPointZero, size}];
-      image = UIGraphicsGetImageFromCurrentImageContext();
-      UIGraphicsEndImageContext();
-    }
+      CGFloat screenScale = RCTScreenScale();
+      NSEdgeInsets capInsets = image.capInsets;
 
-    _borderImage = image;
+      CGRect contentsCenter;
+      if (NSEdgeInsetsEqual(capInsets, NSEdgeInsetsZero)) {
+        contentsCenter = CGRectMake(0, 0, 1, 1);
+      } else {
+        CGSize size = image.size;
+        contentsCenter = CGRectMake(
+          capInsets.left / size.width,
+          capInsets.top / size.height,
+          screenScale / size.width,
+          screenScale / size.height
+        );
+      }
 
-    CGFloat screenScale = RCTScreenScale();
-    NSEdgeInsets capInsets = image.capInsets;
-
-    CGRect contentsCenter;
-    if (NSEdgeInsetsEqual(capInsets, NSEdgeInsetsZero)) {
-      contentsCenter = CGRectMake(0, 0, 1, 1);
+      layer.backgroundColor = NULL;
+      layer.contents = image;
+      layer.contentsScale = screenScale;
+      layer.contentsCenter = contentsCenter;
+      layer.needsDisplayOnBoundsChange = YES;
+      layer.magnificationFilter = kCAFilterNearest;
+      layer.minificationFilter = kCAFilterNearest;
     } else {
-      CGSize size = image.size;
-      contentsCenter = CGRectMake(
-        capInsets.left / size.width,
-        capInsets.top / size.height,
-        screenScale / size.width,
-        screenScale / size.height
-      );
+      layer.backgroundColor = _backgroundColor.CGColor;
+      layer.contents = nil;
+      layer.needsDisplayOnBoundsChange = NO;
     }
-
-    layer.backgroundColor = NULL;
-    layer.contents = image;
-    layer.contentsScale = screenScale;
-    layer.contentsCenter = contentsCenter;
-    layer.needsDisplayOnBoundsChange = YES;
-    layer.magnificationFilter = kCAFilterNearest;
-    layer.minificationFilter = kCAFilterNearest;
 
     [self updateClippingForLayer:layer];
   }
