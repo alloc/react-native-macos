@@ -188,10 +188,10 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
   return fitSize;
 }
 
-- (void)layout
+- (void)setFrameSize:(NSSize)newSize
 {
-  [super layout];
-  _contentView.frame = self.bounds;
+  [super setFrameSize:newSize];
+  _contentView.frame = (NSRect){NSZeroPoint, newSize};
 }
 
 - (NSViewController *)reactViewController
