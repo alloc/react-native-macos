@@ -31,6 +31,7 @@ const ModalEventEmitter =
     : null;
 
 import type EmitterSubscription from 'EmitterSubscription';
+import {VirtualizedListContextResetter} from 'VirtualizedListContext';
 
 /**
  * The Modal component is a simple way to present content above an enclosing view.
@@ -237,7 +238,9 @@ class Modal extends React.Component<Object> {
         onStartShouldSetResponder={this._shouldSetResponder}
         supportedOrientations={this.props.supportedOrientations}
         onOrientationChange={this.props.onOrientationChange}>
-        <View style={[styles.container, containerStyles]}>{innerChildren}</View>
+        <VirtualizedListContextResetter>
+          <View style={[styles.container, containerStyles]}>{innerChildren}</View>
+        </VirtualizedListContextResetter>
       </RCTModalHostView>
     );
   }
