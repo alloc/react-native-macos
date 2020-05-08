@@ -30,7 +30,7 @@ type Window = {|
   +screen: Screen,
 |};
 
-const eventTypes = ['change', 'memoryWarning', 'rootViewWillAppear', 'windowDidChangeScreen', 'windowWillClose'];
+const eventTypes = ['change', 'memoryWarning', 'rootViewWillAppear', 'windowDidChangeScreen', 'windowWillClose', 'frameDidFire'];
 
 /**
  * `AppState` can tell you if the app is in the foreground or background,

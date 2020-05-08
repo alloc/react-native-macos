@@ -57,7 +57,8 @@ RCT_EXPORT_MODULE()
            @"memoryWarning",
            @"rootViewWillAppear",
            @"windowDidChangeScreen",
-           @"windowWillClose"];
+           @"windowWillClose",
+           @"frameDidFire"];
 }
 
 - (void)startObserving

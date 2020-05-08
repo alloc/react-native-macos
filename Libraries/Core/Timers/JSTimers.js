@@ -10,6 +10,7 @@
  */
 'use strict';
 
+const AppState = require('AppState');
 const Platform = require('Platform');
 const Systrace = require('Systrace');
 
@@ -394,6 +395,8 @@ const JSTimers = {
    * and
    */
   callTimers: function(timersToCall: Array<number>) {
+    AppState.emit('frameDidFire');
+
     // The "callTimers" method is called every frame to ensure the
     // "setImmediate" queue is flushed.
     if (timersToCall.length === 0) {

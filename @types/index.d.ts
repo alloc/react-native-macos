@@ -6901,6 +6901,7 @@ export interface AppStateStatic {
     addEventListener(type: 'rootViewWillAppear', listener: (state: WindowState) => void): void;
     addEventListener(type: 'windowDidChangeScreen', listener: (state: WindowState) => void): void;
     addEventListener(type: 'windowWillClose', listener: (rootTag: number) => void): void;
+    addEventListener(type: 'frameDidFire', listener: () => void): void;
 
     /**
      * Remove a handler by passing the change event type and the handler
