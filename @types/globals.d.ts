@@ -257,7 +257,7 @@ declare type WebSocketEventType = "open" | "message" | "close" | "error";
 declare type WebSocketEventListener = (this: WebSocket, event: WebSocketEvent) => any;
 
 /** Provides the API for creating and managing a WebSocket connection to a server, as well as for sending and receiving data on the connection. */
-declare class WebSocket extends EventTarget {
+declare class WebSocket implements EventTarget {
     constructor(
         url: string,
         protocols?: string | string[],
