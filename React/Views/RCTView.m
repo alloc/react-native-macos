@@ -542,10 +542,12 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
       // Can't accurately calculate box shadow, so fall back to pixel-based shadow
       self.layer.shadowPath = nil;
 
+#if DEBUG
       RCTLogAdvice(@"View #%@ of type %@ has a shadow set but cannot calculate "
         "shadow efficiently. Consider setting a background color to "
         "fix this, or apply the shadow to a more specific component.",
         self.reactTag, [self class]);
+#endif
     }
   }
   
