@@ -39,7 +39,9 @@ if (__DEV__) {
         `Possible Unhandled Promise Rejection (id: ${id}):\n` +
         `${message}\n` +
         (stack == null ? '' : stack);
-      console.warn(warning);
+
+      error.message = warning;
+      console.warn(error);
     },
     onHandled: (id) => {
       const warning =
