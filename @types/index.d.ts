@@ -6911,6 +6911,7 @@ export interface AppStateStatic {
 
 export interface WindowState {
     rootTag: number;
+    className: string;
     screen: Screen;
 }
 

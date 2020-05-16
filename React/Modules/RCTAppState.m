@@ -154,6 +154,7 @@ RCT_EXPORT_MODULE()
 - (NSDictionary *)serializeWindow:(NSWindow *)window
 {
   return @{@"rootTag": window.contentView.reactTag,
+           @"className": window.className,
            @"screen": [self serializeScreen:window.screen]};
 }
 
