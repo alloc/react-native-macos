@@ -246,7 +246,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
 
 - (void)updateCursorImage
 {
-  NSView *view = _hoverTarget ?: self.rootView;
+  NSView *view = _hoverTarget ?: self.contentView;
   while (view) {
     if (view.cursor != RCTCursorInherit) {
       self.cursorProvider = view;
@@ -258,7 +258,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
 
 - (void)setCursorProvider:(NSView *)view
 {
-  if (![_hoverTarget isDescendantOf:view]) {
+  if (_hoverTarget && ![_hoverTarget isDescendantOf:view]) {
     RCTLogWarn(@"The 'cursorProvider' must contain the 'hoverTarget'");
     return;
   }
