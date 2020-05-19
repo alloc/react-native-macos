@@ -3898,6 +3898,7 @@ export interface ImageProps extends ImagePropsBase {
 declare class ImageComponent extends React.Component<ImageProps> {}
 declare const ImageBase: Constructor<NativeMethodsMixin> & typeof ImageComponent;
 export class Image extends ImageBase {
+    static getScale: (rootTag: number) => number;
     static getSize(uri: string, success: (width: number, height: number) => void, failure: (error: any) => void): any;
     static prefetch(url: string): any;
     static abortPrefetch?(requestId: number): void;
@@ -6885,12 +6886,11 @@ export interface AlertIOSStatic {
  *
  * @see https://facebook.github.io/react-native/docs/appstateios.html#content
  */
-export type AppStateEvent = "change" | "memoryWarning" | "rootViewWillAppear" | "windowDidChangeScreen" | "windowWillClose";
+export type AppStateEvent = "change" | "memoryWarning" | "frameDidFire";
 export type AppStateStatus = "active" | "background" | "inactive";
 
 export interface AppStateStatic {
     currentState: AppStateStatus;
-    windows: { [rootTag: number]: WindowState };
 
     /**
      * Add a handler to AppState changes by listening to the change event
@@ -6898,27 +6898,12 @@ export interface AppStateStatic {
      */
     addEventListener(type: 'change', listener: (state: AppStateStatus) => void): void;
     addEventListener(type: 'memoryWarning', listener: () => void): void;
-    addEventListener(type: 'rootViewWillAppear', listener: (state: WindowState) => void): void;
-    addEventListener(type: 'windowDidChangeScreen', listener: (state: WindowState) => void): void;
-    addEventListener(type: 'windowWillClose', listener: (rootTag: number) => void): void;
     addEventListener(type: 'frameDidFire', listener: () => void): void;
 
     /**
      * Remove a handler by passing the change event type and the handler
      */
     removeEventListener(type: AppStateEvent, listener: Function): void;
-}
-
-export interface WindowState {
-    rootTag: number;
-    className: string;
-    screen: Screen;
-}
-
-export interface Screen {
-    id: number;
-    scale: number;
-    layout: LayoutRectangle;
 }
 
 /**

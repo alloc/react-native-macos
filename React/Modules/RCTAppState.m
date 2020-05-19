@@ -45,7 +45,6 @@ RCT_EXPORT_MODULE()
 {
   return @{
     @"initialAppState": RCTCurrentAppBackgroundState(),
-    @"windows": [self serializeWindows:NSApp.windows],
   };
 }
 
@@ -55,9 +54,6 @@ RCT_EXPORT_MODULE()
 {
   return @[@"appStateDidChange",
            @"memoryWarning",
-           @"rootViewWillAppear",
-           @"windowDidChangeScreen",
-           @"windowWillClose",
            @"frameDidFire"];
 }
 
@@ -76,21 +72,6 @@ RCT_EXPORT_MODULE()
                    name:name
                  object:nil];
   }
-
-  [notifs addObserver:self
-             selector:@selector(contentWillAppear:)
-                 name:RCTContentWillAppearNotification
-               object:nil];
-
-  [notifs addObserver:self
-             selector:@selector(windowDidChangeScreen:)
-                 name:NSWindowDidChangeScreenNotification
-               object:nil];
-
-  [notifs addObserver:self
-             selector:@selector(windowWillClose:)
-                 name:NSWindowWillCloseNotification
-               object:nil];
 }
 
 - (void)stopObserving
@@ -108,65 +89,6 @@ RCT_EXPORT_MODULE()
     [self sendEventWithName:@"appStateDidChange"
                        body:@{@"app_state": _lastKnownState}];
   }
-}
-
-- (void)contentWillAppear:(NSNotification *)notification
-{
-  // Note: Brownfield apps are not supported yet.
-  RCTRootView *rootView = notification.object;
-  if ([rootView.window isKindOfClass:[RCTWindow class]]) {
-    [self sendEventWithName:@"rootViewWillAppear"
-                       body:[self serializeWindow:rootView.window]];
-  }
-}
-
-- (void)windowDidChangeScreen:(NSNotification *)notification
-{
-  NSWindow *window = notification.object;
-  if ([window isKindOfClass:[RCTWindow class]]) {
-    [self sendEventWithName:@"windowDidChangeScreen"
-                       body:[self serializeWindow:window]];
-  }
-}
-
-- (void)windowWillClose:(NSNotification *)notification
-{
-  NSWindow *window = notification.object;
-  if ([window isKindOfClass:[RCTWindow class]]) {
-    [self sendEventWithName:@"windowWillClose"
-                       body:window.contentView.reactTag];
-  }
-}
-
-#pragma mark - Serialization
-
-- (NSArray *)serializeWindows:(NSArray<NSWindow *> *)windows
-{
-  NSMutableArray *json = [NSMutableArray new];
-  for (NSWindow *window in windows) {
-    if ([window isKindOfClass:[RCTWindow class]]) {
-      [json addObject:[self serializeWindow:window]];
-    }
-  }
-  return json;
-}
-
-- (NSDictionary *)serializeWindow:(NSWindow *)window
-{
-  return @{@"rootTag": window.contentView.reactTag,
-           @"className": window.className,
-           @"screen": [self serializeScreen:window.screen]};
-}
-
-- (NSDictionary *)serializeScreen:(NSScreen *)screen
-{
-  NSRect frame = screen.frame;
-  return @{@"id": screen.deviceDescription[@"NSScreenNumber"],
-           @"scale": @(screen.backingScaleFactor),
-           @"layout": @{@"x":@(frame.origin.x),
-                        @"y":@(frame.origin.y),
-                        @"width":@(frame.size.width),
-                        @"height":@(frame.size.height)}};
 }
 
 #pragma mark - Public API

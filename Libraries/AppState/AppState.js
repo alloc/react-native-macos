@@ -72,22 +72,6 @@ class AppState extends NativeEventEmitter {
       }
     );
 
-    this.windows = RCTAppState.windows.reduce((acc, state) => {
-      acc[state.rootTag] = state;
-      return acc;
-    }, {});
-
-    const onWindowChange = state => {
-      this.windows[state.rootTag] = state;
-    }
-
-    this.addListener('rootViewWillAppear', onWindowChange);
-    this.addListener('windowDidChangeScreen', onWindowChange);
-
-    this.addListener('windowWillClose', rootTag => {
-      delete this.windows[rootTag];
-    });
-
     // TODO: see above - this request just populates the value of `currentState`
     // when the module is first initialized. Would be better to get rid of the
     // prop and expose `getCurrentAppState` method directly.

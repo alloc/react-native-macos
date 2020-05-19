@@ -10,13 +10,12 @@
  */
 'use strict';
 
-const AppState = require('AppState');
 const ImageProps = require('ImageProps');
 const NativeModules = require('NativeModules');
 const React = require('React');
-const ReactNative = require('ReactNative');
 const RootTagContext = require('../ReactNative/RootTagContext');
 const StyleSheet = require('StyleSheet');
+const PixelRatio = require('PixelRatio');
 
 const flattenStyle = require('flattenStyle');
 const requireNativeComponent = require('requireNativeComponent');
@@ -65,9 +64,8 @@ let Image = (
   props: ImagePropsType,
   forwardedRef: ?React.Ref<'RCTImageView'>,
 ) => {
-  const winTag = React.useContext(RootTagContext);
-  const win = AppState.windows[winTag];
-  const scale = win && win.screen ? win.screen.scale : 1;
+  const rootTag = React.useContext(RootTagContext);
+  const scale = Image.getScale(rootTag);
   const source = resolveAssetSource(props.source, scale) || {
     uri: undefined,
     width: undefined,
@@ -118,6 +116,13 @@ let Image = (
 
 // $FlowFixMe - TODO T29156721 `React.forwardRef` is not defined in Flow, yet.
 Image = React.forwardRef(Image);
+
+/**
+ * Retrieve the appropriate scale for the device that is rendering the image.
+ *
+ * By default, the `PixelRatio.get` function is used.
+ */
+Image.getScale = rootTag => PixelRatio.get();
 
 /**
  * Retrieve the width and height (in pixels) of an image prior to displaying it.
