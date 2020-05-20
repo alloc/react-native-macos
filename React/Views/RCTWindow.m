@@ -112,6 +112,12 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
   return self.contentView.contentView;
 }
 
+- (void)close
+{
+  _closed = YES;
+  [super close];
+}
+
 - (void)sendEvent:(NSEvent *)event
 {
   // Avoid sending JS events too early.

@@ -21,6 +21,9 @@
 
 @property (atomic) RCTRootView *contentView;
 
+// Equals true after the `close` method is called. Useful when filtering the `NSApp.windows` array.
+@property (nonatomic, readonly, getter=isClosed) BOOL closed;
+
 // Only exists between mouseDown and mouseUp events (may not be a React view)
 @property (nonatomic, readonly) NSView *clickOrigin;
 
