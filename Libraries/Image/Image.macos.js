@@ -65,7 +65,7 @@ let Image = (
   forwardedRef: ?React.Ref<'RCTImageView'>,
 ) => {
   const rootTag = React.useContext(RootTagContext);
-  const scale = Image.getScale(rootTag);
+  const scale = Image.useScale(rootTag);
   const source = resolveAssetSource(props.source, scale) || {
     uri: undefined,
     width: undefined,
@@ -120,9 +120,9 @@ Image = React.forwardRef(Image);
 /**
  * Retrieve the appropriate scale for the device that is rendering the image.
  *
- * By default, the `PixelRatio.get` function is used.
+ * By default, the `PixelRatio.get` function is used, which only accounts for the main display.
  */
-Image.getScale = rootTag => PixelRatio.get();
+Image.useScale = rootTag => PixelRatio.get();
 
 /**
  * Retrieve the width and height (in pixels) of an image prior to displaying it.
