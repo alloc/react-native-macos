@@ -36,6 +36,8 @@
  */
 @property (nonatomic, assign) RCTPointerEvents pointerEvents;
 
+@property (nonatomic, assign) BOOL redrawsBorderImageOnSizeChange;
+
 + (void)autoAdjustInsetsForView:(NSView<RCTAutoInsetsProtocol> *)parentView
                  withScrollView:(NSScrollView *)scrollView
                    updateOffset:(BOOL)updateOffset;

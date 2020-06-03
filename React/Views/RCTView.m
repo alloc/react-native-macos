@@ -490,6 +490,9 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   CGSize oldSize = self.bounds.size;
   [super reactSetFrame:frame];
   if (!CGSizeEqualToSize(self.bounds.size, oldSize)) {
+    if (_redrawsBorderImageOnSizeChange) {
+      _borderImage = nil;
+    }
     [self.layer setNeedsDisplay];
   } else if (!CATransform3DIsIdentity(_transform)) {
     [self applyTransform:self.layer];
