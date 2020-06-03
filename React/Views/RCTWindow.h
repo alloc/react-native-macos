@@ -20,6 +20,7 @@
                          defer:(BOOL)defer NS_DESIGNATED_INITIALIZER;
 
 @property (atomic) RCTRootView *contentView;
+@property (nonatomic, readonly) RCTBridge *bridge;
 
 // Equals true after the `close` method is called. Useful when filtering the `NSApp.windows` array.
 @property (nonatomic, readonly, getter=isClosed) BOOL closed;

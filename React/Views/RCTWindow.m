@@ -48,8 +48,6 @@
 
 @implementation RCTWindow
 {
-  RCTBridge *_bridge;
-
   RCTCursor _lastCursor;
   NSMutableDictionary *_mouseInfo;
   NSView *_clickTarget;
