@@ -450,6 +450,9 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
 
 - (void)setBackgroundColor:(NSColor *)backgroundColor
 {
+  if (CGColorEqualToColor(_backgroundColor.CGColor, backgroundColor.CGColor)) {
+    return;
+  }
   _backgroundColor = backgroundColor;
 
   if (_borderImage) {
