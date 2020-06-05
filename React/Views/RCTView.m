@@ -565,7 +565,6 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
     BOOL needsBorderImage =
       RCTBordersAreVisible(borderInsets, borderColors) ||
         (!self.clipsToBounds &&
-          _backgroundColor.alphaComponent > 0 &&
           (cornerRadii.topLeft > 0 ||
             !RCTCornerRadiiAreEqual(cornerRadii)));
     
