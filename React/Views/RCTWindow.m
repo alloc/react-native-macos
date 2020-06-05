@@ -436,12 +436,6 @@ static NSCursor *NSCursorForRCTCursor(RCTCursor cursor)
   }
 }
 
-- (void)update
-{
-  [super update];
-  [self invalidateShadow];
-}
-
 - (void)RCT_windowDidChangeScreen:(__unused NSNotification *)notification
 {
   self.contentView.scaleFactor = self.backingScaleFactor;
