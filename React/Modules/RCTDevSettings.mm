@@ -43,7 +43,7 @@ static NSString *const kRCTDevSettingsUserDefaultsKey = @"RCTDevMenu";
 #import <jschelpers/JSCWrapper.h>
 #endif
 
-#if RCT_DEV
+#if RCT_DEBUG
 
 @interface RCTDevSettingsUserDefaultsDataSource : NSObject <RCTDevSettingsDataSource>
 
@@ -450,7 +450,7 @@ RCT_EXPORT_METHOD(toggleElementInspector)
   }
 }
 
-#if RCT_DEV
+#if RCT_DEBUG
 
 - (void)addHandler:(id<RCTPackagerClientMethod>)handler forPackagerMethod:(NSString *)name
 {
@@ -562,7 +562,7 @@ RCT_EXPORT_METHOD(toggleElementInspector)
 
 - (RCTDevSettings *)devSettings
 {
-#if RCT_DEV
+#if RCT_DEBUG
   return [self moduleForClass:[RCTDevSettings class]];
 #else
   return nil;
