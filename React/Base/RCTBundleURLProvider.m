@@ -111,16 +111,16 @@ static NSURL *serverRootWithHostPort(NSString *hostPort)
 
 - (NSString *)packagerServerHost
 {
-  NSString *location = [self jsLocation];
-  if (location != nil) {
-    return location;
-  }
 #if RCT_DEBUG
   NSString *host = [self guessPackagerHost];
   if (host) {
     return host;
   }
 #endif
+  NSString *location = [self jsLocation];
+  if (location != nil) {
+    return location;
+  }
   return nil;
 }
 
@@ -132,7 +132,7 @@ static NSURL *serverRootWithHostPort(NSString *hostPort)
   } else {
     return [RCTBundleURLProvider jsBundleURLForBundleRoot:bundleRoot
                                              packagerHost:packagerServerHost
-                                                enableDev:[self enableDev]
+                                                enableDev:NO // [self enableDev]
                                        enableMinification:[self enableMinification]];
   }
 }
