@@ -153,6 +153,7 @@
 
 - (void)setFrame:(NSRect)frame
 {
+  RCTSetScreen(self.window.screen);
   frame = RCTAlignTextFrame(frame, self.font, self.textAlignVertical);
 
   CGFloat scale = self.window.backingScaleFactor;

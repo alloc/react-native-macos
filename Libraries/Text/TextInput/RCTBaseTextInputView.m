@@ -535,6 +535,8 @@ static BOOL findMismatch(NSString *first, NSString *second, NSRange *firstRange,
 {
   if (_placeholderView) {
     NSFont *font = _placeholderView.font;
+
+    RCTSetScreen(self.window.screen);
     NSRect frame = RCTAlignTextFrame(
       self.reactContentFrame,
       font,
