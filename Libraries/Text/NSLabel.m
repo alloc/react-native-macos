@@ -23,6 +23,7 @@
  */
 
 #import "NSLabel.h"
+#import "NSFont+LineHeight.h"
 
 #import <React/RCTDefines.h>
 
@@ -47,6 +48,7 @@
     _numberOfLines   = 1;
     _alignment       = NSTextAlignmentLeft;
     _lineBreakMode   = NSLineBreakByTruncatingTail;
+    _lineHeight      = NAN;
     _contentRect     = CGRectNull;
   }
 
@@ -136,8 +138,14 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)coder)
   NSMutableParagraphStyle* style = [NSMutableParagraphStyle new];
   style.alignment = _alignment;
   style.lineBreakMode = _lineBreakMode;
+  
+  CGFloat lineHeight = isnan(_lineHeight) ? _font.lineHeight : _lineHeight;
+  style.minimumLineHeight = lineHeight;
+  style.maximumLineHeight = lineHeight;
+  
   return @{
     NSFontAttributeName            : _font,
+    NSKernAttributeName            : @(_letterSpacing),
     NSForegroundColorAttributeName : _textColor,
     NSBackgroundColorAttributeName : _backgroundColor,
     NSParagraphStyleAttributeName  : style,
@@ -225,6 +233,20 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)coder)
 - (void)setLineBreakMode:(NSLineBreakMode)lineBreakMode
 {
   _lineBreakMode = lineBreakMode;
+  [self invalidateIntrinsicContentSize];
+  [self setNeedsDisplay:YES];
+}
+
+- (void)setLetterSpacing:(CGFloat)letterSpacing
+{
+  _letterSpacing = letterSpacing;
+  [self invalidateIntrinsicContentSize];
+  [self setNeedsDisplay:YES];
+}
+
+- (void)setLineHeight:(CGFloat)lineHeight
+{
+  _lineHeight = lineHeight;
   [self invalidateIntrinsicContentSize];
   [self setNeedsDisplay:YES];
 }
