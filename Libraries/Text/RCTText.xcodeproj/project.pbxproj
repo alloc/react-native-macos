@@ -64,6 +64,7 @@
 		70588F712227428000CD1EEA /* NSText+Editing.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 70588F6F2227427700CD1EEA /* NSText+Editing.h */; };
 		705EDE3D221378CC000CAA67 /* NSFont+LineHeight.m in Sources */ = {isa = PBXBuildFile; fileRef = 705EDE3C221378CC000CAA67 /* NSFont+LineHeight.m */; };
 		705EDE4022137BE7000CAA67 /* NSValue+CoreGraphics.m in Sources */ = {isa = PBXBuildFile; fileRef = 705EDE3F22137BE7000CAA67 /* NSValue+CoreGraphics.m */; };
+		70696444248D3A0800121751 /* RCTTextUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 70696442248D3A0700121751 /* RCTTextUtils.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -167,6 +168,8 @@
 		705EDE3F22137BE7000CAA67 /* NSValue+CoreGraphics.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSValue+CoreGraphics.m"; sourceTree = "<group>"; };
 		705EDE422213890E000CAA67 /* NSLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSLabel.m; sourceTree = "<group>"; };
 		705EDE4422138919000CAA67 /* NSLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSLabel.h; sourceTree = "<group>"; };
+		70696442248D3A0700121751 /* RCTTextUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTTextUtils.m; sourceTree = "<group>"; };
+		70696443248D3A0700121751 /* RCTTextUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTTextUtils.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,6 +189,8 @@
 			children = (
 				70588F6F2227427700CD1EEA /* NSText+Editing.h */,
 				70588F6E2227427600CD1EEA /* NSText+Editing.m */,
+				70696443248D3A0700121751 /* RCTTextUtils.h */,
+				70696442248D3A0700121751 /* RCTTextUtils.m */,
 				705EDE4422138919000CAA67 /* NSLabel.h */,
 				705EDE422213890E000CAA67 /* NSLabel.m */,
 				705EDE3E22137BE7000CAA67 /* NSValue+CoreGraphics.h */,
@@ -392,6 +397,7 @@
 				705EDE4022137BE7000CAA67 /* NSValue+CoreGraphics.m in Sources */,
 				5956B135200FEBAA008D9D16 /* RCTBaseTextInputView.m in Sources */,
 				5956B144200FEBAA008D9D16 /* RCTVirtualTextViewManager.m in Sources */,
+				70696444248D3A0800121751 /* RCTTextUtils.m in Sources */,
 				5956B13B200FEBAA008D9D16 /* RCTMultilineTextInputViewManager.m in Sources */,
 				5956B134200FEBAA008D9D16 /* RCTSinglelineTextInputViewManager.m in Sources */,
 				705EDE3D221378CC000CAA67 /* NSFont+LineHeight.m in Sources */,

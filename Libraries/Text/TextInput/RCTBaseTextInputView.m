@@ -18,6 +18,7 @@
 #import "NSLabel.h"
 #import "RCTTextAttributes.h"
 #import "RCTTextSelection.h"
+#import "RCTTextUtils.h"
 
 @implementation RCTBaseTextInputView {
   __weak RCTBridge *_bridge;
@@ -522,15 +523,27 @@ static BOOL findMismatch(NSString *first, NSString *second, NSRange *firstRange,
 {
   if (_placeholderView && _textAttributes) {
     _placeholderView.font = _textAttributes.effectiveFont;
+    _placeholderView.letterSpacing = _textAttributes.letterSpacing;
     _placeholderView.textColor = _placeholderColor ?: _textAttributes.effectiveForegroundColor;
     _placeholderView.alignment = _textAttributes.alignment;
+    
+    [self updatePlaceholderFrame];
   }
 }
 
 - (void)updatePlaceholderFrame
 {
   if (_placeholderView) {
-    _placeholderView.frame = self.reactContentFrame;
+    NSFont *font = _placeholderView.font;
+    NSRect frame = RCTAlignTextFrame(
+      self.reactContentFrame,
+      font,
+      self.backedTextInputView.textAlignVertical
+    );
+    
+    frame.origin.y += font.capHeight - font.ascender;
+    
+    _placeholderView.frame = frame;
   }
 }
 

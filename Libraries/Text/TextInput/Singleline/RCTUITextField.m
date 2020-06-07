@@ -13,6 +13,7 @@
 
 #import "RCTBackedTextInputDelegateAdapter.h"
 #import "RCTFieldEditor.h"
+#import "RCTTextUtils.h"
 #import "NSText+Editing.h"
 #import "NSFont+LineHeight.h"
 
@@ -152,18 +153,15 @@
 
 - (void)setFrame:(NSRect)frame
 {
-  if ([self.textAlignVertical isEqualToString:@"center"]) {
-    CGFloat lineHeight = self.font.lineHeight;
-    CGFloat heightDelta = frame.size.height - lineHeight;
-    if (heightDelta > 0) {
-      frame.origin.y += (heightDelta / 2) - (lineHeight / 16);
-    }
-  }
+  frame = RCTAlignTextFrame(frame, self.font, self.textAlignVertical);
 
-  // The baseline is always 13 pixels from the view's top edge, so that strings with
-  // mixed font sizes are aligned by their baselines. But we want align text so its
-  // ascender is always touching the view's top edge by default.
-  frame.origin.y += self.font.ascender - 13.0;
+  CGFloat scale = self.window.backingScaleFactor;
+  if (scale > 0) {
+    // The baseline is always 13 points from the view's top edge, so that strings with
+    // mixed font sizes are aligned by their baselines. But we want align text so its
+    // ascender is always touching the view's top edge by default.
+    frame.origin.y += RCTRoundPixelValue(self.font.capHeight - 12.5, scale);
+  }
 
   // HACK: The text naturally has 2 pixels of left/right padding.
   frame.origin.x -= 2;
