@@ -313,6 +313,7 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
     self.wantsLayer = YES;
     self.layer.delegate = (id<CALayerDelegate>)self;
     self.layerContentsRedrawPolicy = NSViewLayerContentsRedrawOnSetNeedsDisplay;
+    self.layer.edgeAntialiasingMask = kCALayerTopEdge | kCALayerLeftEdge | kCALayerBottomEdge | kCALayerRightEdge;
   }
 }
 
