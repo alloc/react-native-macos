@@ -10,6 +10,9 @@
 #import "RCTI18nUtil.h"
 
 @implementation RCTI18nUtil
+{
+  NSUserDefaults *defaults;
+}
 
 + (instancetype)sharedInstance
 {
@@ -21,6 +24,14 @@
   });
   
   return sharedInstance;
+}
+
+- (instancetype)init
+{
+  if (self = [super init]) {
+    defaults = [NSUserDefaults standardUserDefaults];
+  }
+  return self;
 }
 
 /**
@@ -47,7 +58,7 @@
  */
 - (BOOL)isRTLAllowed
 {
-  NSNumber *value = [[NSUserDefaults standardUserDefaults] objectForKey:@"RCTI18nUtil_allowRTL"];
+  NSNumber *value = [defaults objectForKey:@"RCTI18nUtil_allowRTL"];
   if (value == nil) {
     return YES;
   }
@@ -56,8 +67,7 @@
 
 - (void)allowRTL:(BOOL)rtlStatus
 {
-  [[NSUserDefaults standardUserDefaults] setBool:rtlStatus forKey:@"RCTI18nUtil_allowRTL"];
-  [[NSUserDefaults standardUserDefaults] synchronize];
+  [defaults setBool:rtlStatus forKey:@"RCTI18nUtil_allowRTL"];
 }
 
 /**
@@ -66,26 +76,22 @@
  */
 - (BOOL)isRTLForced
 {
-  BOOL rtlStatus = [[NSUserDefaults standardUserDefaults]
-                            boolForKey:@"RCTI18nUtil_forceRTL"];
-  return rtlStatus;
+  return [defaults boolForKey:@"RCTI18nUtil_forceRTL"];
 }
 
 - (void)forceRTL:(BOOL)rtlStatus
 {
-  [[NSUserDefaults standardUserDefaults] setBool:rtlStatus forKey:@"RCTI18nUtil_forceRTL"];
-  [[NSUserDefaults standardUserDefaults] synchronize];
+  [defaults setBool:rtlStatus forKey:@"RCTI18nUtil_forceRTL"];
 }
 
 - (BOOL)doLeftAndRightSwapInRTL
 {
-  return [[NSUserDefaults standardUserDefaults] boolForKey:@"RCTI18nUtil_makeRTLFlipLeftAndRightStyles"];
+  return [defaults boolForKey:@"RCTI18nUtil_makeRTLFlipLeftAndRightStyles"];
 }
 
 - (void)swapLeftAndRightInRTL:(BOOL)value
 {
-  [[NSUserDefaults standardUserDefaults] setBool:value forKey:@"RCTI18nUtil_makeRTLFlipLeftAndRightStyles"];
-  [[NSUserDefaults standardUserDefaults] synchronize];
+  [defaults setBool:value forKey:@"RCTI18nUtil_makeRTLFlipLeftAndRightStyles"];
 }
 
 // Check if the current device language is RTL
