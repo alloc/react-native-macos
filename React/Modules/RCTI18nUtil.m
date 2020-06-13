@@ -30,6 +30,11 @@
 {
   if (self = [super init]) {
     defaults = [NSUserDefaults standardUserDefaults];
+
+    NSNumber *allowRTL = [defaults objectForKey:@"RCTI18nUtil_allowRTL"];
+    _isRTLAllowed = allowRTL == nil || allowRTL.boolValue;
+    _isRTLForced = [defaults boolForKey:@"RCTI18nUtil_forceRTL"];
+    _doLeftAndRightSwapInRTL = [defaults boolForKey:@"RCTI18nUtil_makeRTLFlipLeftAndRightStyles"];
   }
   return self;
 }
@@ -51,46 +56,21 @@
   return NO;
 }
 
-/**
- * Should be used very early during app start up
- * Before the bridge is initialized
- * @return whether the app allows RTL layout, default is true
- */
-- (BOOL)isRTLAllowed
+- (void)allowRTL:(BOOL)value
 {
-  NSNumber *value = [defaults objectForKey:@"RCTI18nUtil_allowRTL"];
-  if (value == nil) {
-    return YES;
-  }
-  return [value boolValue];
+  _isRTLAllowed = value;
+  [defaults setBool:value forKey:@"RCTI18nUtil_allowRTL"];
 }
 
-- (void)allowRTL:(BOOL)rtlStatus
+- (void)forceRTL:(BOOL)value
 {
-  [defaults setBool:rtlStatus forKey:@"RCTI18nUtil_allowRTL"];
-}
-
-/**
- * Could be used to test RTL layout with English
- * Used for development and testing purpose
- */
-- (BOOL)isRTLForced
-{
-  return [defaults boolForKey:@"RCTI18nUtil_forceRTL"];
-}
-
-- (void)forceRTL:(BOOL)rtlStatus
-{
-  [defaults setBool:rtlStatus forKey:@"RCTI18nUtil_forceRTL"];
-}
-
-- (BOOL)doLeftAndRightSwapInRTL
-{
-  return [defaults boolForKey:@"RCTI18nUtil_makeRTLFlipLeftAndRightStyles"];
+  _isRTLForced = value;
+  [defaults setBool:value forKey:@"RCTI18nUtil_forceRTL"];
 }
 
 - (void)swapLeftAndRightInRTL:(BOOL)value
 {
+  _doLeftAndRightSwapInRTL = value;
   [defaults setBool:value forKey:@"RCTI18nUtil_makeRTLFlipLeftAndRightStyles"];
 }
 
