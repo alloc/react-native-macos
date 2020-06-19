@@ -63,9 +63,11 @@ RCTLogFunction RCTDefaultLogFunction = ^(
       logType = OS_LOG_TYPE_ERROR;
       break;
   }
+
+  static os_log_t OS_LOG_BUNDLE = os_log_create(NSBundle.mainBundle.bundleIdentifier.UTF8String, "");
   
   NSString *log = RCTFormatLog(nil, level, fileName, lineNumber, message);
-  os_log_with_type(OS_LOG_DEFAULT, logType, "%{public}s", log.UTF8String);
+  os_log_with_type(OS_LOG_BUNDLE, logType, "%{public}s", log.UTF8String);
 };
 
 void RCTSetLogFunction(RCTLogFunction logFunction)
