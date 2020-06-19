@@ -28,9 +28,9 @@ const char *RCTLogLevels[] = {
 };
 
 #if RCT_DEBUG
-static const RCTLogLevel RCTDefaultLogThreshold = (RCTLogLevel)(RCTLogLevelInfo - 1);
+static const RCTLogLevel RCTDefaultLogThreshold = RCTLogLevelTrace;
 #else
-static const RCTLogLevel RCTDefaultLogThreshold = RCTLogLevelError;
+static const RCTLogLevel RCTDefaultLogThreshold = RCTLogLevelInfo;
 #endif
 
 static RCTLogFunction RCTCurrentLogFunction;
