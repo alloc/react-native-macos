@@ -56,13 +56,11 @@ RCTLogFunction RCTDefaultLogFunction = ^(
       break;
     case RCTLogLevelInfo:
     case RCTLogLevelWarning:
-      logType = OS_LOG_TYPE_DEFAULT;
+      logType = OS_LOG_TYPE_INFO;
       break;
     case RCTLogLevelError:
-      logType = OS_LOG_TYPE_ERROR;
-      break;
     case RCTLogLevelFatal:
-      logType = OS_LOG_TYPE_FAULT;
+      logType = OS_LOG_TYPE_ERROR;
       break;
   }
   
