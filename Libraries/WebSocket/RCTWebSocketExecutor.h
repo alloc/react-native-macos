@@ -8,7 +8,7 @@
 #import <React/RCTDefines.h>
 #import <React/RCTJavaScriptExecutor.h>
 
-#if RCT_DEV // Debug executors are only supported in dev mode
+#if RCT_DEBUG // Debug executors are only supported in dev mode
 
 @interface RCTWebSocketExecutor : NSObject <RCTJavaScriptExecutor>
 

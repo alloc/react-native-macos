@@ -17,7 +17,7 @@
 
 #import "RCTSRWebSocket.h"
 
-#if RCT_DEV // Only supported in dev mode
+#if RCT_DEBUG // Only supported in dev mode
 
 #if __has_include(<os/log.h>) && defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED >= 100300 /* __IPHONE_10_3 */
 

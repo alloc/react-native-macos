@@ -7,7 +7,7 @@
 
 #import <React/RCTDefines.h>
 
-#if RCT_DEV // Only supported in dev mode
+#if RCT_DEBUG // Only supported in dev mode
 
 @class RCTReconnectingWebSocket;
 

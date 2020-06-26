@@ -16,7 +16,7 @@
 
 #import "RCTSRWebSocket.h"
 
-#if RCT_DEV // Debug executors are only supported in dev mode
+#if RCT_DEBUG // Debug executors are only supported in dev mode
 
 typedef void (^RCTWSMessageCallback)(NSError *error, NSDictionary<NSString *, id> *reply);
 
