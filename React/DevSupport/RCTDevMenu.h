@@ -11,7 +11,7 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTKeyCommands.h>
 
-#if RCT_DEV
+#if RCT_DEBUG
 
 RCT_EXTERN NSString *const RCTShowDevMenuNotification;
 

@@ -17,7 +17,7 @@
 
 #define RCT_DEVMENU_TITLE @"React Native"
 
-#if RCT_DEV
+#if RCT_DEBUG
 
 #if RCT_ENABLE_INSPECTOR
 #import "RCTInspectorDevServerHelper.h"
@@ -137,7 +137,7 @@ RCT_EXPORT_MODULE()
                                                object:nil];
     _extraMenuItems = [NSMutableArray new];
 
-#if DEBUG
+#if RCT_DEBUG
     [RCTKeyCommands.sharedInstance addObserver:self];
 #endif
   }
@@ -485,7 +485,7 @@ RCT_EXPORT_METHOD(setHotLoadingEnabled:(BOOL)enabled)
 
 - (RCTDevMenu *)devMenu
 {
-#if RCT_DEV
+#if RCT_DEBUG
   return [self moduleForClass:[RCTDevMenu class]];
 #else
   return nil;
