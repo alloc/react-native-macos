@@ -321,7 +321,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
 
   Class bridgeClass = self.bridgeClass;
 
-  #if RCT_DEV
+  #if RCT_DEBUG
   RCTExecuteOnMainQueue(^{
     RCTRegisterReloadCommandListener(self);
   });
