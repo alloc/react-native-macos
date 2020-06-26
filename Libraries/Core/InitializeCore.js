@@ -258,3 +258,7 @@ if (__DEV__) {
     JSInspector.registerAgent(require('NetworkAgent'));
   }
 }
+
+if (global.nativeLoggingHook) {
+  global.__formatLog = require('@alloc/log-format');
+}
