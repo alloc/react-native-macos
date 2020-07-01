@@ -228,13 +228,13 @@ static NSImage *RCTGetSolidBorderImage(RCTCornerRadii cornerRadii,
                                        CGColorRef backgroundColor,
                                        BOOL drawToEdge)
 {
-  const BOOL hasCornerRadii = RCTCornerRadiiAreAboveThreshold(cornerRadii);
-  const RCTCornerInsets cornerInsets = RCTGetCornerInsets(cornerRadii, borderInsets);
-
   // Incorrect render for borders that are not proportional to device pixel: borders get stretched and become
   // significantly bigger than expected.
   // Rdar: http://www.openradar.me/15959788
   borderInsets = RCTRoundInsetsToPixel(borderInsets);
+
+  const BOOL hasCornerRadii = RCTCornerRadiiAreAboveThreshold(cornerRadii);
+  const RCTCornerInsets cornerInsets = RCTGetCornerInsets(cornerRadii, borderInsets);
 
   const BOOL makeStretchable =
     (borderInsets.left + cornerInsets.topLeft.width +
