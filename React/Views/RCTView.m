@@ -506,8 +506,6 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
 {
   if (!CATransform3DEqualToTransform(_transform, layer.transform)) {
     layer.transform = _transform;
-    // Enable edge antialiasing in perspective transforms
-    layer.edgeAntialiasingMask = !(_transform.m34 == 0.0f);
   }
 }
 
