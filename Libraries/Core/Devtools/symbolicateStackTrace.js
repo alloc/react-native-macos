@@ -52,7 +52,7 @@ async function symbolicateStackTrace(stack: Array<StackFrame>): Promise<Array<St
       // replace the location with the packager URL until we reach an internal source
       // which does not have a path (no slashes), indicating a switch from within
       // the application to a surrounding debugging environment.
-      if (!foundInternalSource && isSourcedFromDisk(frame.file)) {
+      if (!foundInternalSource && (frame.file && isSourcedFromDisk(frame.file))) {
         // Copy frame into new object and replace 'file' property
         return {...frame, file: SourceCode.scriptURL};
       }
