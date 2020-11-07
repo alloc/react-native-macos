@@ -15,6 +15,10 @@ require.requireActual('../Libraries/polyfills/error-guard');
 
 global.__DEV__ = true;
 
+if (global.window === undefined) {
+  global.window = global;
+}
+
 global.Promise = require.requireActual('promise');
 global.regeneratorRuntime = require.requireActual('regenerator-runtime/runtime');
 
