@@ -92,12 +92,7 @@ function polyfillGlobal<T>(name: string, getValue: () => T): void {
   defineLazyProperty(global, name, getValue);
 }
 
-// Set up process
-global.process = global.process || {};
-global.process.env = global.process.env || {};
-if (!global.process.env.NODE_ENV) {
-  global.process.env.NODE_ENV = __DEV__ ? 'development' : 'production';
-}
+// Set up process (Metro ensures `global.process` exists)
 global.process.exit = require('NativeModules').AppState.exit;
 Object.defineProperty(global.process, 'argv',
   () => require('NativeModules').LinkingManager.argv);
