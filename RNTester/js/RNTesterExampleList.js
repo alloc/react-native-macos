@@ -22,8 +22,6 @@ const RNTesterActions = require('./RNTesterActions');
 const RNTesterStatePersister = require('./RNTesterStatePersister');
 const View = require('View');
 const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
-const { AppearanceConsumer } = require('./AppearanceContext')
-
 
 import type {
   RNTesterExample,
@@ -65,36 +63,27 @@ class RowComponent extends React.PureComponent<{
     const {item} = this.props;
 
     return (
-      <AppearanceConsumer>
-        {appearance => (
-          <TouchableOpacity {...this.props} onPress={this._onPress}>
-            <View style={[styles.row, this.props.selected ? styles.selectedRow : {}]}>
-              <Text style={[styles.rowTitleText, { color: appearance.colors.textColor}]}>
-                {item.module.title}
-              </Text>
-              <Text style={[styles.rowDetailText, { color: appearance.colors.secondaryLabelColor}]}>
-                {item.module.description}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        )}
-      </AppearanceConsumer>
+      <TouchableOpacity {...this.props} onPress={this._onPress}>
+        <View style={[styles.row, this.props.selected ? styles.selectedRow : {}]}>
+          <Text style={styles.rowTitleText}>
+            {item.module.title}
+          </Text>
+          <Text style={styles.rowDetailText}>
+            {item.module.description}
+          </Text>
+        </View>
+      </TouchableOpacity>
     );
   }
 }
 
-const renderSectionHeader = ({section}) =>
-  <AppearanceConsumer>
-    {appearance => (
-      <View style={{ backgroundColor: "transparent" }} >
-      <Text style={[styles.sectionHeader, 
-      { color: appearance.colors.secondaryLabelColor }]}>
-        {section.title}
-      </Text>
-      </View>)
-    }
-  </AppearanceConsumer>;
-
+const renderSectionHeader = ({section}) => (
+  <View style={{ backgroundColor: "transparent" }} >
+    <Text style={styles.sectionHeader}>
+      {section.title}
+    </Text>
+  </View>
+);
 
 class RNTesterExampleList extends React.Component<Props, $FlowFixMeState> {
 

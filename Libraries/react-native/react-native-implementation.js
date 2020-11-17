@@ -17,7 +17,6 @@ const ReactNative = {
   get useRootTag() { return require('useRootTag'); },
 
   // Components
-  get Appearance() { return require('Appearance'); },
   get AccessibilityInfo() { return require('AccessibilityInfo'); },
   get ActivityIndicator() { return require('ActivityIndicator'); },
   get Button() { return require('Button'); },

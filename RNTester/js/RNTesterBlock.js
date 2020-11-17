@@ -20,9 +20,6 @@ var {
   View,
 } = ReactNative;
 
-import { AppearanceConsumer } from './AppearanceContext'
-
-
 class RNTesterBlock extends React.Component<{
   title?: string,
   description?: string,
@@ -34,15 +31,6 @@ class RNTesterBlock extends React.Component<{
 
   state = {description: (null: ?string)};
 
-  backgroundColor(appearance: any) {
-    return appearance.currentAppearance.indexOf("Dark") > -1 ? "#292A2F" : "white"
-  }
-
-  borderColor(appearance: any, utils) {
-    const isDark = appearance.currentAppearance.indexOf("Dark") > -1;
-    return isDark ? utils.tint(0.86, this.backgroundColor(appearance)) : utils.shade(0.85, this.backgroundColor(appearance))
-  }
-
   render() {
     var description;
     if (this.props.description) {
@@ -53,23 +41,19 @@ class RNTesterBlock extends React.Component<{
     }
 
     return (
-      <AppearanceConsumer resolveColors={(a, utils) => ({ borderColor: this.borderColor(a, utils) })}>
-        {(appearance, { borderColor }) => (
-          <View style={[styles.container, { borderColor, backgroundColor: this.backgroundColor(appearance)}]}>
-            <View style={[styles.titleContainer, {backgroundColor: appearance.colors.textBackgroundColor, borderBottomColor: borderColor }]}>
-              <Text style={[styles.titleText, { color: appearance.colors.textColor } ]}>
-                {this.props.title}
-              </Text>
-              {description}
-            </View>
-            <View style={styles.children}>
-              {
-                // $FlowFixMe found when converting React.createClass to ES6
-                this.props.children}
-            </View>
-          </View>
-        )}
-      </AppearanceConsumer>
+      <View style={styles.container}>
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleText}>
+            {this.props.title}
+          </Text>
+          {description}
+        </View>
+        <View style={styles.children}>
+          {
+            // $FlowFixMe found when converting React.createClass to ES6
+            this.props.children}
+        </View>
+      </View>
     );
   }
 }
@@ -86,7 +70,7 @@ var styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderTopLeftRadius: 3,
     borderTopRightRadius: 2.5,
-    
+
     paddingHorizontal: 10,
     paddingVertical: 5,
   },

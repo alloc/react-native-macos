@@ -197,11 +197,6 @@ const ComponentExamples: Array<RNTesterExample> = [
 ];
 
 const APIExamples: Array<RNTesterExample> = [
-  {
-    key: 'ApperanceExample',
-    module: require('./AppearanceExample.macos'),
-    supportsTVOS: false,
-  },
   // {
   //   key: 'AccessibilityIOSExample',
   //   module: require('./AccessibilityIOSExample'),
