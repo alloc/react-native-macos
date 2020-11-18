@@ -23,7 +23,7 @@ dependencies:
   denodeify: 1.2.1
   envinfo: 3.11.1
   errorhandler: 1.5.1
-  event-target-shim: 1.1.1
+  event-target-shim: 1.0.7
   fbjs: 0.8.17
   fbjs-scripts: 0.8.3
   fs-extra: 1.0.0
@@ -2873,10 +2873,10 @@ packages:
       node: '>= 0.6'
     resolution:
       integrity: sha1-Qa4u62XvpiJorr/qg6x9eSmbCIc=
-  /event-target-shim/1.1.1:
+  /event-target-shim/1.0.7:
     dev: false
     resolution:
-      integrity: sha1-qG5e5r2qFgVEddp5fM3fDFVphJE=
+      integrity: sha1-zhExgSCGXyQKlngBtADpXKLnfLc=
   /eventemitter3/3.1.2:
     dev: false
     resolution:
@@ -7396,7 +7396,7 @@ specifiers:
   eslint-plugin-jest: ^21.5.0
   eslint-plugin-prettier: 2.1.1
   eslint-plugin-react: ^7.2.1
-  event-target-shim: ^1.0.5
+  event-target-shim: ~1.0.5
   fbjs: ^0.8.14
   fbjs-scripts: ^0.8.1
   flow-bin: ^0.66.0
