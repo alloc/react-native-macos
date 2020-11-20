@@ -23,7 +23,6 @@
     self.blurOnSubmit = YES;
 
     _backedTextInputView = [[RCTUITextField alloc] initWithFrame:self.bounds];
-    _backedTextInputView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
     _backedTextInputView.textInputDelegate = self;
 
     [self addSubview:_backedTextInputView];

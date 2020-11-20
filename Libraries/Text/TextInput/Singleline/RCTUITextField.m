@@ -48,7 +48,6 @@
                                                  name:NSControlTextDidChangeNotification
                                                object:self];
 
-    self.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
     self.allowsEditingTextAttributes = NO;
     self.drawsBackground = NO;
     self.focusRingType = NSFocusRingTypeNone;
@@ -163,10 +162,6 @@
     // ascender is always touching the view's top edge by default.
     frame.origin.y += RCTRoundPixelValue(self.font.capHeight - 12.5, scale);
   }
-
-  // HACK: The text naturally has 2 pixels of left/right padding.
-  frame.origin.x -= 2;
-  frame.size.width += 4;
 
   [super setFrame:frame];
 }

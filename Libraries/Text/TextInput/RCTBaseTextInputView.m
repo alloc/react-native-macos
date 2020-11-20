@@ -37,6 +37,7 @@
     _bridge = bridge;
     _eventDispatcher = bridge.eventDispatcher;
 
+    self.autoresizesSubviews = NO;
     self.clipsToBounds = YES;
     self.cursor = RCTCursorText;
   }
@@ -538,7 +539,7 @@ static BOOL findMismatch(NSString *first, NSString *second, NSRange *firstRange,
 
     RCTSetScreen(self.window.screen);
     NSRect frame = RCTAlignTextFrame(
-      self.reactContentFrame,
+      self.backedTextInputFrame,
       font,
       self.backedTextInputView.textAlignVertical
     );
@@ -560,7 +561,22 @@ static BOOL findMismatch(NSString *first, NSString *second, NSRange *firstRange,
 - (void)setFrame:(NSRect)frame
 {
   [super setFrame:frame];
+  [self.backedTextInputView setFrame:self.backedTextInputFrame];
   [self updatePlaceholderFrame];
+}
+
+- (NSRect)backedTextInputFrame
+{
+  NSRect frame = self.reactContentFrame;
+  
+  // HACK: For some reason, this view can be accidentally wider than its parent.
+  //       But we can avoid that by checking and correcting manually.
+  NSSize parentSize = self.superview.frame.size;
+  if (frame.size.width > parentSize.width) {
+    frame.size = (NSSize){parentSize.width, frame.size.height};
+  }
+  
+  return frame;
 }
 
 @end
