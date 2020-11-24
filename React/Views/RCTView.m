@@ -481,6 +481,11 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
 
 #pragma mark - Rendering
 
+- (BOOL)isOpaque
+{
+  return self.layer.opacity > 0.999 && _backgroundColor.alphaComponent > 0.999;
+}
+
 - (void)reactSetFrame:(CGRect)frame
 {
   // TODO: understand if we need to be able to disable live resizing for certain use
