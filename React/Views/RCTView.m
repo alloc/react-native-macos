@@ -538,23 +538,6 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
     return;
   }
   
-  if (RCTLayerHasShadow(self.layer)) {
-    // If view has a solid background color, calculate shadow path from border
-    if (CGColorGetAlpha(self.backgroundColor.CGColor) > 0.999) {
-      [self updateShadowPath];
-    } else {
-      // Can't accurately calculate box shadow, so fall back to pixel-based shadow
-      self.layer.shadowPath = nil;
-
-#if DEBUG
-      RCTLogAdvice(@"View #%@ of type %@ has a shadow set but cannot calculate "
-        "shadow efficiently. Consider setting a background color to "
-        "fix this, or apply the shadow to a more specific component.",
-        self.reactTag, [self class]);
-#endif
-    }
-  }
-  
   if (_borderImage == nil) {
     const RCTCornerRadii cornerRadii = [self cornerRadii];
     const NSEdgeInsets borderInsets = [self bordersAsInsets];
@@ -614,21 +597,27 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
 
     [self updateClippingForLayer:layer];
   }
-}
-
-#pragma mark - Shadows
-
-static BOOL RCTLayerHasShadow(CALayer *layer)
-{
-  return layer.shadowOpacity * CGColorGetAlpha(layer.shadowColor) > 0;
-}
-
-- (void)updateShadowPath
-{
-  const RCTCornerRadii cornerRadii = [self cornerRadii];
-  const RCTCornerInsets cornerInsets = RCTGetCornerInsets(cornerRadii, NSEdgeInsetsZero);
-  CGPathRef shadowPath = RCTPathCreateWithRoundedRect(self.bounds, cornerInsets, NULL);
-  self.layer.shadowPath = shadowPath;
+  
+  CGPathRef shadowPath = nil;
+  CGFloat shadowOpacity = _shadowOpacity * _shadowColor.alphaComponent;
+  if (shadowOpacity > 0) {
+    layer.shadowColor = [_shadowColor colorWithAlphaComponent:shadowOpacity].CGColor;
+    if (_backgroundColor.alphaComponent > 0.999) {
+      const RCTCornerRadii cornerRadii = [self cornerRadii];
+      const RCTCornerInsets cornerInsets = RCTGetCornerInsets(cornerRadii, NSEdgeInsetsZero);
+      shadowPath = RCTPathCreateWithRoundedRect(self.bounds, cornerInsets, NULL);
+    }
+#if DEBUG
+    else {
+      RCTLogAdvice(@"View #%@ of type %@ has a shadow set but cannot calculate "
+        "shadow efficiently. Consider setting a background color to "
+        "fix this, or apply the shadow to a more specific component.",
+        self.reactTag, [self class]);
+    }
+#endif
+  }
+  layer.shadowOpacity = shadowOpacity > 0 ? 1 : 0;
+  layer.shadowPath = shadowPath;
   CGPathRelease(shadowPath);
 }
 

@@ -127,6 +127,8 @@
 @property (nonatomic, assign) CATransform3D transform;
 @property (nonatomic, copy) NSColor *backgroundColor;
 @property (nonatomic, assign) CGFloat backgroundBlurRadius;
+@property (nonatomic, copy) NSColor *shadowColor;
+@property (nonatomic, assign) CGFloat shadowOpacity;
 
 @property (nonatomic, copy) RCTDirectEventBlock onDragEnter;
 @property (nonatomic, copy) RCTDirectEventBlock onDragLeave;
