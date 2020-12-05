@@ -43,19 +43,6 @@ RCT_EXPORT_MODULE()
   }];
 }
 
-static BOOL RCTIsIPhoneX() {
-  static BOOL isIPhoneX = NO;
-  static dispatch_once_t onceToken;
-
-  dispatch_once(&onceToken, ^{
-    RCTAssertMainQueue();
-
-    isIPhoneX = NO;
-  });
-
-  return isIPhoneX;
-}
-
 static NSDictionary *RCTExportedDimensions(__unused RCTBridge *bridge)
 {
   RCTAssertMainQueue();
