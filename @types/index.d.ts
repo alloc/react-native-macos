@@ -9208,4 +9208,11 @@ declare global {
      *     if (__DEV__) console.log('Running in dev mode')
      */
     const __DEV__: boolean;
+
+    /** Shim for NodeJS `process` object */
+    const process: {
+        argv: string[]
+        env: { [key: string]: string | undefined }
+        exit(): void
+    }
 }
