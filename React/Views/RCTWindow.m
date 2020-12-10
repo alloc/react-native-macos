@@ -113,6 +113,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
 - (void)close
 {
   _closed = YES;
+  self.contentView = nil;
   [super close];
 }
 
