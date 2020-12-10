@@ -84,6 +84,7 @@ devDependencies:
   polished: 1.9.3
   prettier: 1.17.0
   react: 16.9.0
+  react-native: 'link:'
   react-test-renderer: 16.9.0_react@16.9.0
   shelljs: 0.7.8
   sinon: 2.4.1
@@ -7593,6 +7594,7 @@ specifiers:
   react: 16.9.0
   react-clone-referenced-element: ^1.0.1
   react-devtools-core: ^4.2.0
+  react-native: 'link:.'
   react-refresh: ^0.4.0
   react-test-renderer: 16.9.0
   react-timer-mixin: ^0.13.2
