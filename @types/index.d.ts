@@ -3669,7 +3669,10 @@ export interface ImageURISource {
     scale?: number;
 }
 
-export type ImageRequireSource = number;
+declare const ImageRequireSource: unique symbol;
+export interface ImageRequireSource {
+  [ImageRequireSource]: true
+}
 
 /**
  * @see ImagePropsIOS.onProgress
