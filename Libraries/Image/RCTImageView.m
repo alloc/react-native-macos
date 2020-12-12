@@ -70,8 +70,11 @@ static NSDictionary *onLoadParamsForSource(RCTImageSource *source)
   // The image source that's being loaded from the network
   RCTImageSource *_pendingImageSource;
 
-  // Size of the image loaded / being loaded, so we can determine when to issue a reload to accommodate a changing size.
+  // Size of the displayed image.
   CGSize _targetSize;
+  
+  // Size of the image being loaded.
+  CGSize _pendingTargetSize;
 
   // A block that can be invoked to cancel the most recent call to -reloadImage, if any
   RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
@@ -173,7 +176,8 @@ static inline BOOL UIEdgeInsetsEqualToEdgeInsets(NSEdgeInsets insets1, NSEdgeIns
 {
   if (![imageSources isEqual:_imageSources]) {
     _imageSources = [imageSources copy];
-    _needsReload = YES;
+    
+    [self updateImageIfNeeded];
   }
 }
 
@@ -242,8 +246,7 @@ static inline BOOL UIEdgeInsetsEqualToEdgeInsets(NSEdgeInsets insets1, NSEdgeIns
     return nil;
   }
 
-  const CGFloat scale = self.window.backingScaleFactor;
-  const CGFloat targetImagePixels = size.width * size.height * scale * scale;
+  const CGFloat targetImagePixels = size.width * size.height;
 
   RCTImageSource *bestSource = nil;
   CGFloat bestFit = CGFLOAT_MAX;
@@ -267,24 +270,15 @@ static inline BOOL UIEdgeInsetsEqualToEdgeInsets(NSEdgeInsets insets1, NSEdgeIns
   return UIEdgeInsetsEqualToEdgeInsets(_capInsets, NSEdgeInsetsZero);
 }
 
-- (BOOL)shouldChangeImageSource
-{
-  // We need to reload if the desired image source is different from the current image
-  // source AND the image load that's pending
-  RCTImageSource *desiredImageSource = [self imageSourceForSize:self.frame.size];
-  return ![desiredImageSource isEqual:_imageSource] &&
-         ![desiredImageSource isEqual:_pendingImageSource];
-}
-
-- (void)reloadImage
+- (void)loadImageSource:(RCTImageSource *)source withSize:(CGSize)targetSize
 {
   [self cancelImageLoad];
   _needsReload = NO;
+  
+  if (source && self.window && targetSize.width > 0 && targetSize.height > 0) {
+    _pendingImageSource = source;
+    _pendingTargetSize = targetSize;
 
-  RCTImageSource *source = [self imageSourceForSize:self.frame.size];
-  _pendingImageSource = source;
-
-  if (source && self.window && !CGRectIsEmpty(self.frame)) {
     if (_onLoadStart) {
       _onLoadStart(nil);
     }
@@ -301,7 +295,7 @@ static inline BOOL UIEdgeInsetsEqualToEdgeInsets(NSEdgeInsets insets1, NSEdgeIns
 
     __weak RCTImageView *weakSelf = self;
     RCTImageLoaderPartialLoadBlock partialLoadHandler = ^(NSImage *image) {
-      [weakSelf imageLoaderLoadedImage:image error:nil forImageSource:source partial:YES];
+      [weakSelf imageLoaderLoadedImage:image error:nil forImageSource:source size:targetSize partial:YES];
     };
 
     CGSize imageSize = self.bounds.size;
@@ -313,7 +307,7 @@ static inline BOOL UIEdgeInsetsEqualToEdgeInsets(NSEdgeInsets insets1, NSEdgeIns
     }
 
     RCTImageLoaderCompletionBlock completionHandler = ^(NSError *error, NSImage *loadedImage) {
-      [weakSelf imageLoaderLoadedImage:loadedImage error:error forImageSource:source partial:NO];
+      [weakSelf imageLoaderLoadedImage:loadedImage error:error forImageSource:source size:targetSize partial:NO];
     };
 
     _reloadImageCancellationBlock =
@@ -330,9 +324,13 @@ static inline BOOL UIEdgeInsetsEqualToEdgeInsets(NSEdgeInsets insets1, NSEdgeIns
   }
 }
 
-- (void)imageLoaderLoadedImage:(NSImage *)loadedImage error:(NSError *)error forImageSource:(RCTImageSource *)source partial:(BOOL)isPartialLoad
+- (void)imageLoaderLoadedImage:(NSImage *)loadedImage
+                         error:(NSError *)error
+                forImageSource:(RCTImageSource *)source
+                          size:(CGSize)targetSize
+                       partial:(BOOL)isPartialLoad
 {
-  if (![source isEqual:_pendingImageSource]) {
+  if (![source isEqual:_pendingImageSource] || !CGSizeEqualToSize(targetSize, _pendingTargetSize)) {
     // Bail out if source has changed since we started loading
     return;
   }
@@ -350,7 +348,9 @@ static inline BOOL UIEdgeInsetsEqualToEdgeInsets(NSEdgeInsets insets1, NSEdgeIns
   void (^setImageBlock)(NSImage *) = ^(NSImage *image) {
     if (!isPartialLoad) {
       self->_imageSource = source;
+      self->_targetSize = targetSize;
       self->_pendingImageSource = nil;
+      self->_pendingTargetSize = CGSizeZero;
     }
 
     if (image.reactKeyframeAnimation) {
@@ -398,46 +398,19 @@ static inline BOOL UIEdgeInsetsEqualToEdgeInsets(NSEdgeInsets insets1, NSEdgeIns
 
 - (void)reactSetFrame:(CGRect)frame
 {
+  CGSize oldSize = self.frame.size;
+
   [super reactSetFrame:frame];
 
-  // If we didn't load an image yet, or the new frame triggers a different image source
-  // to be loaded, reload to swap to the proper image source.
-  if ([self shouldChangeImageSource]) {
-    _targetSize = frame.size;
-    [self reloadImage];
-  } else if ([self shouldReloadImageSourceAfterResize]) {
-    CGSize imageSize = self.image.size;
-    CGFloat imageScale = 1.0;
-    CGFloat screenScale = self.window.backingScaleFactor;
-    CGSize idealSize = RCTTargetSize(imageSize, imageScale, frame.size, screenScale,
-                                     self.resizeMode, YES);
-
-    // Don't reload if the current image or target image size is close enough
-    if (!RCTShouldReloadImageForSizeChange(imageSize, idealSize) ||
-        !RCTShouldReloadImageForSizeChange(_targetSize, idealSize)) {
-      return;
-    }
-
-    // Don't reload if the current image size is the maximum size of the image source
-    CGSize imageSourceSize = _imageSource.size;
-    if (imageSize.width * imageScale == imageSourceSize.width * _imageSource.scale &&
-        imageSize.height * imageScale == imageSourceSize.height * _imageSource.scale) {
-      return;
-    }
-
-    RCTLogInfo(@"Reloading image %@ as size %@", _imageSource.request.URL.absoluteString, NSStringFromSize(idealSize));
-
-    // If the existing image or an image being loaded are not the right
-    // size, reload the asset in case there is a better size available.
-    _targetSize = idealSize;
-    [self reloadImage];
+  if (!CGSizeEqualToSize(frame.size, oldSize)) {
+    [self updateImageIfNeeded];
   }
 }
 
 - (void)didSetProps:(NSArray<NSString *> *)changedProps
 {
   if (_needsReload) {
-    [self reloadImage];
+    [self loadImageSource:_imageSource withSize:_targetSize];
   }
 }
 
@@ -451,9 +424,66 @@ static inline BOOL UIEdgeInsetsEqualToEdgeInsets(NSEdgeInsets insets1, NSEdgeIns
     // requests that have gotten "stuck" from the queue, unblocking other images
     // from loading.
     [self cancelImageLoad];
-  } else if ([self shouldChangeImageSource]) {
-    [self reloadImage];
   }
+}
+
+- (void)viewDidChangeBackingProperties
+{
+  [self updateImageIfNeeded];
+}
+
+// Good for size changes and source changes
+- (BOOL)updateImageIfNeeded
+{
+  CGFloat targetScale = self.window.backingScaleFactor;
+  CGSize targetSize = RCTSizeInPixels(self.bounds.size, targetScale);
+  if (CGSizeEqualToSize(targetSize, CGSizeZero)) {
+    [self clearImage];
+    return NO;
+  }
+  
+  RCTImageSource *source = [self imageSourceForSize:targetSize];
+  if (!source) {
+    [self clearImage];
+    return NO;
+  }
+  
+  CGSize oldTargetSize = CGSizeZero;
+  
+  if ([source isEqual:_pendingImageSource]) {
+    oldTargetSize = _pendingTargetSize;
+  }
+  else if ([source isEqual:_imageSource]) {
+    oldTargetSize = _targetSize;
+    
+    // Cancel loading so the current source is used
+    [self cancelImageLoad];
+    
+    if (self.image) {
+      NSImageRep *image = self.image.representations[0];
+      CGSize imageSize = CGSizeMake(image.pixelsWide, image.pixelsHigh);
+      CGSize idealSize = RCTTargetSize(imageSize, 1.0, targetSize, 1.0, _resizeMode, YES);
+      
+      // Skip update if the current image size is close enough
+      if (!RCTShouldReloadImageForSizeChange(imageSize, idealSize)) {
+        return NO;
+      }
+    }
+  }
+  // Load a new source
+  else {
+    [self loadImageSource:source withSize:targetSize];
+    return YES;
+  }
+  
+  // Skip update if cap insets are used or the size is unchanged
+  if (![self shouldReloadImageSourceAfterResize] || CGSizeEqualToSize(targetSize, oldTargetSize)) {
+    return NO;
+  }
+  
+  // Load an old source with a new size
+  [self loadImageSource:source withSize:targetSize];
+  return YES;
 }
 
 @end
