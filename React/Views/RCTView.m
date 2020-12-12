@@ -105,6 +105,7 @@ static NSString *RCTRecursiveAccessibilityLabel(NSView *view)
   NSColor *_backgroundColor;
   CIFilter *_backgroundBlur;
   NSImage *_borderImage;
+  RCTCornerRadii _cornerRadii;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -486,6 +487,15 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   return self.layer.opacity > 0.999 && _backgroundColor.alphaComponent > 0.999;
 }
 
+- (BOOL)shouldRedrawBorderOnResize
+{
+  RCTCornerRadii cornerRadii = [self cornerRadii];
+  return cornerRadii.topLeft != _cornerRadii.topLeft ||
+    cornerRadii.topRight != _cornerRadii.topRight ||
+    cornerRadii.bottomLeft != _cornerRadii.bottomLeft ||
+    cornerRadii.bottomRight != _cornerRadii.bottomRight;
+}
+
 - (void)reactSetFrame:(CGRect)frame
 {
   // TODO: understand if we need to be able to disable live resizing for certain use
@@ -494,15 +504,16 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   //  }
   // If frame is zero, or below the threshold where the border radii can
   // be rendered as a stretchable image, we'll need to re-render.
-  // TODO: detect up-front if re-rendering is necessary
   CGSize oldSize = self.bounds.size;
   [super reactSetFrame:frame];
+
   if (!CGSizeEqualToSize(self.bounds.size, oldSize)) {
-    if (_redrawsBorderImageOnSizeChange) {
+    if (_borderImage && [self shouldRedrawBorderOnResize]) {
       _borderImage = nil;
     }
     [self.layer setNeedsDisplay];
-  } else if (!CATransform3DIsIdentity(_transform)) {
+  }
+  else if (!CATransform3DIsIdentity(_transform)) {
     [self applyTransform:self.layer];
   }
 }
@@ -570,6 +581,7 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
       }
 
       _borderImage = image;
+      _cornerRadii = cornerRadii;
 
       CGFloat screenScale = RCTScreenScale();
       NSEdgeInsets capInsets = image.capInsets;
