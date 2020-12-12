@@ -65,12 +65,7 @@ let Image = (
   forwardedRef: ?React.Ref<'RCTImageView'>,
 ) => {
   const rootTag = React.useContext(RootTagContext);
-  const scale = Image.useScale(rootTag);
-  const source = resolveAssetSource(props.source, scale) || {
-    uri: undefined,
-    width: undefined,
-    height: undefined,
-  };
+  const source = resolveAssetSource(props.source) || [];
 
   let sources;
   let style;

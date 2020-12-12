@@ -60,6 +60,11 @@
     return nil;
   }
 
+  // An array from `resolveAssetSource` may have been passed.
+  if ([json isKindOfClass:[NSArray class]]) {
+    return [self RCTImageSource:json[0]];
+  }
+
   NSURLRequest *request;
   CGSize size = CGSizeZero;
   CGFloat scale = 1.0;

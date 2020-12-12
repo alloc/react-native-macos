@@ -83,8 +83,16 @@ function resolveAssetSource(source: any, scale?: number): ?ResolvedAssetSource {
     getDevServerURL(),
     getScriptURL(),
     asset,
-    scale || PixelRatio.get(),
+    scale,
   );
+
+  if (scale == null) {
+    return asset.scales.map(scale => {
+      resolver.scale = scale;
+      return resolver.defaultAsset();
+    })
+  }
+
   if (_customSourceTransformer) {
     return _customSourceTransformer(resolver);
   }
