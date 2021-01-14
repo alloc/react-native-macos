@@ -280,9 +280,7 @@ RCT_EXPORT_MODULE()
       [request setValue:(@(request.HTTPBody.length)).description forHTTPHeaderField:@"Content-Length"];
     }
 
-    dispatch_async(self->_methodQueue, ^{
-      block(request);
-    });
+    block(request);
 
     return (RCTURLRequestCancellationBlock)nil;
   }];
