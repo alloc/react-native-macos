@@ -121,6 +121,8 @@
 /** Empty implementation to avoid "missing selector" crashes */
 @property (nonatomic, assign) RCTCursor cursor;
 
+- (NSImage *)imageWithSubviews:(NSRect)frame;
+
 /** The view's frame with subviews taken into account */
 @property (nonatomic, readonly) NSRect effectiveFrame;
 

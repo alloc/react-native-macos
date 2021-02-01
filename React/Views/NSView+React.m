@@ -14,6 +14,7 @@
 #import "RCTAssert.h"
 #import "RCTLog.h"
 #import "RCTShadowView.h"
+#import "RCTUtils.h"
 
 @implementation NSView (React)
 
@@ -328,6 +329,32 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   // Native views must synthesize their own "transform" property,
   // override "displayLayer:", and apply the transform there.
   RCTLogWarn(@"NSView subclass must override setTransform itself");
+}
+
+- (NSImage *)imageWithSubviews:(NSRect)frame
+{
+  CGFloat scale = self.window.backingScaleFactor;
+  NSSize imageSize = frame.size;
+  imageSize.width *= scale;
+  imageSize.height *= scale;
+  
+  CGContextRef context = CGBitmapContextCreate(NULL, imageSize.width, imageSize.height, 8, imageSize.width, NULL, kCGImageAlphaOnly);
+  CGContextTranslateCTM(context, 0, imageSize.height);
+  CGContextScaleCTM(context, scale, -scale);
+  
+  CGFloat offsetX = RCTRoundPixelValue(self.frame.origin.x - frame.origin.x, scale);
+  CGFloat offsetY = RCTRoundPixelValue(self.frame.origin.y - frame.origin.y, scale);
+  CGContextTranslateCTM(context, offsetX, offsetY);
+  
+  [self.layer renderInContext:context];
+  
+  CGImageRef cgImage = CGBitmapContextCreateImage(context);
+  CFRelease(context);
+  
+  NSImage *image = [[NSImage alloc] initWithCGImage:cgImage size:imageSize];
+  CFRelease(cgImage);
+  
+  return image;
 }
 
 - (NSRect)effectiveFrame
