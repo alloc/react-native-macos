@@ -330,6 +330,47 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   RCTLogWarn(@"NSView subclass must override setTransform itself");
 }
 
+- (NSRect)effectiveFrame
+{
+  NSRect rootFrame = self.frame;
+  if (self.subviews.count && !self.clipsToBounds) {
+    CGFloat left = 0;
+    CGFloat top = 0;
+    CGFloat right = rootFrame.size.width;
+    CGFloat bottom = rootFrame.size.height;
+    
+    for (NSView *subview in self.subviews) {
+      NSRect frame = subview.effectiveFrame;
+      if (frame.origin.x < left) {
+        left = frame.origin.x;
+      }
+      CGFloat subviewRight = frame.size.width + frame.origin.x;
+      if (subviewRight > right) {
+        right = subviewRight;
+      }
+      if (frame.origin.y < top) {
+        top = frame.origin.y;
+      }
+      CGFloat subviewBottom = frame.size.height + frame.origin.y;
+      if (subviewBottom > bottom) {
+        bottom = subviewBottom;
+      }
+    }
+    
+    right += MAX(0, -left);
+    bottom += MAX(0, -top);
+    
+    left += rootFrame.origin.x;
+    top += rootFrame.origin.y;
+
+    rootFrame = (NSRect){{left, top}, {right, bottom}};
+  }
+  return CGRectApplyAffineTransform(
+    rootFrame,
+    CATransform3DGetAffineTransform(self.transform)
+  );
+}
+
 @end
 
 #pragma mark -

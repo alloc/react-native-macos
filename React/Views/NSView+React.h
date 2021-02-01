@@ -121,6 +121,9 @@
 /** Empty implementation to avoid "missing selector" crashes */
 @property (nonatomic, assign) RCTCursor cursor;
 
+/** The view's frame with subviews taken into account */
+@property (nonatomic, readonly) NSRect effectiveFrame;
+
 @end
 
 @interface CALayer (React)
