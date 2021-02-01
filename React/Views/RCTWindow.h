@@ -12,6 +12,8 @@
 #import "RCTBridge.h"
 #import "RCTRootView.h"
 
+RCT_EXTERN NSString *const RCTViewsDidUpdateNotification;
+
 @interface RCTWindow : NSWindow
 
 - (instancetype)initWithBridge:(RCTBridge *)bridge
@@ -42,5 +44,8 @@
 
 // Updates the hover target while scrolling.
 - (void)scrollViewDidScroll;
+
+// Notify listeners about an updated descendant.
+- (void)viewDidUpdate:(NSView *)descendantView;
 
 @end

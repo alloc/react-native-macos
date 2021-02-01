@@ -14,6 +14,7 @@
 #import "RCTConvert.h"
 #import "RCTLog.h"
 #import "RCTUtils.h"
+#import "RCTWindow.h"
 #import "NSView+React.h"
 #import "UIImageUtils.h"
 #import "RCTI18nUtil.h"
@@ -151,7 +152,11 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:unused)
 {
   if (_reactLayoutDirection != layoutDirection) {
     _reactLayoutDirection = layoutDirection;
-    [self.layer setNeedsDisplay];
+    
+    if (!self.layer.needsDisplay) {
+      [self.layer setNeedsDisplay];
+      [self _viewDidUpdate];
+    }
   }
 
 //  if ([self respondsToSelector:@selector(setSemanticContentAttribute:)]) {
@@ -511,10 +516,20 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
     if (_borderImage && [self shouldRedrawBorderOnResize]) {
       _borderImage = nil;
     }
-    [self.layer setNeedsDisplay];
+    if (!self.layer.needsDisplay) {
+      [self.layer setNeedsDisplay];
+      [self _viewDidUpdate];
+    }
   }
   else if (!CATransform3DIsIdentity(_transform)) {
     [self applyTransform:self.layer];
+  }
+}
+
+- (void)_viewDidUpdate
+{
+  if ([self.window isKindOfClass:[RCTWindow class]]) {
+    [(RCTWindow *)self.window viewDidUpdate:self];
   }
 }
 
@@ -522,6 +537,7 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
 {
   if (!CATransform3DEqualToTransform(_transform, layer.transform)) {
     layer.transform = _transform;
+    [self _viewDidUpdate];
   }
 }
 
@@ -865,7 +881,10 @@ static CGFloat RCTDefaultIfNegativeTo(CGFloat defaultValue, CGFloat x) {
   _borderImage = nil;
 
   [self ensureLayerExists];
-  [self.layer setNeedsDisplay];
+  if (!self.layer.needsDisplay) {
+    [self.layer setNeedsDisplay];
+    [self _viewDidUpdate];
+  }
 }
 
 #pragma mark - Border Color

@@ -16,6 +16,7 @@
 #import "RCTTouchEvent.h"
 #import "RCTFieldEditor.h"
 #import "NSView+React.h"
+#import <QuartzCore/CATransaction.h>
 
 #pragma mark - NSView+RCTCursor
 
@@ -44,7 +45,21 @@
 
 @end
 
+#pragma mark - CATransaction (Private)
+
+typedef enum {
+  kCATransactionPhasePreLayout,
+  kCATransactionPhasePreCommit,
+  kCATransactionPhasePostCommit,
+} CATransactionPhase;
+
+@interface CATransaction (Private)
++ (void)addCommitHandler:(void(^)(void))block forPhase:(CATransactionPhase)phase;
+@end
+
 #pragma mark - RCTWindow
+
+NSString *const RCTViewsDidUpdateNotification = @"RCTViewsDidUpdateNotification";
 
 @implementation RCTWindow
 {
@@ -56,6 +71,7 @@
 
   BOOL _inContentView;
   BOOL _enabled;
+  NSMutableSet<NSView *> *_updatedViews;
 }
 
 RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styleMask:(NSWindowStyleMask)style backing:(NSBackingStoreType)backingStoreType defer:(BOOL)flag)
@@ -73,6 +89,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
   if (self) {
     _bridge = bridge;
     _enabled = !bridge.isLoading;
+    _updatedViews = [NSMutableSet new];
 
     _mouseInfo = [NSMutableDictionary new];
     _mouseInfo[@"changedTouches"] = @[]; // Required for "mouseMove" events
@@ -289,6 +306,21 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
   if (_clickTarget == nil) {
     [self _setHoverTarget:nil];
   }
+}
+
+- (void)viewDidUpdate:(NSView *)view
+{
+  if (_updatedViews.count == 0) {
+    [CATransaction addCommitHandler:^{
+      [[NSNotificationCenter defaultCenter]
+          postNotificationName:RCTViewsDidUpdateNotification
+                        object:self
+                      userInfo:@{@"updatedViews":_updatedViews}];
+      
+      [_updatedViews removeAllObjects];
+    } forPhase:kCATransactionPhasePreCommit];
+  }
+  [_updatedViews addObject:view];
 }
 
 #pragma mark - Private methods
