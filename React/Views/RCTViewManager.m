@@ -105,7 +105,13 @@ RCT_REMAP_VIEW_PROPERTY(testID, reactAccessibilityElement.accessibilityIdentifie
 RCT_EXPORT_VIEW_PROPERTY(backgroundBlurRadius, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(backgroundColor, NSColor)
 RCT_REMAP_LAYER_PROPERTY(backfaceVisibility, doubleSided, css_backface_visibility_t)
-RCT_EXPORT_LAYER_PROPERTY(opacity, float)
+RCT_CUSTOM_VIEW_PROPERTY(opacity, float, RCTView)
+{
+  float opacity = json ? [RCTConvert float:json] : defaultView.layer.opacity;
+  
+  view.layer.opacity = opacity;
+  view.hidden = opacity < 0.001;
+}
 RCT_EXPORT_LAYER_PROPERTY(shadowRadius, CGFloat)
 RCT_EXPORT_LAYER_PROPERTY(shadowOffset, CGSize)
 RCT_EXPORT_VIEW_PROPERTY(shadowColor, NSColor)
