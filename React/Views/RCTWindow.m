@@ -69,7 +69,6 @@ NSString *const RCTViewsDidUpdateNotification = @"RCTViewsDidUpdateNotification"
   NSEventType _clickType;
   uint16_t _coalescingKey;
 
-  BOOL _inContentView;
   BOOL _enabled;
   NSMutableSet<NSView *> *_updatedViews;
 }
@@ -143,17 +142,8 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
 
   NSEventType type = event.type;
 
-  if (type == NSEventTypeMouseEntered) {
-    if (event.trackingArea.owner == self.contentView) {
-      _inContentView = YES;
-    }
-    return [super sendEvent:event];
-  }
-
   if (type == NSEventTypeMouseExited) {
     if (event.trackingArea.owner == self.contentView) {
-      _inContentView = NO;
-
       if (_clickTarget) {
         if (_clickType == NSEventTypeLeftMouseDown) {
           [self _sendTouchEvent:@"touchCancel"];
@@ -194,10 +184,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
     }
   } else {
     if (type == NSEventTypeMouseMoved) {
-      if (_inContentView == NO) {
-        return; // Ignore "mouseMove" events outside the "contentView"
-      }
-
       [self _setHoverTarget:targetView];
       return;
     }
