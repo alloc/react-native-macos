@@ -671,7 +671,8 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   CGFloat cornerRadius = 0;
   if (self.clipsToBounds) {
     const RCTCornerRadii cornerRadii = [self cornerRadii];
-    if (RCTCornerRadiiAreEqual(cornerRadii)) {
+    layer.masksToBounds = RCTCornerRadiiAreEqual(cornerRadii);
+    if (layer.masksToBounds) {
       cornerRadius = cornerRadii.topLeft;
     } else {
       CAShapeLayer *shapeLayer = [CAShapeLayer layer];
