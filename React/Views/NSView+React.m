@@ -331,29 +331,13 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   RCTLogWarn(@"NSView subclass must override setTransform itself");
 }
 
-- (NSImage *)imageWithSubviews:(NSRect)frame
+- (NSImage *)imageWithSubviews:(NSRect)imageBounds
 {
-  CGFloat scale = self.window.backingScaleFactor;
-  NSSize imageSize = frame.size;
-  imageSize.width *= scale;
-  imageSize.height *= scale;
-  
-  CGContextRef context = CGBitmapContextCreate(NULL, imageSize.width, imageSize.height, 8, imageSize.width, NULL, kCGImageAlphaOnly);
-  CGContextTranslateCTM(context, 0, imageSize.height);
-  CGContextScaleCTM(context, scale, -scale);
-  
-  CGFloat offsetX = RCTRoundPixelValue(self.frame.origin.x - frame.origin.x, scale);
-  CGFloat offsetY = RCTRoundPixelValue(self.frame.origin.y - frame.origin.y, scale);
-  CGContextTranslateCTM(context, offsetX, offsetY);
-  
-  [self.layer renderInContext:context];
-  
-  CGImageRef cgImage = CGBitmapContextCreateImage(context);
-  CFRelease(context);
-  
-  NSImage *image = [[NSImage alloc] initWithCGImage:cgImage size:imageSize];
-  CFRelease(cgImage);
-  
+  NSBitmapImageRep *imageRep = [self bitmapImageRepForCachingDisplayInRect:imageBounds];
+  [self cacheDisplayInRect:imageBounds toBitmapImageRep:imageRep];
+
+  NSImage *image = [[NSImage alloc] initWithSize:imageBounds.size];
+  [image addRepresentation:imageRep];
   return image;
 }
 
