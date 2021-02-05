@@ -341,45 +341,46 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
   return image;
 }
 
-- (NSRect)effectiveFrame
+- (NSRect)recursiveBounds
 {
-  NSRect rootFrame = self.frame;
+  CGFloat left = 0;
+  CGFloat top = 0;
+  CGFloat right = self.bounds.size.width;
+  CGFloat bottom = self.bounds.size.height;
+  
   if (self.subviews.count && !self.clipsToBounds) {
-    CGFloat left = 0;
-    CGFloat top = 0;
-    CGFloat right = rootFrame.size.width;
-    CGFloat bottom = rootFrame.size.height;
-    
+    NSRect childFrame;
+    CGFloat childRight;
+    CGFloat childBottom;
+  
     for (NSView *subview in self.subviews) {
-      NSRect frame = subview.effectiveFrame;
-      if (frame.origin.x < left) {
-        left = frame.origin.x;
+      childFrame = subview.recursiveFrame;
+      if (childFrame.origin.x < left) {
+        left = childFrame.origin.x;
       }
-      CGFloat subviewRight = frame.size.width + frame.origin.x;
-      if (subviewRight > right) {
-        right = subviewRight;
+      childRight = childFrame.size.width + childFrame.origin.x;
+      if (childRight > right) {
+        right = childRight;
       }
-      if (frame.origin.y < top) {
-        top = frame.origin.y;
+      if (childFrame.origin.y < top) {
+        top = childFrame.origin.y;
       }
-      CGFloat subviewBottom = frame.size.height + frame.origin.y;
-      if (subviewBottom > bottom) {
-        bottom = subviewBottom;
+      childBottom = childFrame.size.height + childFrame.origin.y;
+      if (childBottom > bottom) {
+        bottom = childBottom;
       }
     }
-    
-    right += MAX(0, -left);
-    bottom += MAX(0, -top);
-    
-    left += rootFrame.origin.x;
-    top += rootFrame.origin.y;
-
-    rootFrame = (NSRect){{left, top}, {right, bottom}};
   }
-  return CGRectApplyAffineTransform(
-    rootFrame,
-    CATransform3DGetAffineTransform(self.transform)
-  );
+  
+  CGFloat width = right - left;
+  CGFloat height = bottom - top;
+  
+  return CGRectMake(left, top, width, height);
+}
+
+- (NSRect)recursiveFrame
+{
+  return RCTBoundsToFrame(self, self.recursiveBounds);
 }
 
 @end

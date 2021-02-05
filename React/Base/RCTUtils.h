@@ -54,6 +54,12 @@ RCT_EXTERN CGFloat RCTFloorPixelValue(CGFloat value, CGFloat scale);
 // Convert a size in points to pixels, rounded up to the nearest integral size
 RCT_EXTERN CGSize RCTSizeInPixels(CGSize pointSize, CGFloat scale);
 
+// Make an affine transform using a view's transform, its anchor point, and a given size.
+RCT_EXTERN CGAffineTransform RCTMakeTransformFromView(NSView *view, NSSize size);
+
+// Convert a bounds rect into the coordinate space of a superview.
+RCT_EXTERN NSRect RCTBoundsToFrame(NSView *view, NSRect bounds);
+
 // Method swizzling
 RCT_EXTERN void RCTSwapClassMethods(Class cls, SEL original, SEL replacement);
 RCT_EXTERN void RCTSwapInstanceMethods(Class cls, SEL original, SEL replacement);

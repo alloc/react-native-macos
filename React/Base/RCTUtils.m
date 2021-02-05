@@ -17,6 +17,7 @@
 
 #import <CommonCrypto/CommonCrypto.h>
 
+#import "NSView+React.h"
 #import "RCTAssert.h"
 #import "RCTLog.h"
 
@@ -319,6 +320,35 @@ CGSize RCTSizeInPixels(CGSize pointSize, CGFloat scale)
     ceil(pointSize.width * scale),
     ceil(pointSize.height * scale),
   };
+}
+
+CGAffineTransform RCTMakeTransformFromView(NSView *view, NSSize size)
+{
+  CGAffineTransform transform = CATransform3DGetAffineTransform(view.transform);
+  if (!CATransform3DIsIdentity(view.transform)) {
+    NSPoint anchorPoint = {0.5, 0.5}; // view.layer.anchorPoint;
+    anchorPoint = CGPointApplyAffineTransform(
+      anchorPoint,
+      CGAffineTransformMakeScale(size.width, size.height)
+    );
+    return CGAffineTransformConcat(
+      CGAffineTransformMakeTranslation(-anchorPoint.x, -anchorPoint.y),
+      CGAffineTransformConcat(
+        transform,
+        CGAffineTransformMakeTranslation(anchorPoint.x, anchorPoint.y)
+      )
+    );
+  }
+  return transform;
+}
+
+NSRect RCTBoundsToFrame(NSView *view, NSRect bounds)
+{
+  CGAffineTransform transform = RCTMakeTransformFromView(view, bounds.size);
+  bounds = CGRectApplyAffineTransform(bounds, transform);
+  
+  NSPoint origin = view.frame.origin;
+  return CGRectOffset(bounds, origin.x, origin.y);
 }
 
 void RCTSwapClassMethods(Class cls, SEL original, SEL replacement)

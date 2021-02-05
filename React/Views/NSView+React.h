@@ -123,8 +123,17 @@
 
 - (NSImage *)imageWithSubviews:(NSRect)frame;
 
-/** The view's frame with subviews taken into account */
-@property (nonatomic, readonly) NSRect effectiveFrame;
+/**
+ * The view's bounds with subviews accounted for.
+ * This view's transform is *not* applied, but subview transforms *are* applied.
+ */
+@property (nonatomic, readonly) NSRect recursiveBounds;
+
+/**
+ * The view's frame with subviews accounted for.
+ * This view's transform *is* applied, as well as subview transforms.
+ */
+@property (nonatomic, readonly) NSRect recursiveFrame;
 
 @end
 
