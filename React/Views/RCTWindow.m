@@ -114,6 +114,11 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
                                              selector:@selector(RCT_bridgeWillReload:)
                                                  name:RCTBridgeWillReloadNotification
                                                object:bridge];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(_clearTargets)
+                                                 name:NSApplicationDidResignActiveNotification
+                                               object:nil];
   }
 
   return self;
@@ -144,15 +149,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
 
   if (type == NSEventTypeMouseExited) {
     if (event.trackingArea.owner == self.contentView) {
-      if (_clickTarget) {
-        if (_clickType == NSEventTypeLeftMouseDown) {
-          [self _sendTouchEvent:@"touchCancel"];
-        }
-        _clickTarget = nil;
-        _clickType = 0;
-      }
-
-      [self _setHoverTarget:nil];
+      [self _clearTargets];
     }
     return [super sendEvent:event];
   }
@@ -381,6 +378,19 @@ static NSCursor *NSCursorForRCTCursor(RCTCursor cursor)
 
 // HACK: Do nothing here to prevent AppKit default behavior of updating the cursor whenever a view moves.
 - (void)_setCursorForMouseLocation:(__unused CGPoint)point {}
+
+- (void)_clearTargets
+{
+  if (_clickTarget) {
+    if (_clickType == NSEventTypeLeftMouseDown) {
+      [self _sendTouchEvent:@"touchCancel"];
+    }
+    _clickTarget = nil;
+    _clickType = 0;
+  }
+
+  [self _setHoverTarget:nil];
+}
 
 - (void)_setHoverTarget:(NSView *)view
 {
