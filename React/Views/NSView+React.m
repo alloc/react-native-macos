@@ -335,9 +335,24 @@ static inline CGRect NSEdgeInsetsInsetRect(CGRect rect, NSEdgeInsets insets) {
 {
   NSBitmapImageRep *imageRep = [self bitmapImageRepForCachingDisplayInRect:imageBounds];
   [self cacheDisplayInRect:imageBounds toBitmapImageRep:imageRep];
-
-  NSImage *image = [[NSImage alloc] initWithSize:imageBounds.size];
-  [image addRepresentation:imageRep];
+  
+  NSImage *image;
+  if (CATransform3DIsIdentity(self.transform)) {
+    image = [[NSImage alloc] initWithSize:imageBounds.size];
+    [image addRepresentation:imageRep];
+  } else {
+    CGAffineTransform transform = RCTMakeTransformFromView(self, imageBounds.size);
+    imageBounds = CGRectApplyAffineTransform(imageBounds, transform);
+    
+    CIImage *transformedImage = [[CIImage alloc] initWithBitmapImageRep:imageRep];
+    transformedImage = [transformedImage imageByApplyingTransform:transform];
+    
+    // BUGFIX: For some reason, rotations are flipped on the x-axis. This line fixes that.
+    transformedImage = [transformedImage imageByApplyingCGOrientation:kCGImagePropertyOrientationUpMirrored];
+    
+    image = [[NSImage alloc] initWithSize:imageBounds.size];
+    [image addRepresentation:[NSCIImageRep imageRepWithCIImage:transformedImage]];
+  }
   return image;
 }
 
