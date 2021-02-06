@@ -301,8 +301,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
                                             sizeFlexiblity:_sizeFlexibility];
   [self runApplication:bridge];
 
-  [_contentView ensureLayerExists];
-  _contentView.layer.backgroundColor = [NSColor colorWithWhite:0 alpha:0.00001].CGColor;
   _contentView.passThroughTouches = _passThroughTouches;
   [self addSubview:_contentView];
 

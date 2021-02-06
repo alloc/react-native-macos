@@ -326,7 +326,7 @@ static inline BOOL hasFlag(NSUInteger flags, NSUInteger flag) {
     targetView = targetView.superview;
   }
   
-  if (!targetView || targetView == self.rootView) {
+  if (!targetView) {
     return nil;
   }
 
