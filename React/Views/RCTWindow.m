@@ -116,6 +116,11 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
                                                  name:RCTBridgeWillReloadNotification
                                                object:bridge];
 
+     [[NSNotificationCenter defaultCenter] addObserver:self
+                                              selector:@selector(_clearTargets)
+                                                  name:NSWindowDidResignKeyNotification
+                                                object:self];
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(_clearTargets)
                                                  name:NSApplicationDidResignActiveNotification
