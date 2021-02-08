@@ -68,6 +68,7 @@ NSString *const RCTViewsDidUpdateNotification = @"RCTViewsDidUpdateNotification"
   NSView *_clickTarget;
   NSEventType _clickType;
   uint16_t _coalescingKey;
+  id _hoverMonitor;
 
   BOOL _enabled;
   NSMutableSet<NSView *> *_updatedViews;
@@ -407,8 +408,19 @@ static NSCursor *NSCursorForRCTCursor(RCTCursor cursor)
       [self _sendMouseEvent:@"mouseOut"];
       if (!view) {
         [self updateCursorImage];
+        if (_hoverMonitor) {
+          [NSEvent removeMonitor:_hoverMonitor];
+          _hoverMonitor = nil;
+        }
       }
     }
+  } else if (view) {
+    // Clear the hover target when another app receives a MouseMoved event.
+    _hoverMonitor = [NSEvent addGlobalMonitorForEventsMatchingMask:NSEventMaskMouseMoved handler:^(NSEvent * _Nonnull event) {
+      if (!event.window) {
+        [self _setHoverTarget:nil];
+      }
+    }];
   }
 
   if (view) {
