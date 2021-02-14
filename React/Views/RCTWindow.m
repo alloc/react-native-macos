@@ -422,7 +422,12 @@ static NSCursor *NSCursorForRCTCursor(RCTCursor cursor)
   } else if (view) {
     // Clear the hover target when another app receives a MouseMoved event.
     _hoverMonitor = [NSEvent addGlobalMonitorForEventsMatchingMask:NSEventMaskMouseMoved handler:^(NSEvent * _Nonnull event) {
-      if (!event.window) {
+      if (event.window) return;
+      
+      // BUGFIX: For some reason, we receive windowless events even if the app is moused over,
+      //   but (luckily) we can use "hitTest:withEvent:" to avoid clearing the hover target.
+      NSView *hitView = [self hitTest:event.locationInWindow withEvent:event];
+      if (!hitView) {
         [self _setHoverTarget:nil];
       }
     }];
