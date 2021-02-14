@@ -385,7 +385,8 @@ RCT_EXPORT_METHOD(performWindowDrag:(nonnull NSNumber *)reactTag)
      }
      
      RCTWindow *window = (RCTWindow *)view.window;
-     if (!window || ![window isKindOfClass:[RCTWindow class]]) {
+     if (!window) return;
+     if (![window isKindOfClass:[RCTWindow class]]) {
        RCTLogError(@"Expected RCTView.window to be a RCTWindow, but got a %@", window.className);
        return;
      }
