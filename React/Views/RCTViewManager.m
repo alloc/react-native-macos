@@ -392,7 +392,7 @@ RCT_EXPORT_METHOD(performWindowDrag:(nonnull NSNumber *)reactTag)
      }
      
      NSEvent *event = window.lastLeftMouseEvent;
-     if (event && event.type != NSLeftMouseUp) {
+     if (event && event.type != NSEventTypeLeftMouseUp) {
        [window performWindowDragWithEvent:window.lastLeftMouseEvent];
      }
    }];
