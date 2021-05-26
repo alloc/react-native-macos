@@ -87,8 +87,8 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
                               defer:defer];
 
   if (self) {
-    _bridge = bridge;
-    _enabled = !bridge.isLoading;
+    _bridge = [bridge valueForKey:@"_parentBridge"] ?: bridge;
+    _enabled = !_bridge.isLoading;
     _updatedViews = [NSMutableSet new];
 
     _mouseInfo = [NSMutableDictionary new];
@@ -109,12 +109,12 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(RCT_javaScriptDidLoad:)
                                                  name:RCTJavaScriptDidLoadNotification
-                                               object:bridge];
+                                               object:_bridge];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(RCT_bridgeWillReload:)
                                                  name:RCTBridgeWillReloadNotification
-                                               object:bridge];
+                                               object:_bridge];
 
      [[NSNotificationCenter defaultCenter] addObserver:self
                                               selector:@selector(_clearTargets)
