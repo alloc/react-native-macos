@@ -30,7 +30,7 @@ static NSRegularExpression *RCTJSStackFrameRegex()
 {
   if (self = [super init]) {
     _methodName = methodName;
-    _file = file;
+    _file = RCTNilIfNull(file);
     _lineNumber = lineNumber;
     _column = column;
   }
