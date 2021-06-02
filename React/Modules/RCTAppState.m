@@ -53,8 +53,7 @@ RCT_EXPORT_MODULE()
 - (NSArray<NSString *> *)supportedEvents
 {
   return @[@"appStateDidChange",
-           @"memoryWarning",
-           @"frameDidFire"];
+           @"memoryWarning"];
 }
 
 - (void)startObserving
