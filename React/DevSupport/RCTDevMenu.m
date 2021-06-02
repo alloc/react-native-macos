@@ -101,7 +101,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
 @end
 
 @interface RCTDevMenu () <RCTBridgeModule, RCTInvalidating>
-
+@property (nonatomic, weak) RCTBridge *bridge;
 @end
 
 @implementation RCTDevMenu
@@ -109,8 +109,6 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
   NSMutableArray<RCTDevMenuItem *> *_extraMenuItems;
   BOOL isShown;
 }
-
-@synthesize bridge = _bridge;
 
 RCT_EXPORT_MODULE()
 
