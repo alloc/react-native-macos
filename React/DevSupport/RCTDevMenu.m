@@ -194,9 +194,10 @@ RCT_EXPORT_MODULE()
   // Add built-in items
   __weak RCTBridge *bridge = _bridge;
   __weak RCTDevSettings *devSettings = _bridge.devSettings;
-
+  __weak __typeof(self) _self = self;
+  
   [items addObject:[RCTDevMenuItem buttonItemWithTitle:@"Reload"  hotkey:@"r" handler:^{
-    [bridge reload];
+    [_self.bridge reload];
   }]];
 
   if (devSettings.isNuclideDebuggingAvailable) {
