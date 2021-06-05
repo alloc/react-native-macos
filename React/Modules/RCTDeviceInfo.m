@@ -48,16 +48,25 @@ static NSDictionary *RCTExportedDimensions(__unused RCTBridge *bridge)
   RCTAssertMainQueue();
 
   NSScreen *screen = [NSScreen mainScreen];
+  if (!screen) {
+    return nil;
+  }
+  
   NSDictionary *description = [screen deviceDescription];
   NSSize screenPixelSize = [[description objectForKey:NSDeviceSize] sizeValue];
   CGSize screenPhysicalSize = CGDisplayScreenSize(
     [[description objectForKey:@"NSScreenNumber"] unsignedIntValue]
   );
 
+  CGFloat dpi = screenPixelSize.width / (screenPhysicalSize.width / 25.4);
+  if (isnan(dpi)) {
+    dpi = 0;
+  }
+
   // Don't use RCTScreenSize since it the interface orientation doesn't apply to it
   CGSize screenSize = screen.frame.size;
   NSDictionary *dims = @{
-                         @"dpi": @(screenPixelSize.width / (screenPhysicalSize.width / 25.4)),
+                         @"dpi": @(dpi),
                          @"width": @(screenSize.width),
                          @"height": @(screenSize.height),
                          @"scale": @(screen.backingScaleFactor),
@@ -104,8 +113,11 @@ static NSDictionary *RCTExportedDimensions(__unused RCTBridge *bridge)
     // Report the event across the bridge.
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    [bridge.eventDispatcher sendDeviceEventWithName:@"didUpdateDimensions"
-                                        body:RCTExportedDimensions(bridge)];
+    NSDictionary *dimensions = RCTExportedDimensions(bridge);
+    if (dimensions) {
+      [bridge.eventDispatcher sendDeviceEventWithName:@"didUpdateDimensions"
+                                               body:dimensions];
+    }
 #pragma clang diagnostic pop
   });
 }
