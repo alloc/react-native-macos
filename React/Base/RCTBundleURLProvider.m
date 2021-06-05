@@ -34,7 +34,11 @@ static NSString *const kRCTEnableMinificationKey = @"RCT_enableMinification";
 {
   return @{
     kRCTEnableLiveReloadKey: @NO,
+#if RCT_DEV
     kRCTEnableDevKey: @YES,
+#else
+    kRCTEnableDevKey: @NO,
+#endif
     kRCTEnableMinificationKey: @NO,
   };
 }
