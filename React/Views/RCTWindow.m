@@ -87,7 +87,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithContentRect:(NSRect)contentRect styl
                               defer:defer];
 
   if (self) {
-    _bridge = [bridge valueForKey:@"_parentBridge"] ?: bridge;
+    _bridge = [bridge isKindOfClass:RCTBridge.class] ? bridge : [bridge valueForKey:@"_parentBridge"];
     _enabled = !_bridge.isLoading;
     _updatedViews = [NSMutableSet new];
 
