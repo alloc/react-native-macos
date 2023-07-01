@@ -170,7 +170,7 @@
     "regenerator-runtime": "^0.13.2",
     "rimraf": "^2.5.4",
     "scheduler": "0.15.0",
-    "semver": "^5.0.3",
+    "semver": "^7.5.2",
     "serve-static": "^1.13.2",
     "shell-quote": "1.6.1",
     "stacktrace-parser": "^0.1.3",
